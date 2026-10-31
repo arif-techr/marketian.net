@@ -1,0 +1,39 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a> ›
+  <a href="{{ changelist_url }}">Contact messages</a> › Send a template email
+</div>
+{% endblock %}
+
+{% block content %}
+<form method="post">
+  {% csrf_token %}
+  <p>Each person gets their own copy, with placeholders like <code>{% templatetag openvariable %} first_name {% templatetag closevariable %}</code> filled in for them.</p>
+
+  <fieldset class="module aligned">
+    {% for field in form %}
+      <div class="form-row">
+        {{ field.errors }}
+        {{ field.label_tag }} {{ field }}
+      </div>
+    {% endfor %}
+  </fieldset>
+
+  <h2>Recipients ({{ queryset|length }})</h2>
+  <ul>
+    {% for c in queryset %}
+      <li>{{ c.name }} &lt;{{ c.email }}&gt; — {{ c.subject }}</li>
+      <input type="hidden" name="_selected_action" value="{{ c.pk }}">
+    {% endfor %}
+  </ul>
+
+  <input type="hidden" name="action" value="{{ action_name }}">
+  <div class="submit-row">
+    <input type="submit" name="_apply" value="✉ Send to {{ queryset|length }} recipient(s)" class="default">
+    <a href="{{ changelist_url }}" class="closelink">Cancel</a>
+  </div>
+</form>
+{% endblock %}

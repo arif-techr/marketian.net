@@ -1,0 +1,37 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}Portfolio{% endblock %}
+{% block description %}Case studies and selected projects by {{ profile.name }}.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Portfolio</p>
+    <h1>Work I'm <span class="gradient-text">proud of</span></h1>
+    <p class="lead">A selection of campaigns, websites and growth projects — with the results behind them.</p>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container">
+    {% if categories|length > 1 %}
+      <nav class="filters" aria-label="Filter projects by category">
+        <a href="{% url 'core:portfolio' %}" class="chip {% if not active_category %}is-active{% endif %}">All</a>
+        {% for cat in categories %}
+          <a href="?category={{ cat|urlencode }}" class="chip {% if cat == active_category %}is-active{% endif %}">{{ cat }}</a>
+        {% endfor %}
+      </nav>
+    {% endif %}
+
+    <div class="grid grid-3">
+      {% for project in projects %}
+        {% include "partials/project_card.html" %}
+      {% empty %}
+        <p class="muted">No projects to show yet.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta.html" %}
+{% endblock %}

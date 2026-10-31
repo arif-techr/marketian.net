@@ -1,0 +1,43 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}Services{% endblock %}
+{% block description %}Digital marketing, SEO, paid ads and web development services by {{ profile.name }}.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Services</p>
+    <h1>How I can <span class="gradient-text">help you grow</span></h1>
+    <p class="lead">Pick a single service or combine them into a full growth package tailored to your business.</p>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container">
+    <div class="grid grid-2">
+      {% for service in services %}
+        <article class="card service-detail reveal">
+          <div class="service-detail-head">
+            <span class="icon-badge icon-badge-lg">{% icon service.icon 26 %}</span>
+            <div>
+              <h2>{{ service.title }}</h2>
+              <p class="muted">{{ service.summary }}</p>
+            </div>
+          </div>
+          {% if service.description %}<p>{{ service.description }}</p>{% endif %}
+          {% if service.feature_list %}
+            <ul class="check-list">
+              {% for feature in service.feature_list %}<li>{% icon "check" 16 %} {{ feature }}</li>{% endfor %}
+            </ul>
+          {% endif %}
+          <a class="link-arrow" href="{% url 'core:contact' %}?subject={{ service.title|urlencode }}">Request this service {% icon "arrow" 16 %}</a>
+        </article>
+      {% empty %}
+        <p class="muted">No services yet — add some from the admin panel.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta.html" %}
+{% endblock %}

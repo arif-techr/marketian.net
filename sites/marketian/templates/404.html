@@ -1,0 +1,17 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}Page not found{% endblock %}
+
+{% block content %}
+<section class="page-hero not-found">
+  <div class="container center">
+    <p class="big-code gradient-text">404</p>
+    <h1>This page wandered off.</h1>
+    <p class="lead">The page you're looking for doesn't exist or has moved.</p>
+    <div class="hero-actions hero-actions-center">
+      <a class="btn btn-primary" href="{% url 'core:home' %}">{% icon "arrow-left" 16 %} Back home</a>
+      <a class="btn btn-outline" href="{% url 'core:contact' %}">Contact me</a>
+    </div>
+  </div>
+</section>
+{% endblock %}

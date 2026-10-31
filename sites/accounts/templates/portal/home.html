@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% block head_title %}Your account{% endblock %}
+{% block content %}
+<div class="page-head">
+  {% if github %}<img class="avatar" src="{{ github.get_avatar_url }}" alt="">{% else %}<span class="avatar">{{ user.email|first|upper }}</span>{% endif %}
+  <div>
+    <h1 style="margin:0">{% firstof user.get_full_name user.username %}</h1>
+    <p class="muted" style="margin:0">{{ user.email }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>Your products</h2>
+  {% if products %}
+    <div class="grid" style="margin-top:12px">
+      {% for product in products %}
+        <a class="tile" href="{{ product.url }}"><strong>{{ product.name }}</strong><span class="muted small">{{ product.url }}</span></a>
+      {% endfor %}
+    </div>
+  {% else %}
+    <p class="muted">No products yet.</p>
+  {% endif %}
+</div>
+
+<div class="card">
+  <h2>Sign-in methods</h2>
+  <ul class="list">
+    <li>
+      <span>GitHub</span>
+      {% if github %}<span class="badge badge-ok">Connected</span>{% else %}<a href="{% url 'socialaccount_connections' %}">Connect</a>{% endif %}
+    </li>
+    <li><span>Email &amp; password</span><a href="{% url 'account_change_password' %}">{% if user.has_usable_password %}Change password{% else %}Set a password{% endif %}</a></li>
+    <li><span>Email addresses</span><a href="{% url 'account_email' %}">Manage</a></li>
+  </ul>
+</div>
+{% endblock %}

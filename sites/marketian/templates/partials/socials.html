@@ -1,0 +1,10 @@
+{% load ui %}
+<div class="socials">
+  {% if profile.linkedin %}<a href="{{ profile.linkedin }}" target="_blank" rel="noopener" aria-label="LinkedIn">{% icon "linkedin" 18 %}</a>{% endif %}
+  {% if profile.github %}<a href="{{ profile.github }}" target="_blank" rel="noopener" aria-label="GitHub">{% icon "github" 18 %}</a>{% endif %}
+  {% if profile.facebook %}<a href="{{ profile.facebook }}" target="_blank" rel="noopener" aria-label="Facebook">{% icon "facebook" 18 %}</a>{% endif %}
+  {% if profile.twitter %}<a href="{{ profile.twitter }}" target="_blank" rel="noopener" aria-label="X / Twitter">{% icon "twitter" 18 %}</a>{% endif %}
+  {% if profile.instagram %}<a href="{{ profile.instagram }}" target="_blank" rel="noopener" aria-label="Instagram">{% icon "instagram" 18 %}</a>{% endif %}
+  {% if profile.youtube %}<a href="{{ profile.youtube }}" target="_blank" rel="noopener" aria-label="YouTube">{% icon "youtube" 18 %}</a>{% endif %}
+  {% if profile.whatsapp %}<a href="https://wa.me/{{ profile.whatsapp }}" target="_blank" rel="noopener" aria-label="WhatsApp">{% icon "whatsapp" 18 %}</a>{% endif %}
+</div>

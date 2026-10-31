@@ -1,0 +1,62 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}{{ project.title }}{% endblock %}
+{% block og_title %}{{ project.title }} — Case study{% endblock %}
+{% block description %}{{ project.summary }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container narrow">
+    <a class="link-back" href="{% url 'core:portfolio' %}">{% icon "arrow-left" 16 %} All projects</a>
+    <p class="eyebrow">{{ project.category }}</p>
+    <h1>{{ project.title }}</h1>
+    <p class="lead">{{ project.summary }}</p>
+    <dl class="meta-row">
+      {% if project.client %}<div><dt>Client</dt><dd>{{ project.client }}</dd></div>{% endif %}
+      {% if project.completed %}<div><dt>Completed</dt><dd>{{ project.completed|date:"F Y" }}</dd></div>{% endif %}
+      <div><dt>Category</dt><dd>{{ project.category }}</dd></div>
+      {% if project.live_url %}<div><dt>Live</dt><dd><a href="{{ project.live_url }}" target="_blank" rel="noopener">Visit site {% icon "external" 14 %}</a></dd></div>{% endif %}
+    </dl>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container narrow">
+    <div class="detail-cover" style="--accent: {{ project.accent }}">
+      {% if project.cover %}
+        <img src="{{ project.cover.url }}" alt="{{ project.title }}">
+      {% else %}
+        <div class="project-placeholder project-placeholder-lg"><span>{{ project.category }}</span><strong>{{ project.title }}</strong></div>
+      {% endif %}
+    </div>
+
+    {% if project.result_list %}
+      <div class="results">
+        {% for result in project.result_list %}<div class="result reveal">{% icon "chart" 20 %}<span>{{ result }}</span></div>{% endfor %}
+      </div>
+    {% endif %}
+
+    <div class="prose">
+      {% if project.challenge %}<h2>The challenge</h2>{{ project.challenge|linebreaks }}{% endif %}
+      {% if project.solution %}<h2>The solution</h2>{{ project.solution|linebreaks }}{% endif %}
+    </div>
+
+    {% if project.tag_list %}
+      <ul class="tags tags-lg">{% for tag in project.tag_list %}<li>{{ tag }}</li>{% endfor %}</ul>
+    {% endif %}
+  </div>
+</section>
+
+{% if others %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal"><h2>More projects</h2></div>
+    <div class="grid grid-3">
+      {% for project in others %}{% include "partials/project_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include "partials/cta.html" %}
+{% endblock %}

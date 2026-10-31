@@ -1,0 +1,31 @@
+<table role="presentation" cellpadding="0" cellspacing="0" border="0" style="font-family:Arial,Helvetica,sans-serif;color:#2a2f45;">
+  {% if sig.sign_off %}<tr><td colspan="2" style="padding:0 0 12px;font-size:15px;">{{ sig.sign_off }}</td></tr>{% endif %}
+  <tr>
+    {% if photo_url or initials %}
+    <td valign="top" style="padding:0 16px 0 0;">
+      {% if photo_url %}
+        <img src="{{ photo_url }}" width="72" height="72" alt="{{ name }}" style="display:block;width:72px;height:72px;border-radius:50%;object-fit:cover;border:2px solid {{ sig.accent_color }};">
+      {% else %}
+        <table role="presentation" cellpadding="0" cellspacing="0" border="0"><tr>
+          <td width="72" height="72" align="center" valign="middle" style="width:72px;height:72px;border-radius:50%;background:{{ sig.accent_color }};color:#ffffff;font-size:24px;font-weight:bold;">{{ initials }}</td>
+        </tr></table>
+      {% endif %}
+    </td>
+    {% endif %}
+    <td valign="top" style="border-left:3px solid {{ sig.accent_color }};padding:2px 0 2px 14px;font-size:13px;line-height:1.55;">
+      <div style="font-size:16px;font-weight:bold;color:#12152a;">{{ name }}</div>
+      <div style="color:{{ sig.accent_color }};font-weight:bold;">{{ title }}{% if sig.company %} · {{ sig.company }}{% endif %}</div>
+      <div style="margin-top:6px;color:#5a6280;">
+        {% if email %}✉ <a href="mailto:{{ email }}" style="color:#5a6280;text-decoration:none;">{{ email }}</a><br>{% endif %}
+        {% if phone %}☏ <a href="tel:{{ phone }}" style="color:#5a6280;text-decoration:none;">{{ phone }}</a><br>{% endif %}
+        {% if website %}🌐 <a href="{{ website_url }}" style="color:#5a6280;text-decoration:none;">{{ website }}</a>{% endif %}
+      </div>
+      {% if socials %}
+      <div style="margin-top:6px;">
+        {% for label, url in socials %}<a href="{{ url }}" style="color:{{ sig.accent_color }};text-decoration:none;font-weight:bold;">{{ label }}</a>{% if not forloop.last %} <span style="color:#c9cde0;">|</span> {% endif %}{% endfor %}
+      </div>
+      {% endif %}
+    </td>
+  </tr>
+  {% if sig.disclaimer %}<tr><td colspan="2" style="padding:12px 0 0;font-size:11px;line-height:1.5;color:#9aa0b5;">{{ sig.disclaimer|linebreaksbr }}</td></tr>{% endif %}
+</table>

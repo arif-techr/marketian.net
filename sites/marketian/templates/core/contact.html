@@ -1,0 +1,97 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}Contact{% endblock %}
+{% block description %}Get in touch with {{ profile.name }} about your next project.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Contact</p>
+    <h1>Let's build something <span class="gradient-text">great together</span></h1>
+    <p class="lead">Send a message about your project, a question, or just to say hello. I reply to every message.</p>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container contact-grid">
+    <aside class="contact-info">
+      <a class="card contact-item" href="mailto:{{ profile.email }}">
+        <span class="icon-badge">{% icon "mail" 20 %}</span>
+        <span><small>Email</small><strong>{{ profile.email }}</strong></span>
+      </a>
+      {% if profile.phone %}
+        <a class="card contact-item" href="tel:{{ profile.phone }}">
+          <span class="icon-badge">{% icon "phone" 20 %}</span>
+          <span><small>Phone</small><strong>{{ profile.phone }}</strong></span>
+        </a>
+      {% endif %}
+      {% if profile.whatsapp %}
+        <a class="card contact-item" href="https://wa.me/{{ profile.whatsapp }}" target="_blank" rel="noopener">
+          <span class="icon-badge">{% icon "whatsapp" 20 %}</span>
+          <span><small>WhatsApp</small><strong>Chat with me</strong></span>
+        </a>
+      {% endif %}
+      {% if profile.location %}
+        <div class="card contact-item">
+          <span class="icon-badge">{% icon "pin" 20 %}</span>
+          <span><small>Location</small><strong>{{ profile.location }}</strong></span>
+        </div>
+      {% endif %}
+      <div class="card contact-item">
+        <span class="icon-badge">{% icon "clock" 20 %}</span>
+        <span><small>Response time</small><strong>Within 24 hours</strong></span>
+      </div>
+      {% include "partials/socials.html" %}
+    </aside>
+
+    <form class="card contact-form" method="post" novalidate>
+      {% csrf_token %}
+      {% if form.non_field_errors %}<div class="form-error">{{ form.non_field_errors }}</div>{% endif %}
+
+      <div class="form-row">
+        <div class="field {% if form.name.errors %}has-error{% endif %}">
+          <label for="{{ form.name.id_for_label }}">Name <span aria-hidden="true">*</span></label>
+          {{ form.name }}
+          {% for e in form.name.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+        </div>
+        <div class="field {% if form.email.errors %}has-error{% endif %}">
+          <label for="{{ form.email.id_for_label }}">Email <span aria-hidden="true">*</span></label>
+          {{ form.email }}
+          {% for e in form.email.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="field">
+          <label for="{{ form.phone.id_for_label }}">Phone</label>
+          {{ form.phone }}
+        </div>
+        <div class="field">
+          <label for="{{ form.budget.id_for_label }}">Budget</label>
+          {{ form.budget }}
+        </div>
+      </div>
+
+      <div class="field {% if form.subject.errors %}has-error{% endif %}">
+        <label for="{{ form.subject.id_for_label }}">Subject <span aria-hidden="true">*</span></label>
+        {{ form.subject }}
+        {% for e in form.subject.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+
+      <div class="field {% if form.message.errors %}has-error{% endif %}">
+        <label for="{{ form.message.id_for_label }}">Message <span aria-hidden="true">*</span></label>
+        {{ form.message }}
+        {% for e in form.message.errors %}<p class="field-error">{{ e }}</p>{% endfor %}
+      </div>
+
+      <div class="hp-field" aria-hidden="true">
+        <label for="{{ form.website.id_for_label }}">Leave this empty</label>
+        {{ form.website }}
+      </div>
+
+      <button class="btn btn-primary btn-lg btn-block" type="submit">Send message {% icon "send" 18 %}</button>
+      <p class="muted small center">Your details are only used to reply to you.</p>
+    </form>
+  </div>
+</section>
+{% endblock %}

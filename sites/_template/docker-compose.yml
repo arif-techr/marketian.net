@@ -1,0 +1,24 @@
+# Starter for a new site. Copy this folder to sites/<name>, replace every
+# "CHANGE-ME" below with the site's short name (for example: qr), then add
+# "- sites/<name>/docker-compose.yml" to the include list in the root
+# docker-compose.yml. Every service, volume and network name must start with
+# the site's name so it never clashes with another site.
+
+services:
+  CHANGE-ME:
+    build: .
+    image: CHANGE-ME-web
+    restart: unless-stopped
+    env_file:
+      - path: .env
+        required: false
+    networks:
+      - web-proxy
+
+  # Need a database? Copy the "marketian-db" service, the "marketian-pgdata"
+  # volume and the "marketian-private" network from sites/marketian, renaming
+  # "marketian" to this site's name.
+
+networks:
+  web-proxy:
+    name: web-proxy

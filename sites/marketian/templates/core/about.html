@@ -1,0 +1,102 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}About {{ profile.name }}{% endblock %}
+{% block description %}{{ profile.short_bio|default:profile.tagline }}{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">About me</p>
+    <h1>The person behind <span class="gradient-text">Marketian</span></h1>
+    <p class="lead">{{ profile.short_bio|default:profile.tagline }}</p>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container about-grid">
+    <div class="about-photo reveal">
+      <div class="portrait portrait-lg">
+        {% if profile.photo %}
+          <img src="{{ profile.photo.url }}" alt="Portrait of {{ profile.name }}">
+        {% else %}
+          <span class="portrait-initials">{{ profile.initials }}</span>
+        {% endif %}
+      </div>
+      <ul class="info-list">
+        {% if profile.location %}<li>{% icon "pin" 18 %} {{ profile.location }}</li>{% endif %}
+        <li>{% icon "mail" 18 %} <a href="mailto:{{ profile.email }}">{{ profile.email }}</a></li>
+        {% if profile.phone %}<li>{% icon "phone" 18 %} <a href="tel:{{ profile.phone }}">{{ profile.phone }}</a></li>{% endif %}
+      </ul>
+    </div>
+
+    <div class="about-copy reveal">
+      <h2>My story</h2>
+      {% for paragraph in profile.about_paragraphs %}
+        <p>{{ paragraph|linebreaksbr }}</p>
+      {% empty %}
+        <p class="muted">Add your story from the admin panel → Site profile → About.</p>
+      {% endfor %}
+      <div class="hero-actions">
+        {% if profile.resume %}
+          <a class="btn btn-primary" href="{{ profile.resume.url }}" download>{% icon "download" 18 %} Download CV</a>
+        {% endif %}
+        <a class="btn btn-outline" href="{% url 'core:contact' %}">Work with me {% icon "arrow" 16 %}</a>
+      </div>
+      <dl class="stats stats-compact">
+        <div><dt>Years</dt><dd>{{ profile.years_experience }}+</dd></div>
+        <div><dt>Projects</dt><dd>{{ profile.projects_completed }}+</dd></div>
+        <div><dt>Clients</dt><dd>{{ profile.happy_clients }}+</dd></div>
+      </dl>
+    </div>
+  </div>
+</section>
+
+{% if skill_groups %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Skills</p>
+      <h2>What I bring to the table</h2>
+    </div>
+    <div class="grid grid-2">
+      {% for group, skills in skill_groups.items %}
+        <div class="card reveal">
+          <h3>{{ group }}</h3>
+          <ul class="skill-list">
+            {% for skill in skills %}
+              <li>
+                <div class="skill-row"><span>{{ skill.name }}</span><span class="muted">{{ skill.level }}%</span></div>
+                <div class="bar"><span style="--level: {{ skill.level }}%"></span></div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if experience %}
+<section class="section">
+  <div class="container narrow">
+    <div class="section-head reveal">
+      <p class="eyebrow">Journey</p>
+      <h2>Experience</h2>
+    </div>
+    <ol class="timeline">
+      {% for item in experience %}
+        <li class="reveal">
+          <span class="timeline-period">{{ item.period }}</span>
+          <h3>{{ item.title }}</h3>
+          <p class="timeline-org">{{ item.organization }}</p>
+          {% if item.description %}<p class="muted">{{ item.description }}</p>{% endif %}
+        </li>
+      {% endfor %}
+    </ol>
+  </div>
+</section>
+{% endif %}
+
+{% include "partials/cta.html" %}
+{% endblock %}

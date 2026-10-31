@@ -1,0 +1,28 @@
+# accounts.marketian.net: the one Marketian account (GitHub or email) that
+# every product signs in with. Its database lives on the shared PostgreSQL
+# server in ../../infra (created with: scripts/create-db.sh accounts).
+
+services:
+  accounts:
+    build: .
+    image: accounts-web
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: postgres
+    volumes:
+      # The key that signs sign-in tokens. Keep it: losing it signs everyone out of every product.
+      - accounts-keys:/app/keys
+    networks:
+      - shared-db
+      - web-proxy
+
+volumes:
+  accounts-keys:
+
+networks:
+  shared-db:
+    name: shared-db
+    internal: true
+  web-proxy:
+    name: web-proxy

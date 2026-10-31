@@ -1,0 +1,30 @@
+{% load ui %}{% with url_name=request.resolver_match.url_name %}
+<header class="site-header" id="top">
+  <nav class="container nav" aria-label="Main">
+    <a class="brand" href="{% url 'core:home' %}" aria-label="Marketian home">
+      <span class="brand-mark">M</span>
+      <span class="brand-text">Marketian</span>
+    </a>
+
+    <ul class="nav-links" id="nav-links">
+      <li><a href="{% url 'core:home' %}" {% if url_name == "home" %}aria-current="page"{% endif %}>Home</a></li>
+      <li><a href="{% url 'core:about' %}" {% if url_name == "about" %}aria-current="page"{% endif %}>About</a></li>
+      <li><a href="{% url 'core:services' %}" {% if url_name == "services" %}aria-current="page"{% endif %}>Services</a></li>
+      <li><a href="{% url 'core:portfolio' %}" {% if url_name == "portfolio" or url_name == "project_detail" %}aria-current="page"{% endif %}>Portfolio</a></li>
+      <li class="nav-cta-mobile"><a class="btn btn-primary" href="{% url 'core:contact' %}">Let's talk</a></li>
+    </ul>
+
+    <div class="nav-actions">
+      <button class="icon-btn" id="theme-toggle" type="button" aria-label="Toggle color theme">
+        <span class="when-dark">{% icon "sun" 18 %}</span>
+        <span class="when-light">{% icon "moon" 18 %}</span>
+      </button>
+      <a class="btn btn-primary btn-sm nav-cta" href="{% url 'core:contact' %}">Let's talk {% icon "arrow" 16 %}</a>
+      <button class="icon-btn nav-toggle" id="nav-toggle" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="nav-links">
+        <span class="when-closed">{% icon "menu" 20 %}</span>
+        <span class="when-open">{% icon "close" 20 %}</span>
+      </button>
+    </div>
+  </nav>
+</header>
+{% endwith %}

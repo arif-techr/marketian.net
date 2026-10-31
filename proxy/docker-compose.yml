@@ -1,0 +1,28 @@
+# Shared reverse proxy for every site on this server.
+# Caddy gets HTTPS certificates automatically and routes each domain to the
+# right container (see Caddyfile). Included by ../docker-compose.yml.
+
+services:
+  proxy:
+    image: caddy:2-alpine
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"
+    volumes:
+      - ./Caddyfile:/etc/caddy/Caddyfile:ro
+      - proxy-data:/data
+      - proxy-config:/config
+    networks:
+      web-proxy:
+        # Products reach the login server through the proxy without leaving the VPS.
+        aliases: [accounts.marketian.net]
+
+volumes:
+  proxy-data:
+  proxy-config:
+
+networks:
+  web-proxy:
+    name: web-proxy

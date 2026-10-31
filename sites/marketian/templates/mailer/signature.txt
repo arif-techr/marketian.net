@@ -1,0 +1,9 @@
+{% autoescape off %}{% if sig.sign_off %}{{ sig.sign_off }}
+{% endif %}{{ name }}
+{{ title }}{% if sig.company %} · {{ sig.company }}{% endif %}
+{% if email %}{{ email }}
+{% endif %}{% if phone %}{{ phone }}
+{% endif %}{% if website %}{{ website }}
+{% endif %}{% if socials %}{% for label, url in socials %}{{ label }}: {{ url }}
+{% endfor %}{% endif %}{% if sig.disclaimer %}
+{{ sig.disclaimer }}{% endif %}{% endautoescape %}

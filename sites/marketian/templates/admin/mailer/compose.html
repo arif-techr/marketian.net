@@ -1,0 +1,130 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block extrastyle %}{{ block.super }}
+<style>
+  .mail-grid { display: grid; grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); gap: 28px; align-items: start; }
+  .mail-card { background: var(--body-bg); border: 1px solid var(--hairline-color); border-radius: 10px; padding: 20px 22px; }
+  .mail-card h2 { margin: 0 0 14px; font-size: 15px; }
+  .mail-field { margin-bottom: 14px; }
+  .mail-field label { display: block; font-weight: 600; margin-bottom: 5px; }
+  .mail-field input[type=text], .mail-field input[type=email], .mail-field select, .mail-field textarea { width: 100%; box-sizing: border-box; padding: 8px 10px; font-size: 14px; }
+  .mail-field select { height: auto; line-height: 1.4; }
+  .mail-field textarea { font-family: inherit; line-height: 1.55; }
+  .mail-field .helptext, .mail-field .help { color: var(--body-quiet-color); font-size: 12px; margin-top: 4px; display: block; }
+  .mail-field .errorlist { margin: 4px 0 0; }
+  .mail-check label { display: inline; font-weight: normal; }
+  .mail-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+  .mail-actions { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 8px; }
+  .mail-actions .default { padding: 10px 22px; }
+  .original { background: var(--darkened-bg); border-left: 3px solid var(--primary); padding: 12px 14px; border-radius: 6px; white-space: pre-wrap; margin: 0 0 16px; }
+  .ph-list { margin: 0; padding: 0; list-style: none; font-size: 12.5px; }
+  .ph-list li { display: flex; justify-content: space-between; gap: 10px; padding: 5px 0; border-bottom: 1px solid var(--hairline-color); }
+  .ph-list code { cursor: pointer; }
+  .ph-list span { color: var(--body-quiet-color); text-align: right; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 55%; }
+  .preview-frame { width: 100%; height: 620px; border: 1px solid var(--hairline-color); border-radius: 8px; background: #fff; }
+  @media (max-width: 1000px) { .mail-grid, .mail-row { grid-template-columns: 1fr; } }
+</style>
+{% endblock %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+  <a href="{% url 'admin:index' %}">{% translate 'Home' %}</a> ›
+  {% if contact %}
+    <a href="{% url 'admin:core_contactmessage_changelist' %}">Contact messages</a> ›
+    <a href="{% url 'admin:core_contactmessage_change' contact.pk %}">{{ contact }}</a> › Reply
+  {% else %}
+    <a href="{% url 'admin:mailer_sentemail_changelist' %}">Sent emails</a> › Compose
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block content %}
+<div class="mail-grid">
+  <form method="post" class="mail-card" id="compose-form" novalidate>
+    {% csrf_token %}
+    {% if form.non_field_errors %}{{ form.non_field_errors }}{% endif %}
+
+    {% if contact %}
+      <h2>Their message</h2>
+      <div class="original"><strong>{{ contact.subject }}</strong>
+{{ contact.message }}</div>
+    {% endif %}
+
+    <div class="mail-field">{{ form.template.label_tag }}{{ form.template }}
+      <span class="help">Picking a template fills in the subject and message. <a href="{% url 'admin:mailer_emailtemplate_changelist' %}">Manage templates</a></span>
+    </div>
+
+    <div class="mail-row">
+      <div class="mail-field">{{ form.to.label_tag }}{{ form.to }}{{ form.to.errors }}</div>
+      <div class="mail-field">{{ form.cc.label_tag }}{{ form.cc }}{{ form.cc.errors }}</div>
+    </div>
+    {% if form.recipient_name %}
+      <div class="mail-field">{{ form.recipient_name.label_tag }}{{ form.recipient_name }}<span class="help">{{ form.recipient_name.help_text }}</span></div>
+    {% endif %}
+
+    <div class="mail-field">{{ form.subject.label_tag }}{{ form.subject }}{{ form.subject.errors }}</div>
+    <div class="mail-field">{{ form.body.label_tag }}{{ form.body }}{{ form.body.errors }}</div>
+
+    <div class="mail-row">
+      <div class="mail-field">{{ form.signature.label_tag }}{{ form.signature }}
+        <span class="help"><a href="{% url 'admin:mailer_emailsignature_changelist' %}">Edit signatures</a></span>
+      </div>
+      <div class="mail-field mail-check" style="padding-top:24px">
+        {{ form.no_signature }} {{ form.no_signature.label_tag }}
+        {% if form.include_original %}<br>{{ form.include_original }} {{ form.include_original.label_tag }}{% endif %}
+      </div>
+    </div>
+
+    <div class="mail-actions">
+      <input type="submit" name="_preview" value="Preview">
+      <input type="submit" name="_send" value="✉ Send email" class="default">
+    </div>
+  </form>
+
+  <div>
+    {% if preview_html %}
+      <div class="mail-card" style="margin-bottom:20px">
+        <h2>Preview</h2>
+        <iframe class="preview-frame" srcdoc="{{ preview_html|force_escape }}"></iframe>
+      </div>
+    {% endif %}
+    <div class="mail-card">
+      <h2>Placeholders</h2>
+      <p class="help" style="margin-top:0">Click one to insert it into the message. They're filled in when the email is sent.</p>
+      <ul class="ph-list">
+        {% for key, value in sample.items %}
+          <li><code data-ph="{{ key }}">{% templatetag openvariable %} {{ key }} {% templatetag closevariable %}</code><span title="{{ value }}">{{ value|default:"—"|truncatechars:40 }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</div>
+
+{{ templates_data|json_script:"templates-data" }}
+<script>
+(function () {
+  var data = JSON.parse(document.getElementById("templates-data").textContent);
+  var form = document.getElementById("compose-form");
+  var pick = form.elements["template"], subject = form.elements["subject"], body = form.elements["body"], sig = form.elements["signature"];
+  var original = body.value;
+  pick.addEventListener("change", function () {
+    var t = data[pick.value];
+    if (!t) return;
+    if (body.value.trim() && body.value !== original && !confirm("Replace your current message with this template?")) return;
+    subject.value = t.subject;
+    body.value = original = t.body;
+    sig.value = t.signature || "";
+  });
+  document.querySelectorAll("[data-ph]").forEach(function (el) {
+    el.addEventListener("click", function () {
+      var token = "{" + "{ " + el.getAttribute("data-ph") + " }" + "}";
+      var s = body.selectionStart || body.value.length, e = body.selectionEnd || s;
+      body.value = body.value.slice(0, s) + token + body.value.slice(e);
+      body.focus();
+      body.selectionStart = body.selectionEnd = s + token.length;
+    });
+  });
+})();
+</script>
+{% endblock %}

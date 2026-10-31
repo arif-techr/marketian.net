@@ -1,0 +1,36 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ product_name }}{% endblock %} · Marketian</title>
+  <meta name="description" content="{{ product_tagline }}">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+</head>
+<body>
+  <header class="app-header">
+    <a class="brand" href="{% url 'dashboard:landing' %}"><img src="{% static 'img/favicon.svg' %}" alt=""> Marketian <span>{{ product_name }}</span></a>
+    <nav class="app-nav">
+      {% if user.is_authenticated %}
+        <a href="{% url 'dashboard:app' %}">Dashboard</a>
+        <a href="{{ accounts_url }}/">Account</a>
+        <a href="{% url 'dashboard:logout' %}">Sign out</a>
+      {% else %}
+        <a class="btn btn-inline" style="padding:8px 16px" href="{% url 'dashboard:login' %}">Sign in</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="app-main">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="app-footer">{{ product_name }} is a <a href="https://marketian.net">Marketian</a> product</footer>
+</body>
+</html>

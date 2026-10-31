@@ -1,0 +1,51 @@
+# Marketian portfolio: the Django app and its own PostgreSQL database.
+# Started from the repo root (../../docker-compose.yml includes this file).
+# The proxy reaches the app as "marketian:8000" on the shared "web-proxy" network.
+# Names are prefixed with "marketian" so they never clash with other sites.
+
+services:
+  marketian:
+    build: .
+    image: marketian-web
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: marketian-db
+      SERVE_MEDIA: "True"
+    volumes:
+      - marketian-media:/app/media
+    depends_on:
+      marketian-db:
+        condition: service_healthy
+    networks:
+      - marketian-private
+      - web-proxy
+
+  marketian-db:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-marketian}
+      POSTGRES_USER: ${POSTGRES_USER:-marketian}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in sites/marketian/.env}
+    volumes:
+      - marketian-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER} -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - marketian-private
+
+volumes:
+  marketian-media:
+  marketian-pgdata:
+
+networks:
+  # Only this site's containers; no other site can reach the database.
+  marketian-private:
+    internal: true
+  # Shared with the proxy.
+  web-proxy:
+    name: web-proxy

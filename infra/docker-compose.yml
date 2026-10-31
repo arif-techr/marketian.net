@@ -1,0 +1,29 @@
+# Shared services for the SaaS products.
+# One PostgreSQL server; every product gets its own database and its own
+# login (created with scripts/create-db.sh), so products can't read each
+# other's data. Only containers on the internal "shared-db" network reach it.
+
+services:
+  postgres:
+    image: postgres:17-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in infra/.env}
+    volumes:
+      - infra-pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - shared-db
+
+volumes:
+  infra-pgdata:
+
+networks:
+  shared-db:
+    name: shared-db
+    internal: true

@@ -1,0 +1,34 @@
+{% load ui %}
+<footer class="site-footer">
+  <div class="container footer-grid">
+    <div>
+      <a class="brand" href="{% url 'core:home' %}">
+        <span class="brand-mark">M</span>
+        <span class="brand-text">Marketian</span>
+      </a>
+      <p class="muted footer-about">{{ profile.tagline }}</p>
+      {% include "partials/socials.html" %}
+    </div>
+    <div>
+      <h3 class="footer-title">Explore</h3>
+      <ul class="footer-links">
+        <li><a href="{% url 'core:about' %}">About</a></li>
+        <li><a href="{% url 'core:services' %}">Services</a></li>
+        <li><a href="{% url 'core:portfolio' %}">Portfolio</a></li>
+        <li><a href="{% url 'core:contact' %}">Contact</a></li>
+      </ul>
+    </div>
+    <div>
+      <h3 class="footer-title">Get in touch</h3>
+      <ul class="footer-links">
+        <li><a href="mailto:{{ profile.email }}">{% icon "mail" 16 %} {{ profile.email }}</a></li>
+        {% if profile.phone %}<li><a href="tel:{{ profile.phone }}">{% icon "phone" 16 %} {{ profile.phone }}</a></li>{% endif %}
+        {% if profile.location %}<li><span>{% icon "pin" 16 %} {{ profile.location }}</span></li>{% endif %}
+      </ul>
+    </div>
+  </div>
+  <div class="container footer-bottom">
+    <p>&copy; {{ current_year }} {{ profile.name }} · Marketian.net</p>
+    <a href="#top" class="muted">Back to top ↑</a>
+  </div>
+</footer>

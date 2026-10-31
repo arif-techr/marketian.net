@@ -1,0 +1,144 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block content %}
+<section class="hero" data-identity="ian">
+  <div class="container hero-grid">
+    <div class="hero-copy">
+      {% if profile.available_for_work %}
+        <p class="status-pill"><span class="dot"></span> Available for new projects</p>
+      {% endif %}
+      <h1>Hi, I'm {{ profile.name }}.<br><span class="gradient-text">{{ profile.role }}</span></h1>
+      <p class="lead">{{ profile.tagline }}</p>
+
+      <div class="identity">
+        <p class="identity-head">
+          <span class="identity-word" aria-hidden="true">Market<span class="identity-slot"><span class="identity-track"><span>ian</span><span>ain</span></span></span></span>
+          <span class="identity-note">Two names, one studio</span>
+        </p>
+        <div class="identity-options">
+          <button type="button" class="identity-option" data-identity-target="ian" aria-pressed="true">
+            <span class="identity-domain"><span class="identity-dot"></span>marketian.net</span>
+            <span class="identity-text"><strong>Marketing.</strong> Strategy, SEO and ads that get you found.</span>
+          </button>
+          <button type="button" class="identity-option" data-identity-target="ain" aria-pressed="false">
+            <span class="identity-domain"><span class="identity-dot"></span>marketain.net</span>
+            <span class="identity-text"><strong>Building.</strong> Fast websites that turn visits into gains.</span>
+          </button>
+        </div>
+      </div>
+      <div class="hero-actions">
+        <a class="btn btn-primary btn-lg" href="{% url 'core:portfolio' %}">See my work {% icon "arrow" 18 %}</a>
+        <a class="btn btn-outline btn-lg" href="{% url 'core:contact' %}">{% icon "mail" 18 %} Contact me</a>
+      </div>
+      {% include "partials/socials.html" %}
+    </div>
+
+    <div class="hero-visual">
+      <div class="portrait">
+        {% if profile.photo %}
+          <img src="{{ profile.photo.url }}" alt="Portrait of {{ profile.name }}">
+        {% else %}
+          <span class="portrait-initials">{{ profile.initials }}</span>
+        {% endif %}
+      </div>
+      <div class="float-card float-card-a">
+        {% icon "chart" 20 %}
+        <div><strong>+240%</strong><span>Avg. traffic growth</span></div>
+      </div>
+      <div class="float-card float-card-b">
+        {% icon "check" 20 %}
+        <div><strong>{{ profile.projects_completed }}+</strong><span>Projects delivered</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <dl class="stats">
+      <div><dt>Years of experience</dt><dd><span data-count="{{ profile.years_experience }}">{{ profile.years_experience }}</span>+</dd></div>
+      <div><dt>Projects completed</dt><dd><span data-count="{{ profile.projects_completed }}">{{ profile.projects_completed }}</span>+</dd></div>
+      <div><dt>Happy clients</dt><dd><span data-count="{{ profile.happy_clients }}">{{ profile.happy_clients }}</span>+</dd></div>
+    </dl>
+  </div>
+</section>
+
+{% if services %}
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">What I do</p>
+      <h2>Services that move the needle</h2>
+      <p class="muted">From strategy to execution — everything you need to be found, chosen and remembered online.</p>
+    </div>
+    <div class="grid grid-3">
+      {% for service in services %}
+        <article class="card service-card reveal">
+          <span class="icon-badge">{% icon service.icon 22 %}</span>
+          <h3>{{ service.title }}</h3>
+          <p class="muted">{{ service.summary }}</p>
+        </article>
+      {% endfor %}
+    </div>
+    <div class="center mt-lg">
+      <a class="btn btn-outline" href="{% url 'core:services' %}">All services {% icon "arrow" 16 %}</a>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% if projects %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head section-head-row reveal">
+      <div>
+        <p class="eyebrow">Selected work</p>
+        <h2>Recent projects</h2>
+      </div>
+      <a class="link-arrow" href="{% url 'core:portfolio' %}">View full portfolio {% icon "arrow" 16 %}</a>
+    </div>
+    <div class="grid grid-3">
+      {% for project in projects %}{% include "partials/project_card.html" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<section class="section">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">How I work</p>
+      <h2>A simple, proven process</h2>
+    </div>
+    <ol class="process">
+      <li class="reveal"><span class="step">01</span><h3>Discover</h3><p class="muted">We talk goals, audience and competitors so every decision has a reason.</p></li>
+      <li class="reveal"><span class="step">02</span><h3>Strategize</h3><p class="muted">A clear plan with channels, timeline, budget and the KPIs we'll track.</p></li>
+      <li class="reveal"><span class="step">03</span><h3>Execute</h3><p class="muted">Campaigns, content and builds shipped fast with weekly updates.</p></li>
+      <li class="reveal"><span class="step">04</span><h3>Optimize</h3><p class="muted">Measure, test, improve — and scale what works.</p></li>
+    </ol>
+  </div>
+</section>
+
+{% if testimonials %}
+<section class="section section-alt">
+  <div class="container">
+    <div class="section-head reveal">
+      <p class="eyebrow">Testimonials</p>
+      <h2>What clients say</h2>
+    </div>
+    <div class="grid grid-3">
+      {% for t in testimonials %}
+        <figure class="card testimonial reveal">
+          <span class="quote-mark">{% icon "quote" 22 %}</span>
+          <blockquote>{{ t.quote }}</blockquote>
+          <figcaption>
+            <span class="avatar">{{ t.initials }}</span>
+            <span><strong>{{ t.name }}</strong>{% if t.position %}<small>{{ t.position }}</small>{% endif %}</span>
+          </figcaption>
+        </figure>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+{% include "partials/cta.html" %}
+{% endblock %}

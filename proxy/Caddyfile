@@ -1,0 +1,33 @@
+# Every public domain on this server, and the container that answers it.
+# The upstream name is the site's service name in its docker-compose.yml
+# (reached over the "web-proxy" network). Caddy fetches HTTPS certificates itself.
+#
+# After editing, apply with:  scripts/deploy.sh   (or just reload the proxy:)
+#   docker compose exec proxy caddy reload --config /etc/caddy/Caddyfile
+
+# --- Marketian portfolio (sites/marketian) ----------------------------------
+# marketain.net and the www. names are redirected to marketian.net by the app.
+marketian.net, www.marketian.net, marketain.net, www.marketain.net {
+	encode zstd gzip
+	reverse_proxy marketian:8000
+}
+
+# --- Marketian account: one login for every product (sites/accounts) --------
+accounts.marketian.net {
+	encode zstd gzip
+	reverse_proxy accounts:8000
+}
+
+# --- SaaS products ------------------------------------------------------------
+metadata.marketian.net {
+	encode zstd gzip
+	reverse_proxy metadata:8000
+}
+
+# --- Next sites ---------------------------------------------------------------
+# Copy sites/_template to sites/<name>, then uncomment and adjust a block:
+#
+# qr.marketian.net {
+# 	encode zstd gzip
+# 	reverse_proxy qr:80
+# }

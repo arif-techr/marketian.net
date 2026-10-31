@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% block head_title %}Create your account{% endblock %}
+{% block content %}
+<div class="auth card">
+  <h1>Create your Marketian account</h1>
+  <p class="muted">Use it to sign in to every Marketian product.</p>
+
+  {% include "socialaccount/snippets/github_button.html" %}
+
+  <form method="post" action="{% url 'account_signup' %}">
+    {% csrf_token %}
+    {{ form.non_field_errors }}
+    <p>
+      <label for="id_email">Email</label>
+      {{ form.email.errors }}
+      <input type="email" name="email" id="id_email" autocomplete="email" required value="{{ form.email.value|default:'' }}">
+    </p>
+    <p>
+      <label for="id_password1">Password</label>
+      {{ form.password1.errors }}
+      <input type="password" name="password1" id="id_password1" autocomplete="new-password" required>
+      <span>At least 8 characters, not too common.</span>
+    </p>
+    <p>
+      <label for="id_password2">Password again</label>
+      {{ form.password2.errors }}
+      <input type="password" name="password2" id="id_password2" autocomplete="new-password" required>
+    </p>
+    {{ redirect_field }}
+    <button type="submit">Create account</button>
+  </form>
+
+  <p class="small muted" style="margin:18px 0 0">Already have an account? <a href="{{ login_url }}">Sign in</a></p>
+</div>
+{% endblock %}

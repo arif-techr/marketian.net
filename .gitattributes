@@ -1,0 +1,7 @@
+# Everything runs on a Linux server: store and check out text files with LF,
+# even when edited on Windows.
+* text=auto eol=lf
+*.png binary
+*.jpg binary
+*.webp binary
+*.ico binary

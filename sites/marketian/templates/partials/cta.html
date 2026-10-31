@@ -1,0 +1,15 @@
+{% load ui %}
+<section class="section">
+  <div class="container">
+    <div class="cta-band reveal">
+      <div>
+        <h2>Have a project in mind?</h2>
+        <p>Let's turn your ideas into measurable growth. Tell me what you need — I usually reply within 24 hours.</p>
+      </div>
+      <div class="cta-actions">
+        <a class="btn btn-light" href="{% url 'core:contact' %}">Start a project {% icon "arrow" 18 %}</a>
+        <a class="btn btn-ghost-light" href="mailto:{{ profile.email }}">{% icon "mail" 18 %} Email me</a>
+      </div>
+    </div>
+  </div>
+</section>

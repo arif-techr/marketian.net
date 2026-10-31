@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block title %}Dashboard · {{ product_name }}{% endblock %}
+{% block content %}
+<div class="page-head">
+  {% if picture %}<img class="avatar" src="{{ picture }}" alt="">{% else %}<span class="avatar">{{ display_name|first|upper }}</span>{% endif %}
+  <div>
+    <h1 style="margin:0">Welcome, {{ display_name }}</h1>
+    <p class="muted" style="margin:0">{{ user.email }}</p>
+  </div>
+</div>
+
+<div class="card">
+  <h2>{{ product_name }}</h2>
+  <p class="muted" style="margin:0">This is where the product's features go.</p>
+</div>
+{% endblock %}

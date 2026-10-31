@@ -1,0 +1,22 @@
+{% load ui %}
+<article class="project-card reveal">
+  <a href="{{ project.get_absolute_url }}" class="project-media" style="--accent: {{ project.accent }}">
+    {% if project.cover %}
+      <img src="{{ project.cover.url }}" alt="{{ project.title }}" loading="lazy">
+    {% else %}
+      <div class="project-placeholder">
+        <span>{{ project.category }}</span>
+        <strong>{{ project.title }}</strong>
+      </div>
+    {% endif %}
+  </a>
+  <div class="project-body">
+    <p class="eyebrow">{{ project.category }}{% if project.client %} · {{ project.client }}{% endif %}</p>
+    <h3><a href="{{ project.get_absolute_url }}">{{ project.title }}</a></h3>
+    <p class="muted">{{ project.summary }}</p>
+    {% if project.tag_list %}
+      <ul class="tags">{% for tag in project.tag_list|slice:":4" %}<li>{{ tag }}</li>{% endfor %}</ul>
+    {% endif %}
+    <a class="link-arrow" href="{{ project.get_absolute_url }}">View case study {% icon "arrow" 16 %}</a>
+  </div>
+</article>

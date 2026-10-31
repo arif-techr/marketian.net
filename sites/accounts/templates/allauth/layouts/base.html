@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% comment %}Every allauth page (verify email, reset password, connections, ...) in the Marketian layout.{% endcomment %}
+{% block body %}
+  <div class="auth card">
+    {% block content %}{% endblock %}
+  </div>
+{% endblock %}

@@ -1,0 +1,12 @@
+{% autoescape off %}Name: {{ m.name }}
+Email: {{ m.email }}
+Phone: {{ m.phone|default:"—" }}
+Budget: {{ m.budget|default:"—" }}
+Subject: {{ m.subject }}
+Sent: {{ m.created_at|date:"j M Y, H:i" }}
+
+{{ m.message }}
+
+Reply with a template and your signature: {{ reply_url }}
+(or just press Reply in your mail app)
+{% endautoescape %}

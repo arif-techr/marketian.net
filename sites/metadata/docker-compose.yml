@@ -1,0 +1,22 @@
+# metadata.marketian.net: a Marketian SaaS product.
+# Signs people in through accounts.marketian.net; its database lives on the
+# shared PostgreSQL server in ../../infra (created with: scripts/create-db.sh metadata).
+
+services:
+  metadata:
+    build: .
+    image: metadata-web
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      POSTGRES_HOST: postgres
+    networks:
+      - shared-db
+      - web-proxy
+
+networks:
+  shared-db:
+    name: shared-db
+    internal: true
+  web-proxy:
+    name: web-proxy
