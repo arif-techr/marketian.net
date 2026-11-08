@@ -61,6 +61,23 @@
   </div>
 </section>
 
+{% if tools %}
+<section class="section">
+  <div class="container">
+    <div class="section-head section-head-row reveal">
+      <div>
+        <p class="eyebrow">Marketing tools</p>
+        <h2>Tools I build for marketers</h2>
+      </div>
+      <a class="link-arrow" href="{% url 'core:tools' %}">All marketing tools {% icon "arrow" 16 %}</a>
+    </div>
+    <div class="grid grid-3">
+      {% for tool in tools %}{% include "partials/tool_card.html" with level="3" %}{% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
 {% if services %}
 <section class="section">
   <div class="container">
@@ -85,22 +102,6 @@
 </section>
 {% endif %}
 
-{% if tools %}
-<section class="section">
-  <div class="container">
-    <div class="section-head section-head-row reveal">
-      <div>
-        <p class="eyebrow">Marketing tools</p>
-        <h2>Tools I build for marketers</h2>
-      </div>
-      <a class="link-arrow" href="{% url 'core:tools' %}">All marketing tools {% icon "arrow" 16 %}</a>
-    </div>
-    <div class="grid grid-3">
-      {% for tool in tools %}{% include "partials/tool_card.html" with level="3" %}{% endfor %}
-    </div>
-  </div>
-</section>
-{% endif %}
 
 {% if projects %}
 <section class="section section-alt">
