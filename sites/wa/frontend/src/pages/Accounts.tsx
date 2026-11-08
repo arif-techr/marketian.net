@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ConfirmButton, Empty, PageHeader, Pill, Spinner, useToast } from '../components/ui';
+import { ConfirmButton, Empty, PageHeader, Pill, SharedTag, Spinner, useToast } from '../components/ui';
 import { api, ApiError } from '../lib/api';
 import { accountStatus } from '../lib/format';
 import type { Account, AccountsResponse } from '../lib/types';
@@ -99,7 +99,7 @@ function AccountCard({ a, onChange }: { a: Account; onChange: () => void }) {
   return (
     <div className="card">
       <div className="row spread">
-        <span className="name">{a.label}</span>
+        <span className="name">{a.label} <SharedTag by={a.shared_by} /></span>
         <Pill tone={tone}>{text}</Pill>
       </div>
       {a.phone && <span className="meta">+{a.phone}{a.display_name ? ` · ${a.display_name}` : ''}</span>}
@@ -117,7 +117,9 @@ function AccountCard({ a, onChange }: { a: Account; onChange: () => void }) {
       {a.status === 'starting' && <span className="small">Preparing a QR code…</span>}
       {a.last_error && <span className="small err">{a.last_error}</span>}
 
-      {editing ? (
+      {a.shared_by ? (
+        <span className="small">You can send from this phone. Only {a.shared_by} can link, edit or remove it; stop using it under Share resources.</span>
+      ) : editing ? (
         <form className="stack" onSubmit={save}>
           <label className="field"><span>Name</span><input type="text" value={label} maxLength={60} onChange={e => setLabel(e.target.value)} /></label>
           <label className="field">

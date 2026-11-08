@@ -7,12 +7,13 @@ class AccountSerializer(serializers.ModelSerializer):
     sent_today = serializers.SerializerMethodField()
     effective_daily_limit = serializers.SerializerMethodField()
     qr = serializers.SerializerMethodField()
+    shared_by = serializers.SerializerMethodField()
 
     class Meta:
         model = WhatsAppAccount
         fields = [
             "id", "label", "session_id", "provider", "status", "phone", "display_name", "last_error",
-            "daily_limit", "effective_daily_limit", "sent_today", "connected_at", "created_at", "qr",
+            "daily_limit", "effective_daily_limit", "sent_today", "connected_at", "created_at", "qr", "shared_by",
         ]
         read_only_fields = [f for f in fields if f not in ("label", "daily_limit")]
 
@@ -20,9 +21,21 @@ class AccountSerializer(serializers.ModelSerializer):
         return self.context.get("sent_today", {}).get(obj.id, 0)
 
     def get_effective_daily_limit(self, obj):
-        return obj.daily_limit if obj.daily_limit is not None else self.context.get("workspace_limit", 0)
+        if obj.daily_limit is not None:
+            return obj.daily_limit
+        ws = self.context.get("workspace")
+        if ws is not None and obj.owner_id != ws.pk:
+            from apps.broadcasts.limits import limit_for
+            return limit_for(obj)  # the owner's limit applies to a shared phone
+        return self.context.get("workspace_limit", 0)
+
+    def get_shared_by(self, obj):
+        ws = self.context.get("workspace")
+        return obj.owner.username if ws is not None and obj.owner_id != ws.pk else None
 
     def get_qr(self, obj):
+        if self.get_shared_by(obj):
+            return None  # a QR code links a device to the phone: never shown to anyone but the owner
         st = self.context.get("live", {}).get(obj.id)
         return st.qr if st and obj.status == WhatsAppAccount.Status.QR else None
 

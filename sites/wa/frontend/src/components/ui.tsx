@@ -28,6 +28,12 @@ export function Pill({ tone = '', children, title }: { tone?: string; children: 
   return <span className={`pill ${tone}`} title={title}>{children}</span>;
 }
 
+/** The "Shared" flag on anything another user shared with this workspace. Renders nothing for own items. */
+export function SharedTag({ by }: { by?: string | null }) {
+  if (!by) return null;
+  return <Pill tone="shared" title={`Shared with you by ${by}. You can use it, but only ${by} can change it.`}>Shared · {by}</Pill>;
+}
+
 export function Progress({ value, total, label }: { value: number; total: number; label?: string }) {
   const pct = total ? Math.round((value / total) * 100) : 0;
   return (

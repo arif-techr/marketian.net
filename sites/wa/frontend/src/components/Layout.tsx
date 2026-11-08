@@ -13,6 +13,7 @@ const NAV = [
   { to: '/reports', label: 'Reports' },
   { to: '/accounts', label: 'Accounts' },
   { to: '/library', label: 'Templates' },
+  { to: '/sharing', label: 'Share resources', ownersOnly: true },
   { to: '/settings', label: 'Settings' },
 ];
 
@@ -32,11 +33,12 @@ export default function Layout() {
           <button type="button" className="ghost menu-btn" aria-expanded={open} aria-label="Menu" onClick={() => setOpen(o => !o)}>☰</button>
         </div>
         <nav aria-label="Main">
-          {NAV.map(n => (
+          {NAV.filter(n => !n.ownersOnly || user?.is_owner).map(n => (
             <NavLink key={n.to} to={n.to} end={n.end}>
               {n.label}
               {n.to === '/accounts' && data && <span className="meta">{data.accounts.connected}/{data.accounts.total}</span>}
               {n.to === '/campaigns' && !!data?.campaigns_active && <span className="badge">{data.campaigns_active}</span>}
+              {n.to === '/sharing' && !!data?.share_invites && <span className="badge" title="Waiting for you to accept">{data.share_invites}</span>}
             </NavLink>
           ))}
         </nav>

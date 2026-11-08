@@ -9,6 +9,7 @@ from rest_framework.response import Response
 from apps.broadcasts.limits import sent_today_by_account
 from apps.core.models import AppSettings
 from apps.core.workspace import WorkspaceMixin
+from apps.sharing.access import accounts_for
 
 from . import services
 from .models import WhatsAppAccount
@@ -26,11 +27,15 @@ class AccountViewSet(WorkspaceMixin, mixins.ListModelMixin, mixins.RetrieveModel
     pagination_class = None
 
     def get_queryset(self):
+        # Accounts shared with this workspace can be seen (and sent from), but only the owner changes them.
+        if self.action in ("list", "retrieve"):
+            return accounts_for(self.workspace).select_related("owner")
         return WhatsAppAccount.objects.filter(owner=self.workspace)
 
     def context_for(self, live=None):
         return {
             "request": self.request,
+            "workspace": self.workspace,
             "live": live or {},
             "sent_today": sent_today_by_account(),
             "workspace_limit": AppSettings.load(self.workspace).daily_limit,

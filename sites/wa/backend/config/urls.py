@@ -13,4 +13,5 @@ urlpatterns = [
     path("api/", include("apps.whatsapp.urls")),
     path("api/", include("apps.broadcasts.urls")),
     path("api/", include("apps.contacts.urls")),
+    path("api/", include("apps.sharing.urls")),
 ]

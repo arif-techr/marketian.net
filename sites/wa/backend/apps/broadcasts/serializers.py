@@ -11,6 +11,7 @@ from apps.contacts.phones import jid as phone_jid
 from apps.contacts.phones import normalize
 from apps.core.models import AppSettings, Rotation
 from apps.core.workspace import workspace_of
+from apps.sharing.access import accounts_for, contacts_for, lists_for
 from apps.whatsapp.models import WhatsAppAccount
 
 from .models import Campaign, CampaignTarget, MediaFile, MessageTemplate
@@ -45,9 +46,15 @@ class MediaFileSerializer(serializers.ModelSerializer):
 
 
 class TemplateSerializer(serializers.ModelSerializer):
+    shared_by = serializers.SerializerMethodField()
+
     class Meta:
         model = MessageTemplate
-        fields = ["id", "title", "body", "created_at", "updated_at"]
+        fields = ["id", "title", "body", "shared_by", "created_at", "updated_at"]
+
+    def get_shared_by(self, obj):
+        ws = workspace_of(self.context["request"].user)
+        return obj.owner.username if obj.owner_id != ws.pk else None
 
     def validate_title(self, v):
         if not v.strip():
@@ -149,8 +156,8 @@ class CampaignCreateSerializer(serializers.Serializer):
             raise serializers.ValidationError({"scheduled_at": "The scheduled time is in the past."})
         attrs["scheduled_at"] = when or timezone.now()
 
-        senders = list(WhatsAppAccount.objects.filter(
-            pk__in=attrs["sender_account_ids"], owner=ws, status=WhatsAppAccount.Status.CONNECTED).order_by("id"))
+        senders = list(accounts_for(ws).filter(
+            pk__in=attrs["sender_account_ids"], status=WhatsAppAccount.Status.CONNECTED).order_by("id"))
         if not senders:
             raise serializers.ValidationError({"sender_account_ids": "Pick at least one connected WhatsApp account to send from."})
 
@@ -167,9 +174,11 @@ class CampaignCreateSerializer(serializers.Serializer):
         """Saved contacts + list members + pasted numbers, de-duplicated. Opted-out contacts and numbers
         already validated as not on WhatsApp are left out. Returns (contacts, how many were not on WhatsApp)."""
         mine = Contact.objects.filter(owner=ws)
-        picked = {c.phone: c for c in mine.filter(pk__in=attrs["contact_ids"])}
+        # Own contacts, and members of lists shared with this workspace (they stay the sharer's contacts).
+        picked = {c.phone: c for c in contacts_for(ws).filter(pk__in=attrs["contact_ids"])}
         if attrs["contact_list_ids"]:
-            for c in mine.filter(lists__id__in=attrs["contact_list_ids"], lists__owner=ws).distinct():
+            allowed = lists_for(ws).filter(pk__in=attrs["contact_list_ids"]).values("pk")
+            for c in Contact.objects.filter(lists__in=allowed).distinct():
                 picked.setdefault(c.phone, c)
         pasted, bad = [], []
         for token in filter(None, (t.strip() for t in re.split(r"[\n,;]+", attrs.get("numbers") or ""))):

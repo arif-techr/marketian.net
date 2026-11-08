@@ -34,14 +34,16 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const r = await api<{ user: User }>('/auth/login/', { method: 'POST', body: { username, password } });
     // Django rotates the CSRF token on login; fetch the fresh one.
     await api('/auth/session/');
+    qc.clear(); // nothing cached from whoever used this browser before
     setUser(r.user);
-  }, []);
+  }, [qc]);
 
   const register = useCallback(async (body: { username: string; name: string; password: string }) => {
     const r = await api<{ user: User }>('/auth/register/', { method: 'POST', body });
     await api('/auth/session/'); // fresh CSRF token after signing in
+    qc.clear();
     setUser(r.user);
-  }, []);
+  }, [qc]);
 
   const logout = useCallback(async () => {
     await api('/auth/logout/', { method: 'POST' }).catch(() => {});

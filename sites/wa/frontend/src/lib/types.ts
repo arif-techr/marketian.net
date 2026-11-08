@@ -28,6 +28,8 @@ export type Account = {
   connected_at: string | null;
   created_at: string;
   qr: string | null;
+  /** the owner's username when another user shared this account with you */
+  shared_by: string | null;
 };
 
 export type AccountsResponse = { provider: string; provider_online: boolean; results: Account[] };
@@ -37,7 +39,7 @@ export type Media = {
   url: string; public_url: string | null; source_url: string; created_at: string;
 };
 
-export type Template = { id: number; title: string; body: string; created_at: string; updated_at: string };
+export type Template = { id: number; title: string; body: string; shared_by: string | null; created_at: string; updated_at: string };
 
 /** How a campaign shares its recipients between the sender accounts. */
 export type Rotation = 'turns' | 'random' | 'balanced';
@@ -112,6 +114,7 @@ export type Dashboard = {
   failed_today: number;
   sent_total: number;
   campaigns_active: number;
+  share_invites: number;
   last_7_days: { date: string; sent: number }[];
 };
 
@@ -123,11 +126,14 @@ export type Contact = {
   opted_out: boolean;
   on_whatsapp: boolean | null;
   checked_at: string | null;
+  /** extra imported columns, e.g. { score: "85" }; used as {score} in messages */
+  fields: Record<string, string>;
+  shared_by: string | null;
   created_at: string;
   updated_at: string;
 };
 
-export type ContactList = { id: number; name: string; contact_count: number; created_at: string };
+export type ContactList = { id: number; name: string; contact_count: number; shared_by: string | null; created_at: string };
 
 export type ImportResult = {
   total: number;
@@ -139,7 +145,40 @@ export type ImportResult = {
   validation: Validation;
   columns: { name_column: string | null; phone_column: string | null } | null;
   garbled_names: number;
+  fields: string[];
+  fields_updated: number;
 };
+
+/** An imported column usable in messages as {key}. */
+export type ContactField = { id: number; key: string; label: string; shared_by: string | null; created_at: string };
+
+export type ColumnUse = 'phone' | 'name' | 'field' | 'ignore';
+
+export type ImportPreview = { has_header: boolean; headers: string[]; sample: string[][]; total_rows: number; columns: ColumnUse[] };
 
 /** How many numbers are on WhatsApp, not on it, or still waiting to be checked. */
 export type Validation = { total: number; valid: number; invalid: number; pending: number; opted_out: number };
+
+// ---------- sharing ----------
+export type ShareItems = {
+  accounts: { id: number; label: string; phone: string }[];
+  lists: { id: number; name: string; contact_count?: number }[];
+  templates: { id: number; title: string }[];
+};
+
+export type ShareInvite = {
+  id: number; from: string; to: string;
+  status: 'pending' | 'accepted' | 'declined' | 'cancelled' | 'failed' | 'expired';
+  expires_at: string; created_at: string; accepted_at: string | null; attempts_left: number;
+  items: ShareItems;
+  /** only in the response that creates the invitation or a new code */
+  code?: string;
+};
+
+export type ShareGrant = { id: number; kind: 'account' | 'list' | 'template'; item_id: number; name: string; detail: string; owner: string; grantee: string; created_at: string };
+
+export type SharingOverview = {
+  sent_invites: ShareInvite[]; received_invites: ShareInvite[];
+  shared_by_me: ShareGrant[]; shared_with_me: ShareGrant[];
+  shareable: ShareItems;
+};

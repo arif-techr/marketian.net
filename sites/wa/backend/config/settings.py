@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     "apps.whatsapp",
     "apps.contacts",
     "apps.broadcasts",
+    "apps.sharing",
 ]
 
 MIDDLEWARE = [

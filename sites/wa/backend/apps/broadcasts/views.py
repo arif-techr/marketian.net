@@ -16,6 +16,7 @@ from rest_framework.response import Response
 
 from apps.core.csvutil import csv_response
 from apps.core.workspace import WorkspaceMixin
+from apps.sharing.access import templates_for
 
 from .fetch import FetchError, fetch
 from .models import Campaign, CampaignTarget, MediaFile, MessageTemplate
@@ -33,6 +34,8 @@ class TemplateViewSet(WorkspaceMixin, viewsets.ModelViewSet):
     pagination_class = None
 
     def get_queryset(self):
+        if self.action in ("list", "retrieve"):
+            return templates_for(self.workspace).select_related("owner")  # shared ones can be used, not changed
         return MessageTemplate.objects.filter(owner=self.workspace)
 
     def perform_create(self, serializer):

@@ -31,6 +31,8 @@ class WhatsAppAccount(models.Model):
         null=True, blank=True, validators=[MaxValueValidator(10000)], help_text="Overrides the workspace limit. Empty = use workspace limit."
     )
     connected_at = models.DateTimeField(null=True, blank=True)
+    last_sent_at = models.DateTimeField(null=True, blank=True, editable=False,
+                                        help_text="When any campaign last sent from this phone; used to keep a gap between messages.")
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

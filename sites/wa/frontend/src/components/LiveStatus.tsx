@@ -74,6 +74,10 @@ export default function LiveStatus({ c, onFilter }: { c: CampaignDetail; onFilte
         ))}
       </div>
 
+      {c.status === 'scheduled' && c.note && (
+        <div className="note" role="status">{c.note}. It starts by itself as soon as that's free.</div>
+      )}
+
       {running && (
         <div className="now">
           <div>

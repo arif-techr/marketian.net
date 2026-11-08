@@ -12,6 +12,7 @@ import Library from './pages/Library';
 import Login from './pages/Login';
 import Reports from './pages/Reports';
 import Settings from './pages/Settings';
+import Sharing from './pages/Sharing';
 
 export default function App() {
   const { user, ready } = useAuth();
@@ -29,6 +30,7 @@ export default function App() {
         <Route path="accounts" element={<Accounts />} />
         <Route path="library" element={<Library />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="sharing" element={<Sharing />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Route>
     </Routes>

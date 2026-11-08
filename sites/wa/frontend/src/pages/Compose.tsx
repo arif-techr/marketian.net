@@ -2,12 +2,15 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import ContactPicker, { emptyPick, pastedCount, pickCount, type ContactPick } from '../components/ContactPicker';
-import { Empty, PageHeader, useToast } from '../components/ui';
+import { useAuth } from '../components/auth';
+import FormatBar, { useFields } from '../components/FormatBar';
+import { Empty, PageHeader, SharedTag, useToast } from '../components/ui';
 import { api, upload } from '../lib/api';
-import { dateTime, duration, fileSize, localInput, plural, previewName, waToHtml } from '../lib/format';
+import { dateTime, duration, fileSize, localInput, fillFields, plural, usedFields, usesName, waToHtml } from '../lib/format';
 import type { AccountsResponse, CampaignDetail, ContactList, Media, Rotation, Settings, Template } from '../lib/types';
 
-const DRAFT_KEY = 'wab-draft-v2';
+// The unsent draft is kept per user, so someone else signing in on this browser doesn't get it.
+const draftKey = (userId: number | undefined) => `wab-draft-v3-${userId ?? 'anon'}`;
 
 type Timing = {
   delay_min_seconds: number; delay_max_seconds: number; batch_size: number; batch_pause_minutes: number; typing_indicator: boolean;
@@ -23,8 +26,8 @@ const ROTATIONS: [Rotation, string, string][] = [
   ['balanced', 'Fewest sent today', 'The account that has sent the least today goes next.'],
 ];
 
-function readDraft(): { message: string; media: Media | null } {
-  try { return { media: null, ...JSON.parse(localStorage.getItem(DRAFT_KEY) || '{}') }; } catch { return { message: '', media: null }; }
+function readDraft(key: string): { message: string; media: Media | null } {
+  try { return { media: null, ...JSON.parse(localStorage.getItem(key) || '{}') }; } catch { return { message: '', media: null }; }
 }
 
 export default function Compose() {
@@ -33,8 +36,11 @@ export default function Compose() {
   const qc = useQueryClient();
   const [params] = useSearchParams();
   const fromId = params.get('from');
+  const templateId = params.get('template');
 
-  const draft = useMemo(readDraft, []);
+  const { user } = useAuth();
+  const DRAFT_KEY = draftKey(user?.id);
+  const draft = useMemo(() => readDraft(DRAFT_KEY), [DRAFT_KEY]);
   const [message, setMessage] = useState<string>(draft.message || '');
   const [media, setMedia] = useState<Media | null>(draft.media);
   const [uploadPct, setUploadPct] = useState<number | null>(null);
@@ -46,6 +52,15 @@ export default function Compose() {
   const [confirming, setConfirming] = useState(false);
   const [pick, setPick] = useState<ContactPick>(emptyPick);
   const textRef = useRef<HTMLTextAreaElement>(null);
+  // The preview shows the first picked contact as they will see it (one with a name, if any).
+  const sample = pick.contacts.find(c => c.name) ?? pick.contacts[0];
+  const fieldList = useFields();
+  const known = (fieldList.data ?? []).map(f => f.key);
+  const used = usedFields(message, known);
+  const fieldLabel = (k: string) => fieldList.data?.find(f => f.key === k)?.label ?? k;
+  const sampleValues = sample
+    ? { name: sample.name, phone: sample.phone, fields: sample.fields ?? {} }
+    : { name: 'Rahim', phone: '8801712345678', fields: Object.fromEntries((fieldList.data ?? []).map(f => [f.key, `‹${f.label}›`])) };
 
   const accounts = useQuery({ queryKey: ['accounts'], queryFn: () => api<AccountsResponse>('/accounts/') });
   const settings = useQuery({ queryKey: ['settings'], queryFn: () => api<Settings>('/settings/') });
@@ -84,6 +99,15 @@ export default function Compose() {
     }).catch(e => toast(e.message, 'bad'));
   }, [fromId, toast]);
 
+  // "Send" from a template on the Templates page.
+  useEffect(() => {
+    if (!templateId) return;
+    api<Template>(`/templates/${templateId}/`).then(tp => {
+      setMessage(tp.body);
+      toast(`Loaded template "${tp.title}". Now pick who gets it.`);
+    }).catch(e => toast(e.message, 'bad'));
+  }, [templateId, toast]);
+
   useEffect(() => {
     try { localStorage.setItem(DRAFT_KEY, JSON.stringify({ message, media })); } catch { /* private mode */ }
   }, [message, media]);
@@ -92,21 +116,6 @@ export default function Compose() {
   const chosenSenders = useMemo(() => (senders ?? []).filter(id => connected.some(a => a.id === id)), [senders, connected]);
 
   // ---------- message ----------
-  function wrapSelection(w: string) {
-    const el = textRef.current;
-    if (!el) return;
-    const a = el.selectionStart, z = el.selectionEnd, v = message, sel = v.slice(a, z) || 'text';
-    setMessage(v.slice(0, a) + w + sel + w + v.slice(z));
-    requestAnimationFrame(() => { el.focus(); el.setSelectionRange(a + w.length, a + w.length + sel.length); });
-  }
-
-  function insertAtCursor(snippet: string) {
-    const el = textRef.current;
-    const a = el?.selectionStart ?? message.length, z = el?.selectionEnd ?? message.length;
-    setMessage(message.slice(0, a) + snippet + message.slice(z));
-    requestAnimationFrame(() => { el?.focus(); el?.setSelectionRange(a + snippet.length, a + snippet.length); });
-  }
-
   async function onFile(f: File | undefined) {
     if (!f) return;
     setUploadPct(0);
@@ -185,12 +194,7 @@ export default function Compose() {
             <h2>Message</h2>
             <span className="meta">{message.length.toLocaleString()} characters</span>
           </div>
-          <div className="row fmt" role="group" aria-label="WhatsApp formatting">
-            <button type="button" onClick={() => wrapSelection('*')} title="Bold"><b>B</b></button>
-            <button type="button" onClick={() => wrapSelection('_')} title="Italic"><i>I</i></button>
-            <button type="button" onClick={() => wrapSelection('~')} title="Strikethrough"><s>S</s></button>
-            <button type="button" onClick={() => wrapSelection('```')} title="Monospace">{'{ }'}</button>
-            <button type="button" onClick={() => insertAtCursor('{name|friend}')} title="Insert the contact's name (friend when there is none)">+ Name</button>
+          <FormatBar textRef={textRef} value={message} onChange={setMessage}>
             {!!templates.data?.length && (
               <select aria-label="Insert a template" value="" onChange={e => {
                 const tp = templates.data!.find(x => String(x.id) === e.target.value);
@@ -200,7 +204,7 @@ export default function Compose() {
                 {templates.data.map(tp => <option key={tp.id} value={tp.id}>{tp.title}</option>)}
               </select>
             )}
-          </div>
+          </FormatBar>
           <textarea ref={textRef} value={message} onChange={e => setMessage(e.target.value)} maxLength={60000}
             placeholder="Type your announcement. Bangla and emoji work too." aria-label="Message" />
 
@@ -233,13 +237,22 @@ export default function Compose() {
                 {media?.kind === 'image' && <img src={media.url} alt="" className="bubble-img" />}
                 {media && media.kind !== 'image' && <div className="bubble-file">📎 {media.original_name}</div>}
                 {message.trim()
-                  ? <div dangerouslySetInnerHTML={{ __html: waToHtml(previewName(message)) }} />
+                  ? <div dangerouslySetInnerHTML={{ __html: waToHtml(fillFields(message, sampleValues, known)) }} />
                   : !media && <span className="empty">Your formatted message appears here.</span>}
               </div>
             </div>
           </div>
 
-          {/\{name/i.test(message) && <p className="small" style={{ margin: 0 }}>Each contact sees their own name; the preview uses "Rahim". Contacts without a name get the word after |.</p>}
+          {(usesName(message) || used.length > 0) && (
+            <p className="small" style={{ margin: 0 }}>
+              Each person sees their own {[usesName(message) && 'name', ...used.map(fieldLabel)].filter(Boolean).join(', ')}.{' '}
+              {sample ? `Preview shows ${sample.name || '+' + sample.phone}, the first person you picked.` : 'The preview uses sample values until you pick contacts.'}
+              {' '}People without a value get the text after | (or nothing).
+              {sample && used.filter(k => !sample.fields?.[k]).length > 0 && (
+                <> <b>{sample.name || '+' + sample.phone} has no {used.filter(k => !sample.fields?.[k]).map(fieldLabel).join(', ')}.</b></>
+              )}
+            </p>
+          )}
 
           <NameAndSave placeholder="Name this message to save it as a template" button="Save as template"
             disabled={!message.trim()} onSave={name => saveTemplate.mutate(name)} />
@@ -263,7 +276,7 @@ export default function Compose() {
                 {connected.map(a => (
                   <label key={a.id} className="row chip-check">
                     <input type="checkbox" checked={chosenSenders.includes(a.id)} onChange={e => toggleSender(a.id, e.target.checked)} />
-                    {a.label} <span className="meta">+{a.phone}{a.effective_daily_limit ? ` · ${a.sent_today}/${a.effective_daily_limit} today` : ''}</span>
+                    {a.label} <SharedTag by={a.shared_by} /> <span className="meta">+{a.phone}{a.effective_daily_limit ? ` · ${a.sent_today}/${a.effective_daily_limit} today` : ''}</span>
                   </label>
                 ))}
               </div>

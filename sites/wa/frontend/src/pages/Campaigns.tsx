@@ -22,11 +22,12 @@ export function CampaignRow({ c }: { c: Campaign }) {
             {' · '}{c.sent}/{plural(c.total, 'recipient')} sent{c.failed ? ` · ${c.failed} failed` : ''}{c.skipped ? ` · ${c.skipped} skipped` : ''}
             {c.media ? ` · 📎 ${c.media.original_name}` : ''}
           </span>
+          {c.status === 'scheduled' && c.note && <span className="small" style={{ color: 'var(--warn)' }}>{c.note}</span>}
           {c.status === 'running' && (
             <>
               <Progress value={done} total={c.total} />
               <span className="small">
-                {c.next_action_at ? <>{c.note || 'Waiting'}: next message in <Countdown to={c.next_action_at} /></> : c.note || 'Posting…'}
+                {c.next_action_at ? <>{c.note || 'Waiting'} · next in <Countdown to={c.next_action_at} /></> : c.note || 'Posting…'}
               </span>
             </>
           )}

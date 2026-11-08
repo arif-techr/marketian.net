@@ -5,7 +5,7 @@ import { api } from '../lib/api';
 import { plural } from '../lib/format';
 import type { Contact, ContactList, Page } from '../lib/types';
 
-export type ContactLite = Pick<Contact, 'id' | 'name' | 'phone'>;
+export type ContactLite = Pick<Contact, 'id' | 'name' | 'phone'> & { fields?: Contact['fields'] };
 
 /** Who a broadcast goes to. */
 export type ContactPick = {
@@ -47,7 +47,7 @@ export default function ContactPicker({ value, onChange }: { value: ContactPick;
               <label key={l.id} className={`chip chip-toggle ${value.listIds.includes(l.id) ? 'on' : ''}`}>
                 <input type="checkbox" className="sr-only" checked={value.listIds.includes(l.id)}
                   onChange={e => set({ listIds: toggle(value.listIds, l.id, e.target.checked) })} />
-                {l.name} · {l.contact_count}
+                {l.name} · {l.contact_count}{l.shared_by ? ` · shared by ${l.shared_by}` : ''}
               </label>
             ))}
           </div>
@@ -62,7 +62,7 @@ export default function ContactPicker({ value, onChange }: { value: ContactPick;
             {found.data?.results.length ? found.data.results.map(c => (
               <li key={c.id}>
                 <input type="checkbox" id={`pc-${c.id}`} checked={picked.has(c.id)} onChange={e => set({
-                  contacts: e.target.checked ? [...value.contacts, { id: c.id, name: c.name, phone: c.phone }] : value.contacts.filter(x => x.id !== c.id),
+                  contacts: e.target.checked ? [...value.contacts, { id: c.id, name: c.name, phone: c.phone, fields: c.fields }] : value.contacts.filter(x => x.id !== c.id),
                 })} />
                 <label className="grow" htmlFor={`pc-${c.id}`}><span className="name">{c.name || 'No name'}</span><span className="meta">+{c.phone}</span></label>
               </li>

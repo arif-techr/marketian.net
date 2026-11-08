@@ -100,6 +100,7 @@ class Campaign(models.Model):
 
     scheduled_at = models.DateTimeField(default=timezone.now, db_index=True)
     started_at = models.DateTimeField(null=True, blank=True)
+    claimed_at = models.DateTimeField(null=True, blank=True, help_text="When it last started running; the earlier campaign keeps a shared phone.")
     finished_at = models.DateTimeField(null=True, blank=True)
     next_action_at = models.DateTimeField(null=True, blank=True)
     note = models.CharField(max_length=200, blank=True)

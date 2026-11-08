@@ -74,4 +74,33 @@ export const targetStatus: Record<TargetStatus, [string, Tone]> = {
 };
 
 /** Preview of a personalised message: {name} / {name|fallback} shown with a sample name. */
-export const previewName = (text: string) => text.replace(/\{name(?:\|[^}]*)?\}/gi, 'Rahim');
+// Same rule as the server (runner.personalize): {key} or {key|fallback}; only known keys are replaced.
+const TAG = /\{([^\s{}|]{1,40})(?:\|([^}]*))?\}/g;
+
+export type Sample = { name?: string; phone?: string; fields?: Record<string, string> };
+
+/** Fill placeholders for one recipient. `known` = the workspace's field keys; other braces stay as typed. */
+export function fillFields(text: string, s: Sample, known: Iterable<string> = []): string {
+  const keys = new Set(known);
+  return text.replace(TAG, (whole, rawKey: string, fallback?: string) => {
+    const key = rawKey.toLowerCase();
+    const fields = s.fields ?? {};
+    let value: string;
+    if (key === 'name') value = s.name ?? '';
+    else if (key === 'phone') value = s.phone ? `+${s.phone}` : '';
+    else if (key in fields || keys.has(key)) value = fields[key] ?? '';
+    else return whole;
+    return value || (fallback ?? '').trim();
+  });
+}
+
+/** Preview with a sample name. */
+export const previewName = (text: string, name = 'Rahim') => fillFields(text, { name });
+
+export const usesName = (text: string) => /\{name/i.test(text);
+
+/** Field keys (other than name/phone) that a message uses. */
+export const usedFields = (text: string, known: Iterable<string>) => {
+  const keys = new Set(known);
+  return [...new Set([...text.matchAll(TAG)].map(m => m[1].toLowerCase()))].filter(k => keys.has(k));
+};

@@ -26,6 +26,7 @@ class Contact(models.Model):
     on_whatsapp = models.BooleanField(null=True, help_text="Result of the last check. Null = not checked yet.")
     wa_jid = models.CharField(max_length=80, blank=True, help_text="Chat id WhatsApp returned for this number.")
     checked_at = models.DateTimeField(null=True, blank=True, db_index=True, help_text="Empty = waiting to be checked.")
+    fields = models.JSONField(default=dict, blank=True, help_text='Extra columns from imports, e.g. {"score": "85"}. Used as {score} in messages.')
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -39,3 +40,19 @@ class Contact(models.Model):
     @property
     def jid(self):
         return jid(self.phone)
+
+
+class ContactField(models.Model):
+    """An extra column a workspace imported (e.g. Score), usable in messages as {score}."""
+
+    owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="+")
+    key = models.SlugField(max_length=40, help_text="Placeholder name: {key} in messages.")
+    label = models.CharField(max_length=80, help_text="Column heading it came from.")
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    class Meta:
+        ordering = ["label"]
+        constraints = [models.UniqueConstraint(fields=["owner", "key"], name="unique_field_key_per_owner")]
+
+    def __str__(self):
+        return f"{{{self.key}}}"

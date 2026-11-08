@@ -110,6 +110,7 @@ input[type=checkbox] { width: 20px; height: 20px; accent-color: var(--accent); f
 .pill { font-size: .74rem; font-weight: 700; padding: 3px 9px; border-radius: 99px; white-space: nowrap; background: var(--sunk); color: var(--muted); }
 .pill.ok { background: var(--ok-soft); color: var(--ok); }
 .pill.warn { background: var(--warn-soft); color: var(--warn); }
+.pill.shared { background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); }
 .pill.bad { background: var(--danger-soft); color: var(--danger); }
 .pill.info { background: var(--info-soft); color: var(--info); }
 .bar { height: 8px; background: var(--sunk); border-radius: 99px; overflow: hidden; border: 1px solid var(--line); }

@@ -116,7 +116,10 @@ def dashboard(request):
     ws = workspace_of(request.user)
     targets = CampaignTarget.objects.filter(campaign__owner=ws)
     sent = targets.filter(status=CampaignTarget.Status.SENT)
-    accounts = WhatsAppAccount.objects.filter(owner=ws).aggregate(
+    from apps.sharing.access import accounts_for
+    from apps.sharing.models import ShareInvite
+
+    accounts = WhatsAppAccount.objects.filter(pk__in=accounts_for(ws).values("pk")).aggregate(
         total=Count("id"), connected=Count("id", filter=Q(status=WhatsAppAccount.Status.CONNECTED))
     )
     per_day = {}
@@ -131,6 +134,7 @@ def dashboard(request):
             "failed_today": targets.filter(status=CampaignTarget.Status.FAILED, finished_at__gte=today).count(),
             "sent_total": sent.count(),
             "campaigns_active": Campaign.objects.filter(owner=ws, status__in=Campaign.ACTIVE).count(),
+            "share_invites": ShareInvite.objects.filter(to_user=request.user, status="pending", expires_at__gt=now).count(),
             "last_7_days": [{"date": d, "sent": per_day.get(d, 0)} for d in days],
         }
     )
