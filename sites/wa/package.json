@@ -1,0 +1,17 @@
+{
+  "name": "wa-broadcaster",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Link WhatsApp accounts by QR code and send one message to many contacts, one at a time. Django + Celery backend, React frontend.",
+  "scripts": {
+    "setup": "node scripts/setup.mjs",
+    "dev": "node scripts/dev.mjs",
+    "test": "node scripts/run.mjs test",
+    "docker:up": "docker compose up -d --build",
+    "docker:down": "docker compose down",
+    "docker:logs": "docker compose logs -f --tail=100"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
