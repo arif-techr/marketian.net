@@ -11,8 +11,8 @@ if [ -d .git ]; then
   git pull --ff-only
 fi
 
-# Every included site that ships a .env.example needs its own .env.
-for example in sites/*/.env.example; do
+# The shared database and every included site that ships a .env.example need their own .env.
+for example in infra/.env.example sites/*/.env.example; do
   [ -e "$example" ] || continue
   dir=$(dirname "$example")
   grep -Eq "^[[:space:]]*-[[:space:]]*$dir/docker-compose.yml" docker-compose.yml || continue
