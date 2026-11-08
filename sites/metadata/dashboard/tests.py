@@ -10,9 +10,10 @@ User = get_user_model()
 class DashboardTests(TestCase):
     def setUp(self):
         self.user = User.objects.create_user("jane", "jane@example.com")
+        # Stored the way allauth stores an OpenID Connect sign-in.
         SocialAccount.objects.create(
             user=self.user, provider="marketian", uid="42",
-            extra_data={"name": "Jane Doe", "picture": "https://avatars.example/jane.png"},
+            extra_data={"id_token": {"sub": "42"}, "userinfo": {"name": "Jane Doe", "picture": "https://avatars.example/jane.png"}},
         )
 
     def test_landing_renders(self):

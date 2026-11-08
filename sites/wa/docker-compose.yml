@@ -55,6 +55,11 @@ services:
     volumes:
       - wa-media:/app/media
       - wa-static:/app/staticfiles
+    networks:
+      - wa-private
+      - wa-data
+      # Signing in talks to accounts.marketian.net, which the proxy answers on this network.
+      - web-proxy
     healthcheck:
       test: ["CMD", "python", "-c", "import urllib.request; urllib.request.urlopen('http://127.0.0.1:8000/api/health/', timeout=5)"]
       interval: 15s

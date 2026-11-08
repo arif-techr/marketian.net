@@ -1,0 +1,25 @@
+# The same sites on your own computer, over plain http (no certificates):
+#   CADDYFILE=Caddyfile.local docker compose up -d --build
+# Browsers send every *.localhost name to this computer, so no hosts-file changes are needed.
+{
+	auto_https off
+}
+
+http://marketian.localhost {
+	reverse_proxy marketian:8000
+}
+
+http://accounts.localhost {
+	reverse_proxy accounts:8000
+}
+
+http://metadata.localhost {
+	reverse_proxy metadata:8000
+}
+
+http://wa.localhost {
+	request_body {
+		max_size 30MB
+	}
+	reverse_proxy wa:80
+}

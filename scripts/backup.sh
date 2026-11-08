@@ -11,6 +11,8 @@
 #   30 3 * * * /opt/sites/scripts/backup.sh >> /var/log/sites-backup.log 2>&1
 set -euo pipefail
 cd "$(dirname "$0")/.."
+# Git Bash on Windows would rewrite container paths like /app/media; Linux ignores this.
+export MSYS_NO_PATHCONV=1
 
 # Backups hold passwords and private keys: only root may read them.
 umask 077

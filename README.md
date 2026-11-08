@@ -202,6 +202,31 @@ The wildcard DNS record means there is nothing to change in hPanel. The new prod
 
 **A plain site without logins** (a landing page, a static tool): copy `sites/_template` instead, replace every `CHANGE-ME` in its `docker-compose.yml` with the site's name, and use `reverse_proxy <name>:80` in the Caddyfile.
 
+## Run everything on your computer (Docker)
+
+The whole server, exactly as on the VPS, on your own computer: every site at a `*.localhost` address over plain http (browsers send `*.localhost` to your computer by themselves).
+
+| Site | Address |
+|---|---|
+| Portfolio | http://marketian.localhost |
+| Marketian account | http://accounts.localhost |
+| Metadata | http://metadata.localhost |
+| WhatsApp broadcaster | http://wa.localhost |
+
+1. Create every `.env` (the same files as on the server, with local values): `DEBUG=False`, `SECURE_SSL_REDIRECT=False`, and the addresses above instead of the real domains, e.g. `ALLOWED_HOSTS=accounts.localhost` and `CSRF_TRUSTED_ORIGINS=http://accounts.localhost`. Accounts and Metadata also need `SECURE_COOKIES=False`; accounts `PRODUCTS_DOMAIN=localhost`; products `ACCOUNTS_URL=http://accounts.localhost`; the broadcaster `DJANGO_SECURE=false`.
+2. Then, from the repo root in Git Bash:
+   ```bash
+   export CADDYFILE=Caddyfile.local                 # plain http, *.localhost names
+   bash scripts/create-db.sh accounts && bash scripts/create-db.sh metadata
+   docker compose up -d --build
+   docker compose exec accounts python manage.py register_product metadata http://metadata.localhost
+   docker compose exec accounts python manage.py register_product wa http://wa.localhost
+   docker compose up -d metadata wa-backend wa-worker wa-beat   # after pasting the client IDs into their .env
+   ```
+3. Stop with `docker compose down` (data stays in Docker volumes); start again with `CADDYFILE=Caddyfile.local docker compose up -d`.
+
+Local `.env` files never go to git. Running the Django tests with them present: add `DEBUG=True POSTGRES_DB=` in front of the test command.
+
 ## Working on it locally
 
 Each Django site runs on its own with SQLite and prints emails in the terminal. From a site's folder:

@@ -32,8 +32,9 @@ def logout(request):
 @login_required
 def app(request):
     account = SocialAccount.objects.filter(user=request.user, provider="marketian").first()
-    profile = account.extra_data if account else {}
+    # allauth keeps the Marketian account's details under "userinfo" (and the raw "id_token").
+    profile = (account.extra_data if account else {}).get("userinfo", {})
     return render(request, "dashboard/app.html", {
-        "display_name": profile.get("name") or request.user.email,
+        "display_name": request.user.get_full_name() or profile.get("name") or request.user.email,
         "picture": profile.get("picture", ""),
     })
