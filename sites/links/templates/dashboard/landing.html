@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="landing">
+  <h1>Short links and a link-in-bio page, in one place</h1>
+  <p class="muted lead">{{ product_tagline }} Plus your own page at <b>links.marketian.net/@you</b> with all your links, socials and videos.</p>
+  <p>
+    {% if user.is_authenticated %}
+      <a class="btn btn-inline" href="{% url 'shortener:links' %}">Open my links</a>
+    {% else %}
+      <a class="btn btn-inline" href="{% url 'dashboard:login' %}">Get started free</a>
+    {% endif %}
+  </p>
+  <p class="small muted">Sign in with your Marketian account: GitHub or email.</p>
+</section>
+
+<div class="features">
+  <div class="card"><h2>Short links</h2><p class="muted">Turn long addresses into short ones, with your own name if you like: links.marketian.net/summer-sale.</p></div>
+  <div class="card"><h2>Click stats</h2><p class="muted">Clicks per day, unique visitors, and where they came from: sites, devices, browsers.</p></div>
+  <div class="card"><h2>QR codes</h2><p class="muted">Every link and page gets a QR code to download for print, posters and packaging.</p></div>
+  <div class="card"><h2>Link-in-bio page</h2><p class="muted">One page for your Instagram or TikTok bio: buttons, socials, videos, email sign-ups.</p></div>
+  <div class="card"><h2>Your look</h2><p class="muted">Themes, button styles and your own colours, with a live preview while you edit.</p></div>
+  <div class="card"><h2>Full control</h2><p class="muted">Passwords, expiry dates, scheduled buttons, and switching any link off in one click.</p></div>
+</div>
+{% endblock %}

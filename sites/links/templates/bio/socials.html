@@ -1,0 +1,14 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<form class="card" method="post" novalidate>
+  {% csrf_token %}
+  <h2>Social icons</h2>
+  <p class="small muted">Type your username (or a full address). Filled-in ones show as icons under your bio.</p>
+  <div class="fields">
+    {% for field in form %}
+      <p><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{% if field.help_text %}<span>{{ field.help_text }}</span>{% endif %}{{ field.errors }}</p>
+    {% endfor %}
+  </div>
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

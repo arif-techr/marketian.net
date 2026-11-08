@@ -1,0 +1,43 @@
+{% load static %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}{{ product_name }}{% endblock %} · Marketian</title>
+  <meta name="description" content="{{ product_tagline }}">
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/app.css' %}">
+  <link rel="stylesheet" href="{% static 'css/links.css' %}">
+  {# Instant page changes: links and forms load the next page in the background and swap it in (htmx). #}
+  {# Anything that leaves for accounts.marketian.net (sign-in, sign-out) needs hx-boost="false". #}
+  <meta name="htmx-config" content='{"globalViewTransitions": true, "responseHandling": [{"code": "204", "swap": false}, {"code": "[2345]..", "swap": true}]}'>
+  <script src="{% static 'js/vendor/htmx-2.0.4.min.js' %}" defer></script>
+  <script src="{% static 'js/app.js' %}" defer></script>
+</head>
+<body hx-boost="true">
+  <header class="app-header">
+    <a class="brand" href="{% url 'dashboard:landing' %}"><img src="{% static 'img/favicon.svg' %}" alt=""> Marketian <span>{{ product_name }}</span></a>
+    <nav class="app-nav">
+      {% if user.is_authenticated %}
+        <a href="{% url 'shortener:links' %}">Short links</a>
+        <a href="{% url 'bio:items' %}">Bio page</a>
+        <a href="{{ accounts_url }}/">Account</a>
+        <a href="{% url 'dashboard:logout' %}" hx-boost="false">Sign out</a>
+      {% else %}
+        <a class="btn btn-inline" style="padding:8px 16px" href="{% url 'dashboard:login' %}">Sign in</a>
+      {% endif %}
+    </nav>
+  </header>
+
+  <main class="app-main {% block main_class %}{% endblock %}">
+    {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}<li class="{{ message.tags }}">{{ message }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <footer class="app-footer">{{ product_name }} is a <a href="https://marketian.net">Marketian</a> product</footer>
+</body>
+</html>

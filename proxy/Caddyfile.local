@@ -17,6 +17,13 @@ http://metadata.localhost {
 	reverse_proxy metadata:8000
 }
 
+http://links.localhost {
+	request_body {
+		max_size 10MB
+	}
+	reverse_proxy links:8000
+}
+
 http://wa.localhost {
 	request_body {
 		max_size 30MB

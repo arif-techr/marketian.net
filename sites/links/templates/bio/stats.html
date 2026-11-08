@@ -1,0 +1,21 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<div class="stat-tiles">
+  <div class="card tile-stat"><span class="muted small">Page views</span><b>{{ total_views }}</b></div>
+  <div class="card tile-stat"><span class="muted small">Unique visitors</span><b>{{ unique }}</b></div>
+  <div class="card tile-stat"><span class="muted small">Button clicks</span><b>{{ total_clicks }}</b></div>
+  <div class="card tile-stat"><span class="muted small">Click rate</span><b>{{ ctr }}%</b></div>
+</div>
+
+<div class="card">
+  <h2>Clicks per button</h2>
+  {% for item in item_clicks %}
+    <div class="share-row list-row"><span>{{ item.title }}</span><span class="small muted">{{ item.unique }} unique · <b>{{ item.clicks }}</b></span></div>
+  {% empty %}
+    <p class="muted small">Add links to your page to see their clicks.</p>
+  {% endfor %}
+</div>
+
+{% include "shortener/_stats.html" with noun="views" %}
+<p class="small muted">Your own visits, link previews and search engines aren't counted.</p>
+{% endblock %}

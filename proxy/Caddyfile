@@ -24,6 +24,15 @@ metadata.marketian.net {
 	reverse_proxy metadata:8000
 }
 
+links.marketian.net {
+	encode zstd gzip
+	# Bio page photos up to 5 MB.
+	request_body {
+		max_size 10MB
+	}
+	reverse_proxy links:8000
+}
+
 wa.marketian.net {
 	encode zstd gzip
 	# Attachments up to 25 MB (MAX_UPLOAD_MB) are uploaded through here.

@@ -1,0 +1,22 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<div class="card">
+  <div class="page-title">
+    <h2>Email subscribers ({{ subscribers|length }})</h2>
+    {% if subscribers %}<a class="small" href="?format=csv" hx-boost="false">Export CSV</a>{% endif %}
+  </div>
+  {% if not page.collect_emails %}
+    <p class="small muted">The sign-up form is off. Turn on “Collect email sign-ups” in <a href="{% url 'bio:settings' %}">Settings</a>.</p>
+  {% endif %}
+  {% for sub in subscribers %}
+    <div class="share-row list-row">
+      <span>{{ sub.email }}</span>
+      <span class="small muted">{{ sub.created_at|date:"j M Y" }}
+        <form class="inline" method="post" action="{% url 'bio:subscriber_delete' sub.pk %}">{% csrf_token %}<button type="submit" class="linklike">Remove</button></form>
+      </span>
+    </div>
+  {% empty %}
+    <p class="muted small">No sign-ups yet.</p>
+  {% endfor %}
+</div>
+{% endblock %}

@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} · {{ product_name }}{% endblock %}
+{% block content %}
+<div class="auth card center">
+  <h1>{{ title }}</h1>
+  <p class="muted">{{ text }}</p>
+  <a class="btn btn-outline btn-inline" href="/">Make your own short links</a>
+</div>
+{% endblock %}

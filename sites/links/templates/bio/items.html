@@ -1,0 +1,40 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<form class="card" method="post" novalidate>
+  {% csrf_token %}
+  <h2>Add to your page</h2>
+  {% include "bio/_item_fields.html" %}
+  <button type="submit">Add</button>
+</form>
+
+<div class="items">
+  {% for item in items %}
+    <div class="card item-row {% if not item.is_visible %}is-hidden{% endif %}">
+      <div class="item-order">
+        <form method="post" action="{% url 'bio:item_action' item.pk 'up' %}">{% csrf_token %}<button type="submit" class="icon-btn" aria-label="Move up" {% if forloop.first %}disabled{% endif %}>↑</button></form>
+        <form method="post" action="{% url 'bio:item_action' item.pk 'down' %}">{% csrf_token %}<button type="submit" class="icon-btn" aria-label="Move down" {% if forloop.last %}disabled{% endif %}>↓</button></form>
+      </div>
+      <div class="item-main">
+        <a class="link-title" href="{% url 'bio:item_edit' item.pk %}">{{ item.title }}</a>
+        <div class="small muted">
+          {{ item.get_kind_display }}{% if item.url %} · {{ item.url|truncatechars:60 }}{% endif %}
+        </div>
+        <div class="tags">
+          {% if not item.is_active %}<span class="badge">Hidden</span>{% endif %}
+          {% if item.schedule_state %}<span class="badge">{{ item.schedule_state }}</span>{% endif %}
+          {% if item.kind != "header" %}<span class="small muted">{{ item.clicks }} click{{ item.clicks|pluralize }}</span>{% endif %}
+        </div>
+      </div>
+      <div class="item-actions">
+        <form method="post" action="{% url 'bio:item_action' item.pk 'toggle' %}">{% csrf_token %}
+          <button type="submit" class="btn btn-outline btn-small">{% if item.is_active %}Hide{% else %}Show{% endif %}</button></form>
+        <a class="btn btn-outline btn-small" href="{% url 'bio:item_edit' item.pk %}">Edit</a>
+        <form method="post" action="{% url 'bio:item_action' item.pk 'delete' %}" onsubmit="return confirm('Delete “{{ item.title|escapejs }}”?')">{% csrf_token %}
+          <button type="submit" class="btn btn-outline btn-small">Delete</button></form>
+      </div>
+    </div>
+  {% empty %}
+    <p class="muted center">Nothing on your page yet. Add your first link above.</p>
+  {% endfor %}
+</div>
+{% endblock %}

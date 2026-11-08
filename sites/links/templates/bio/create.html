@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% block title %}Make your bio page · {{ product_name }}{% endblock %}
+{% block content %}
+<form class="auth card" method="post" novalidate>
+  {% csrf_token %}
+  <h1>Make your bio page</h1>
+  <p class="muted">One page with all your links, for your Instagram, TikTok or YouTube bio.</p>
+  {{ form.non_field_errors }}
+  <p>
+    <label for="{{ form.handle.id_for_label }}">{{ form.handle.label }}</label>
+    <span class="prefix-input"><span>{{ request.get_host }}/@</span>{{ form.handle }}</span>
+    {{ form.handle.errors }}
+  </p>
+  <p><label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>{{ form.title }}{{ form.title.errors }}</p>
+  <button type="submit">Make my page</button>
+</form>
+{% endblock %}

@@ -96,6 +96,17 @@ TESTIMONIALS = [
 
 TOOLS = [
     (
+        "Links", "share", Tool.LIVE, "https://links.marketian.net",
+        "Short links with click stats and QR codes, plus your own link-in-bio page.",
+        "Shorten any address (with your own name if you like), see who clicks and from where, "
+        "and build one page with all your links for your Instagram, TikTok or YouTube bio.",
+        "Custom short names, passwords and expiry dates\n"
+        "Clicks per day, devices, browsers and where visitors came from\n"
+        "QR codes for every link and page\n"
+        "UTM tags for Google Analytics\n"
+        "Link-in-bio page with themes, socials, videos and email sign-ups",
+    ),
+    (
         "WA Broadcaster", "whatsapp", Tool.INVITE, "https://wa.marketian.net",
         "Send one WhatsApp message to many customers, safely paced and tracked.",
         "Link your WhatsApp numbers by QR code, pick your contacts and send personalised messages "

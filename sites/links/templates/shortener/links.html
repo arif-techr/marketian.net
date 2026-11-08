@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% block title %}Short links · {{ product_name }}{% endblock %}
+{% block content %}
+<div class="page-title">
+  <h1>Short links</h1>
+  {% if total %}<a class="small" href="{% url 'shortener:export' %}" hx-boost="false">Export all as CSV</a>{% endif %}
+</div>
+
+<form class="card create" method="post" novalidate>
+  {% csrf_token %}
+  {{ form.non_field_errors }}
+  <label for="{{ form.destination.id_for_label }}">{{ form.destination.label }}</label>
+  <div class="row">
+    {{ form.destination }}
+    <button type="submit" class="btn btn-inline">Shorten</button>
+  </div>
+  {{ form.destination.errors }}
+
+  <details {% if open_options %}open{% endif %}>
+    <summary>More options: custom name, password, expiry, UTM tags</summary>
+    <div class="fields">
+      <p>
+        <label for="{{ form.slug.id_for_label }}">{{ form.slug.label }}</label>
+        <span class="prefix-input"><span>{{ request.get_host }}/</span>{{ form.slug }}</span>
+        <span>{{ form.slug.help_text }}</span>
+        {{ form.slug.errors }}
+      </p>
+      <p><label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>{{ form.title }}{{ form.title.errors }}</p>
+      <p><label for="{{ form.password.id_for_label }}">{{ form.password.label }} (optional)</label>{{ form.password }}<span>{{ form.password.help_text }}</span></p>
+      <p><label for="{{ form.expires_at.id_for_label }}">{{ form.expires_at.label }} (optional)</label>{{ form.expires_at }}{{ form.expires_at.errors }}</p>
+    </div>
+    <h3 class="small">UTM tags <span class="muted">(campaign tracking for Google Analytics)</span></h3>
+    <div class="fields fields-5">
+      {% for field in form %}{% if field.name|slice:":4" == "utm_" %}
+        <p><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}</p>
+      {% endif %}{% endfor %}
+    </div>
+  </details>
+</form>
+
+{% if total %}
+  <form class="search" method="get" role="search">
+    <input type="search" name="q" value="{{ query }}" placeholder="Search your links" aria-label="Search your links">
+  </form>
+{% endif %}
+
+<div class="link-list">
+  {% for link in page %}
+    <article class="card link-row">
+      <div class="link-main">
+        <a class="link-title" href="{% url 'shortener:detail' link.pk %}">{{ link.label }}</a>
+        <div class="link-short">
+          <a href="{{ link.short }}" target="_blank" rel="noopener">{{ link.short|cut:"https://"|cut:"http://" }}</a>
+          <button type="button" class="copy" data-copy="{{ link.short }}">Copy</button>
+        </div>
+        <div class="link-dest small muted">{{ link.destination|truncatechars:90 }}</div>
+        <div class="tags">
+          {% if not link.is_active %}<span class="badge">Off</span>{% endif %}
+          {% if link.is_expired %}<span class="badge">Expired</span>{% endif %}
+          {% if link.has_password %}<span class="badge">Password</span>{% endif %}
+          <span class="small muted">{{ link.created_at|date:"j M Y" }}</span>
+        </div>
+      </div>
+      <a class="link-clicks" href="{% url 'shortener:detail' link.pk %}"><b>{{ link.clicks }}</b><span>clicks</span></a>
+    </article>
+  {% empty %}
+    <p class="muted center">{% if query %}No links match “{{ query }}”.{% else %}Your short links will show up here.{% endif %}</p>
+  {% endfor %}
+</div>
+
+{% if page.has_other_pages %}
+  <nav class="pager">
+    {% if page.has_previous %}<a href="?page={{ page.previous_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}">← Newer</a>{% endif %}
+    <span class="muted small">Page {{ page.number }} of {{ page.paginator.num_pages }}</span>
+    {% if page.has_next %}<a href="?page={{ page.next_page_number }}{% if query %}&q={{ query|urlencode }}{% endif %}">Older →</a>{% endif %}
+  </nav>
+{% endif %}
+{% endblock %}

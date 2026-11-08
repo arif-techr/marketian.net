@@ -1,0 +1,26 @@
+{# Day-by-day chart and top sources. Needs: days, tables, and a label for what is counted (noun). #}
+<div class="card">
+  <h2>Last 30 days</h2>
+  <div class="chart" role="img" aria-label="{{ noun }} per day over the last 30 days">
+    {% for d in days %}
+      <div class="chart-col" title="{{ d.day|date:'j M' }}: {{ d.n }} {{ noun }}"><i style="height: {{ d.pct }}%"></i></div>
+    {% endfor %}
+  </div>
+  <div class="chart-axis small muted"><span>{{ days.0.day|date:"j M" }}</span><span>Today</span></div>
+</div>
+
+<div class="stat-tables">
+  {% for title, rows in tables %}
+    <div class="card">
+      <h2>{{ title }}</h2>
+      {% for row in rows %}
+        <div class="share">
+          <div class="share-row"><span>{{ row.name }}</span><b>{{ row.n }}</b></div>
+          <div class="share-bar"><i style="width: {{ row.pct }}%"></i></div>
+        </div>
+      {% empty %}
+        <p class="muted small">Nothing yet.</p>
+      {% endfor %}
+    </div>
+  {% endfor %}
+</div>

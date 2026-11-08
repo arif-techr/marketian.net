@@ -1,0 +1,10 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<p><a class="small" href="{% url 'bio:items' %}">← All items</a></p>
+<form class="card" method="post" novalidate>
+  {% csrf_token %}
+  <h2>Edit “{{ item.title }}”</h2>
+  {% include "bio/_item_fields.html" %}
+  <button type="submit">Save</button>
+</form>
+{% endblock %}

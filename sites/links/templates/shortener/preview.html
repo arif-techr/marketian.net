@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block title %}Where does {{ short|cut:"https://"|cut:"http://" }} go? · {{ product_name }}{% endblock %}
+{% block content %}
+<div class="auth card">
+  <p class="small muted">Short link</p>
+  <h1 class="break">{{ short|cut:"https://"|cut:"http://" }}</h1>
+  {% if notice %}
+    <p class="muted">This link doesn't work any more.</p>
+  {% elif link.has_password %}
+    <p class="muted">It's protected by a password, so where it goes stays private.</p>
+    <a class="btn" href="{{ short }}" hx-boost="false">Continue</a>
+  {% else %}
+    <p class="muted">It takes you to:</p>
+    <p class="break"><b>{{ link.destination }}</b></p>
+    <a class="btn" href="{{ short }}" hx-boost="false">Continue to the site</a>
+  {% endif %}
+</div>
+{% endblock %}

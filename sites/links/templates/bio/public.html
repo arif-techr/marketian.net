@@ -1,0 +1,84 @@
+{% load static bio %}<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ page.title }} (@{{ page.handle }})</title>
+  <meta name="description" content="{{ page.bio|default:page.title }}">
+  <meta property="og:type" content="profile">
+  <meta property="og:title" content="{{ page.title }}">
+  <meta property="og:description" content="{{ page.bio|default:'All my links in one place.' }}">
+  <meta property="og:url" content="{{ page_url }}">
+  {% if page.avatar %}<meta property="og:image" content="{{ request.scheme }}://{{ request.get_host }}{{ page.avatar.url }}">{% endif %}
+  <meta name="twitter:card" content="summary">
+  {% if page.sensitive %}<meta name="rating" content="adult">{% endif %}
+  <link rel="icon" href="{% static 'img/favicon.svg' %}" type="image/svg+xml">
+  <link rel="stylesheet" href="{% static 'css/bio.css' %}">
+  <style>
+    :root { --bg: {{ colors.bg }}; --text: {{ colors.text }}; --button: {{ colors.button }}; --button-text: {{ colors.button_text }}; }
+  </style>
+</head>
+<body class="buttons-{{ page.button_style }}">
+  {% if show_warning %}
+    <div class="warning" role="dialog" aria-labelledby="warning-title">
+      <div class="warning-box">
+        <h1 id="warning-title">Sensitive content</h1>
+        <p>This page may contain content that isn't suitable for everyone. Continue only if you are 18 or older.</p>
+        <a class="button" href="?continue=1">Continue</a>
+        <a class="small" href="/">Go back</a>
+      </div>
+    </div>
+  {% else %}
+  <main class="page">
+    <header class="profile">
+      {% if page.avatar %}<img class="avatar" src="{{ page.avatar.url }}" alt="" width="96" height="96">{% else %}<span class="avatar">{{ page.title|first|upper }}</span>{% endif %}
+      <h1>{{ page.title }}</h1>
+      {% if page.bio %}<p class="bio">{{ page.bio }}</p>{% endif %}
+      {% if page.social_links %}
+        <nav class="socials" aria-label="Social profiles">
+          {% for s in page.social_links %}
+            <a href="{{ s.url }}" target="_blank" rel="noopener me" aria-label="{{ s.label }}" title="{{ s.label }}">{% icon s.key 22 %}</a>
+          {% endfor %}
+        </nav>
+      {% endif %}
+    </header>
+
+    <div class="items">
+      {% for item in items %}
+        {% if item.kind == "header" %}
+          <h2 class="section">{{ item.title }}</h2>
+        {% elif item.kind == "video" %}
+          <figure class="video">
+            <iframe src="https://www.youtube-nocookie.com/embed/{{ item.youtube_id }}" title="{{ item.title }}" loading="lazy"
+                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture; fullscreen" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <figcaption>{{ item.title }}</figcaption>
+          </figure>
+        {% else %}
+          <a class="button" href="/@{{ page.handle }}/go/{{ item.pk }}" {% if preview %}target="_blank"{% endif %} rel="noopener">{{ item.title }}</a>
+        {% endif %}
+      {% empty %}
+        {% if preview %}<p class="empty">Your links will show up here.</p>{% endif %}
+      {% endfor %}
+    </div>
+
+    {% if page.collect_emails %}
+      <section class="signup" id="signup">
+        {% if subscribed %}
+          <p><b>Thanks! You're signed up.</b></p>
+        {% else %}
+          <h2>{{ page.email_prompt }}</h2>
+          <form method="post" action="/@{{ page.handle }}/subscribe/">
+            {% csrf_token %}
+            <input type="email" name="email" placeholder="you@example.com" required aria-label="Your email">
+            <input type="text" name="website" tabindex="-1" autocomplete="off" class="hp" aria-hidden="true">
+            <button type="submit" class="button">Sign up</button>
+          </form>
+        {% endif %}
+      </section>
+    {% endif %}
+
+    <footer class="made-with"><a href="/" {% if preview %}target="_blank"{% endif %}>Made with Marketian Links</a></footer>
+  </main>
+  {% endif %}
+</body>
+</html>

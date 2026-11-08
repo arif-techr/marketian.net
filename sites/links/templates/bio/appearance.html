@@ -1,0 +1,54 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<form method="post" enctype="multipart/form-data" novalidate hx-boost="false">
+  {% csrf_token %}
+  <div class="card">
+    <h2>Profile</h2>
+    {{ profile.non_field_errors }}
+    <div class="profile-row">
+      {% if page.avatar %}<img class="avatar-lg" src="{{ page.avatar.url }}" alt="">{% else %}<span class="avatar-lg">{{ page.title|first|upper }}</span>{% endif %}
+      <p>
+        <label for="{{ profile.avatar.id_for_label }}">{{ profile.avatar.label }}</label>
+        <input type="file" name="{{ profile.avatar.html_name }}" id="{{ profile.avatar.id_for_label }}" accept="image/*">
+        <span>JPG, PNG or WebP, up to 5 MB. Shown as a circle.</span>
+        {{ profile.avatar.errors }}
+      </p>
+    </div>
+    {% if page.avatar %}<p class="check">{{ profile.remove_avatar }}<label for="{{ profile.remove_avatar.id_for_label }}">{{ profile.remove_avatar.label }}</label></p>{% endif %}
+    <p><label for="{{ profile.title.id_for_label }}">{{ profile.title.label }}</label>{{ profile.title }}{{ profile.title.errors }}</p>
+    <p><label for="{{ profile.bio.id_for_label }}">{{ profile.bio.label }}</label>{{ profile.bio }}{{ profile.bio.errors }}</p>
+  </div>
+
+  <div class="card">
+    <h2>Theme</h2>
+    <div class="swatches">
+      {% for key, theme in themes.items %}
+        <label class="swatch">
+          <input type="radio" name="{{ look.theme.html_name }}" value="{{ key }}" {% if look.theme.value == key %}checked{% endif %}>
+          <span class="swatch-face" {% if key != "custom" %}style="background: {{ theme.bg }}; color: {{ theme.text }}"{% endif %}>
+            {% if key == "custom" %}🎨{% else %}<i style="background: {{ theme.button }}"></i><i style="background: {{ theme.button }}"></i>{% endif %}
+          </span>
+          <span class="small">{{ theme.label }}</span>
+        </label>
+      {% endfor %}
+    </div>
+    <div class="fields fields-4">
+      {% for field in look %}{% if field.name != "theme" and field.name != "button_style" %}
+        <p><label for="{{ field.id_for_label }}">{{ field.label }}</label>{{ field }}{{ field.errors }}</p>
+      {% endif %}{% endfor %}
+    </div>
+    <p class="small muted">The colours are used with the “My own colours” theme.</p>
+  </div>
+
+  <div class="card">
+    <h2>Buttons</h2>
+    <div class="button-styles">
+      {% for choice in look.button_style %}
+        <label class="button-style">{{ choice.tag }}<span class="sample sample-{{ choice.data.value }}">{{ choice.choice_label }}</span></label>
+      {% endfor %}
+    </div>
+  </div>
+
+  <button type="submit" class="btn">Save</button>
+</form>
+{% endblock %}

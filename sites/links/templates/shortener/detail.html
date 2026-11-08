@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% block title %}{{ link.label }} · {{ product_name }}{% endblock %}
+{% block content %}
+<p><a class="small" href="{% url 'shortener:links' %}">← All short links</a></p>
+
+<div class="card link-hero">
+  <h1>{{ link.label }}</h1>
+  <div class="link-short big">
+    <a href="{{ short }}" target="_blank" rel="noopener">{{ short|cut:"https://"|cut:"http://" }}</a>
+    <button type="button" class="copy" data-copy="{{ short }}">Copy</button>
+  </div>
+  <p class="small muted link-dest">Goes to <a href="{{ link.destination }}" target="_blank" rel="noopener noreferrer">{{ link.destination|truncatechars:120 }}</a></p>
+  <div class="tags">
+    {% if not link.is_active %}<span class="badge">Off</span>{% endif %}
+    {% if link.is_expired %}<span class="badge">Expired</span>{% endif %}
+    {% if link.has_password %}<span class="badge">Password</span>{% endif %}
+    {% if link.expires_at and not link.is_expired %}<span class="badge">Stops {{ link.expires_at|date:"j M Y, H:i" }}</span>{% endif %}
+    <a class="small" href="{{ short }}+" target="_blank" rel="noopener">Preview page</a>
+  </div>
+</div>
+
+<div class="stat-tiles">
+  <div class="card tile-stat"><span class="muted small">Total clicks</span><b>{{ link.clicks }}</b></div>
+  <div class="card tile-stat"><span class="muted small">Unique visitors</span><b>{{ unique }}</b></div>
+  <div class="card tile-stat"><span class="muted small">Last 30 days</span><b>{{ last_30 }}</b></div>
+</div>
+
+{% include "shortener/_stats.html" with noun="clicks" %}
+
+<div class="two-col">
+  <div class="card qr">
+    <h2>QR code</h2>
+    <img src="{% url 'shortener:qr' link.pk 'svg' %}" alt="QR code for {{ short }}" width="180" height="180">
+    <p class="small">
+      <a href="{% url 'shortener:qr' link.pk 'png' %}?download=1" hx-boost="false">Download PNG</a> ·
+      <a href="{% url 'shortener:qr' link.pk 'svg' %}?download=1" hx-boost="false">SVG (for print)</a>
+    </p>
+  </div>
+
+  <form class="card" method="post" novalidate>
+    {% csrf_token %}
+    <h2>Edit</h2>
+    {{ form.non_field_errors }}
+    <p><label for="{{ form.destination.id_for_label }}">{{ form.destination.label }}</label>{{ form.destination }}{{ form.destination.errors }}</p>
+    <p>
+      <label for="{{ form.slug.id_for_label }}">Short name</label>
+      <span class="prefix-input"><span>{{ request.get_host }}/</span>{{ form.slug }}</span>
+      <span>Changing it stops the old short link from working.</span>
+      {{ form.slug.errors }}
+    </p>
+    <p><label for="{{ form.title.id_for_label }}">{{ form.title.label }}</label>{{ form.title }}</p>
+    <p><label for="{{ form.expires_at.id_for_label }}">{{ form.expires_at.label }}</label>{{ form.expires_at }}{{ form.expires_at.errors }}</p>
+    <p><label for="{{ form.new_password.id_for_label }}">{% if link.has_password %}{{ form.new_password.label }}{% else %}Password (optional){% endif %}</label>{{ form.new_password }}
+      {% if link.has_password %}<span>{{ form.new_password.help_text }}</span>{% endif %}</p>
+    {% if link.has_password %}<p class="check">{{ form.remove_password }}<label for="{{ form.remove_password.id_for_label }}">{{ form.remove_password.label }}</label></p>{% endif %}
+    <p class="check">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label></p>
+    <button type="submit">Save</button>
+  </form>
+</div>
+
+<form class="card danger" method="post" action="{% url 'shortener:delete' link.pk %}"
+      onsubmit="return confirm('Delete this short link? It stops working right away.')">
+  {% csrf_token %}
+  <div><h2>Delete this link</h2><p class="small muted">It stops working right away and its stats are removed.</p></div>
+  <button type="submit" class="btn btn-danger btn-inline">Delete</button>
+</form>
+{% endblock %}

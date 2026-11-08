@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% block title %}Bio page · {{ product_name }}{% endblock %}
+{% block main_class %}wide{% endblock %}
+{% block content %}
+<div class="page-title">
+  <h1>Bio page</h1>
+  <div class="link-short">
+    <a href="{{ public_url }}" target="_blank" rel="noopener">{{ public_url|cut:"https://"|cut:"http://" }}</a>
+    <button type="button" class="copy" data-copy="{{ public_url }}">Copy</button>
+  </div>
+</div>
+
+<nav class="tabs" aria-label="Bio page">
+  <a href="{% url 'bio:items' %}" {% if tab == "items" or tab == "item_edit" %}aria-current="page"{% endif %}>Links</a>
+  <a href="{% url 'bio:appearance' %}" {% if tab == "appearance" %}aria-current="page"{% endif %}>Appearance</a>
+  <a href="{% url 'bio:socials' %}" {% if tab == "socials" %}aria-current="page"{% endif %}>Socials</a>
+  <a href="{% url 'bio:stats' %}" {% if tab == "stats" %}aria-current="page"{% endif %}>Stats</a>
+  <a href="{% url 'bio:subscribers' %}" {% if tab == "subscribers" %}aria-current="page"{% endif %}>Subscribers</a>
+  <a href="{% url 'bio:settings' %}" {% if tab == "settings" %}aria-current="page"{% endif %}>Settings</a>
+</nav>
+
+<div class="editor">
+  <div class="editor-main">{% block editor %}{% endblock %}</div>
+  <aside class="phone" aria-label="Live preview">
+    <iframe src="/@{{ page.handle }}?preview=1" title="Preview of your page" loading="lazy"></iframe>
+    <p class="small muted center">Preview{% if not page.is_published %} · your page is hidden from visitors{% endif %}</p>
+  </aside>
+</div>
+{% endblock %}

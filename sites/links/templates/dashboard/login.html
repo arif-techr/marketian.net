@@ -1,0 +1,13 @@
+{% extends "base.html" %}{% load socialaccount %}
+{% block title %}Sign in · {{ product_name }}{% endblock %}
+{% block content %}
+<div class="auth card" style="text-align:center">
+  <h1>Sign in to {{ product_name }}</h1>
+  <p class="muted">Use your Marketian account. It works with every Marketian product.</p>
+  <form method="post" hx-boost="false" action="{% if next %}{% provider_login_url 'marketian' process='login' next=next %}{% else %}{% provider_login_url 'marketian' process='login' %}{% endif %}">
+    {% csrf_token %}
+    <button type="submit">Continue with Marketian account</button>
+  </form>
+  <p class="small muted" style="margin:16px 0 0">GitHub or email · New here? You can create an account on the next screen.</p>
+</div>
+{% endblock %}

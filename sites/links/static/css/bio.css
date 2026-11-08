@@ -1,0 +1,51 @@
+/* Public bio pages (links.marketian.net/@name). Colours come from the page's theme (--bg, --text, --button, --button-text). */
+*, *::before, *::after { box-sizing: border-box; }
+html { min-height: 100%; background: var(--bg); background-attachment: fixed; }
+body { margin: 0; min-height: 100vh; color: var(--text); font: 16px/1.5 "Inter", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: inherit; }
+.page { width: 100%; max-width: 580px; margin: 0 auto; padding: 48px 16px 32px; display: flex; flex-direction: column; gap: 28px; }
+
+.profile { text-align: center; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.avatar { width: 96px; height: 96px; border-radius: 50%; object-fit: cover; display: grid; place-items: center; font-size: 2.2rem; font-weight: 700; background: var(--button); color: var(--button-text); box-shadow: 0 8px 24px -10px rgba(0, 0, 0, .4); }
+.profile h1 { margin: 8px 0 0; font-size: 1.35rem; }
+.bio { margin: 0; opacity: .85; max-width: 440px; overflow-wrap: anywhere; }
+.socials { display: flex; flex-wrap: wrap; justify-content: center; gap: 6px; margin-top: 6px; }
+.socials a { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; transition: transform .15s, background .15s; }
+.socials a:hover { transform: translateY(-2px); background: color-mix(in srgb, var(--text) 12%, transparent); }
+
+.items { display: flex; flex-direction: column; gap: 14px; }
+.button {
+  display: block; width: 100%; padding: 16px 20px; text-align: center; font: inherit; font-weight: 600; text-decoration: none; cursor: pointer;
+  color: var(--button-text); background: var(--button); border: 2px solid var(--button); border-radius: 14px;
+  overflow-wrap: anywhere; transition: transform .15s, box-shadow .15s, filter .15s;
+}
+.button:hover { transform: translateY(-2px) scale(1.01); filter: brightness(1.04); }
+.buttons-pill .button { border-radius: 999px; }
+.buttons-square .button { border-radius: 4px; }
+.buttons-outline .button { background: transparent; color: var(--text); border-color: currentColor; }
+.buttons-shadow .button { border-radius: 10px; border-color: var(--text); box-shadow: 4px 4px 0 var(--text); }
+.buttons-shadow .button:hover { box-shadow: 6px 6px 0 var(--text); }
+.section { margin: 14px 0 0; text-align: center; font-size: 1rem; font-weight: 700; }
+.video { margin: 0; }
+.video iframe { display: block; width: 100%; aspect-ratio: 16 / 9; border: 0; border-radius: 14px; background: #000; }
+.video figcaption { margin-top: 6px; text-align: center; font-size: .9rem; opacity: .85; }
+.empty { text-align: center; opacity: .7; }
+
+.signup { text-align: center; padding: 20px; border-radius: 16px; background: color-mix(in srgb, var(--text) 8%, transparent); }
+.signup h2 { margin: 0 0 12px; font-size: 1rem; }
+.signup form { display: flex; gap: 8px; flex-wrap: wrap; }
+.signup input[type="email"] { flex: 1 1 200px; padding: 14px 16px; font: inherit; border-radius: 12px; border: 1px solid color-mix(in srgb, var(--text) 25%, transparent); background: rgba(255, 255, 255, .9); color: #12152a; }
+.signup .button { width: auto; flex: 0 0 auto; padding: 14px 22px; }
+.hp { position: absolute; left: -9999px; width: 1px; height: 1px; opacity: 0; }
+
+.made-with { text-align: center; font-size: .82rem; opacity: .7; }
+.made-with a { text-decoration: none; }
+.made-with a:hover { text-decoration: underline; }
+.small { font-size: .88rem; }
+
+.warning { position: fixed; inset: 0; display: grid; place-items: center; padding: 16px; background: var(--bg); }
+.warning-box { max-width: 380px; text-align: center; display: flex; flex-direction: column; gap: 14px; align-items: center; }
+.warning-box h1 { margin: 0; font-size: 1.3rem; }
+.warning-box p { margin: 0; opacity: .85; }
+
+@media (prefers-reduced-motion: reduce) { .button, .socials a { transition: none; } .button:hover { transform: none; } }

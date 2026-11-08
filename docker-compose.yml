@@ -16,5 +16,6 @@ include:
   - sites/marketian/docker-compose.yml
   - sites/accounts/docker-compose.yml # accounts.marketian.net: one login for every product
   - sites/metadata/docker-compose.yml
+  - sites/links/docker-compose.yml    # links.marketian.net: short links + bio pages
   - sites/wa/docker-compose.yml       # wa.marketian.net: WhatsApp broadcaster
   # - sites/qr/docker-compose.yml

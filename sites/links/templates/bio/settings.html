@@ -1,0 +1,28 @@
+{% extends "bio/_editor.html" %}
+{% block editor %}
+<form class="card" method="post" novalidate>
+  {% csrf_token %}
+  <h2>Settings</h2>
+  {{ form.non_field_errors }}
+  <p>
+    <label for="{{ form.handle.id_for_label }}">{{ form.handle.label }}</label>
+    <span class="prefix-input"><span>{{ request.get_host }}/@</span>{{ form.handle }}</span>
+    <span>Changing it changes your page's address; the old one stops working.</span>
+    {{ form.handle.errors }}
+  </p>
+  <p class="check">{{ form.is_published }}<label for="{{ form.is_published.id_for_label }}">{{ form.is_published.label }}</label></p>
+  <p class="check">{{ form.sensitive }}<label for="{{ form.sensitive.id_for_label }}">{{ form.sensitive.label }}</label></p>
+  <p class="check">{{ form.collect_emails }}<label for="{{ form.collect_emails.id_for_label }}">{{ form.collect_emails.label }}</label></p>
+  <p><label for="{{ form.email_prompt.id_for_label }}">{{ form.email_prompt.label }}</label>{{ form.email_prompt }}{{ form.email_prompt.errors }}</p>
+  <button type="submit">Save</button>
+</form>
+
+<div class="card qr">
+  <h2>QR code for your page</h2>
+  <img src="{% url 'bio:qr' 'svg' %}" alt="QR code for {{ public_url }}" width="180" height="180">
+  <p class="small">
+    <a href="{% url 'bio:qr' 'png' %}?download=1" hx-boost="false">Download PNG</a> ·
+    <a href="{% url 'bio:qr' 'svg' %}?download=1" hx-boost="false">SVG (for print)</a>
+  </p>
+</div>
+{% endblock %}

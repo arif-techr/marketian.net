@@ -1,0 +1,15 @@
+{# The fields of a page item (adding or editing). #}
+{{ form.non_field_errors }}
+<div class="fields">
+  <p><label for="{{ form.kind.id_for_label }}">{{ form.kind.label }}</label>{{ form.kind }}</p>
+  <p><label for="{{ form.title.id_for_label }}">Title</label>{{ form.title }}{{ form.title.errors }}</p>
+</div>
+<p><label for="{{ form.url.id_for_label }}">{{ form.url.label }} <span class="muted">(not needed for a section title)</span></label>{{ form.url }}{{ form.url.errors }}</p>
+<details {% if form.show_from.value or form.show_until.value or form.errors.show_until %}open{% endif %}>
+  <summary>Schedule</summary>
+  <div class="fields">
+    <p><label for="{{ form.show_from.id_for_label }}">{{ form.show_from.label }}</label>{{ form.show_from }}<span>{{ form.show_from.help_text }}</span></p>
+    <p><label for="{{ form.show_until.id_for_label }}">{{ form.show_until.label }}</label>{{ form.show_until }}{{ form.show_until.errors }}<span>{{ form.show_until.help_text }}</span></p>
+  </div>
+</details>
+<p class="check">{{ form.is_active }}<label for="{{ form.is_active.id_for_label }}">{{ form.is_active.label }}</label></p>
