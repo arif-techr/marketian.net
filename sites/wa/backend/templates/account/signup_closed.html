@@ -1,0 +1,9 @@
+{% extends "account/_page.html" %}
+{# Shown when a Marketian account matches no user here and ALLOW_SIGNUP is off. #}
+{% block title %}Not added yet{% endblock %}
+{% block content %}
+  <h1>You haven't been added yet</h1>
+  <p>Your Marketian account works, but WA Broadcaster only lets in people the administrator has added.
+     Ask them to add a user with your email address, then sign in again.</p>
+  <a class="btn" href="/">Back to sign-in</a>
+{% endblock %}

@@ -24,6 +24,15 @@ metadata.marketian.net {
 	reverse_proxy metadata:8000
 }
 
+wa.marketian.net {
+	encode zstd gzip
+	# Attachments up to 25 MB (MAX_UPLOAD_MB) are uploaded through here.
+	request_body {
+		max_size 30MB
+	}
+	reverse_proxy wa:80
+}
+
 # --- Next sites ---------------------------------------------------------------
 # Copy sites/_template to sites/<name>, then uncomment and adjust a block:
 #

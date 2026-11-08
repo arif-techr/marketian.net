@@ -5,7 +5,12 @@ export type User = {
   role: 'owner' | TeamRole;
   /** the owner's name, for team members */
   workspace: string | null;
+  /** "marketian": signs in with the Marketian account (password changed there) */
+  sign_in: 'marketian' | 'password';
 };
+
+/** Sign in with the Marketian account (accounts.marketian.net). */
+export type MarketianSignIn = { enabled: boolean; login_url: string; account_url: string };
 
 export type TeamRole = 'employee' | 'support';
 

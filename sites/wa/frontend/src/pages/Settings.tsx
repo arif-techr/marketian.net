@@ -75,7 +75,7 @@ export default function Settings() {
         </form>
 
         <div className="stack">
-          {user?.is_owner ? <><Team /><PasswordForm /></> : (
+          {user?.is_owner ? <><Team />{user.sign_in === 'marketian' ? <MarketianAccount /> : <PasswordForm />}</> : (
             <section className="panel">
               <h2>Your account</h2>
               <p className="small" style={{ margin: 0 }}>
@@ -95,6 +95,20 @@ export default function Settings() {
         </div>
       </div>
     </>
+  );
+}
+
+/** Owners who sign in with the Marketian account change their password and sign-in methods there. */
+function MarketianAccount() {
+  const { marketian } = useAuth();
+  return (
+    <section className="panel">
+      <h2>Your account</h2>
+      <p className="small" style={{ margin: 0 }}>
+        You sign in with your Marketian account. Change your password, email or GitHub connection
+        at <a href={marketian.account_url} target="_blank" rel="noreferrer">{new URL(marketian.account_url).host}</a>.
+      </p>
+    </section>
   );
 }
 

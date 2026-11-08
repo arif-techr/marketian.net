@@ -15,6 +15,9 @@ export function setUnauthorizedHandler(fn: () => void) {
   onUnauthorized = fn;
 }
 
+/** The CSRF token Django expects on every POST (also for plain form posts). */
+export const csrfToken = () => cookie('csrftoken');
+
 function cookie(name: string): string {
   const m = document.cookie.match(new RegExp('(?:^|; )' + name + '=([^;]*)'));
   return m ? decodeURIComponent(m[1]) : '';

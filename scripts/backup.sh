@@ -6,6 +6,7 @@
 #   - uploaded files (any service with /app/media)
 #   - sign-in keys (any service with /app/keys): losing the accounts key signs
 #     everyone out of every product
+#   - WhatsApp logins (any service with /app/sessions), so numbers don't need re-scanning
 # Schedule it daily with:  crontab -e
 #   30 3 * * * /opt/sites/scripts/backup.sh >> /var/log/sites-backup.log 2>&1
 set -euo pipefail
@@ -19,7 +20,8 @@ chmod 700 backups
 
 for svc in $(docker compose ps --services --status running); do
   case "$svc" in
-    proxy) ;;
+    # Workers share their site's uploads volume, which is backed up from the site itself.
+    proxy | *-worker | *-beat) ;;
     postgres)
       echo "==> $svc: logins"
       docker compose exec -T postgres pg_dumpall -U postgres --roles-only \
@@ -37,7 +39,7 @@ for svc in $(docker compose ps --services --status running); do
         | gzip > "backups/${svc%-db}_db_${stamp}.sql.gz"
       ;;
     *)
-      for dir in media keys; do
+      for dir in media keys sessions; do
         if docker compose exec -T "$svc" test -d "/app/$dir" 2>/dev/null; then
           echo "==> $svc: $dir"
           docker compose exec -T "$svc" tar -czf - -C /app "$dir" > "backups/${svc}_${dir}_${stamp}.tar.gz"

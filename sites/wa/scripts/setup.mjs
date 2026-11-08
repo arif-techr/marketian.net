@@ -15,7 +15,12 @@ if (!existsSync(envFile)) {
     .replace(/^GATEWAY_API_KEY=.*$/m, `GATEWAY_API_KEY=${secret()}`)
     .replace(/^EVOLUTION_API_KEY=.*$/m, `EVOLUTION_API_KEY=${secret()}`)
     .replace(/^ADMIN_PASSWORD=.*$/m, `ADMIN_PASSWORD=${adminPw}`)
-    .replace(/^DJANGO_DEBUG=.*$/m, 'DJANGO_DEBUG=true'); // this script sets up local development, not Docker
+    // this script sets up local development, not the server: local addresses, no HTTPS
+    .replace(/^DJANGO_DEBUG=.*$/m, 'DJANGO_DEBUG=true')
+    .replace(/^DJANGO_ALLOWED_HOSTS=.*$/m, 'DJANGO_ALLOWED_HOSTS=localhost,127.0.0.1')
+    .replace(/^DJANGO_CSRF_TRUSTED_ORIGINS=.*$/m, 'DJANGO_CSRF_TRUSTED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173')
+    .replace(/^DJANGO_SECURE=.*$/m, 'DJANGO_SECURE=false')
+    .replace(/^PUBLIC_BASE_URL=.*$/m, 'PUBLIC_BASE_URL=');
   writeFileSync(envFile, env);
   console.log(`\nCreated .env with random secrets.\n  Dashboard login: admin / ${adminPw}\n  (also saved as ADMIN_PASSWORD in .env)\n`);
 } else {

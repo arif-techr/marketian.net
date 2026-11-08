@@ -7,6 +7,7 @@ admin.site.site_header = "WA Broadcaster admin"
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),  # sign in with the Marketian account
     path("m/<str:token>/", public_media),
     path("m/<str:token>/<path:name>", public_media),
     path("api/", include("apps.core.urls")),

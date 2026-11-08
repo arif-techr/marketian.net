@@ -39,6 +39,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "rest_framework",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.openid_connect",
     "apps.core",
     "apps.whatsapp",
     "apps.contacts",
@@ -54,6 +58,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
 ]
 
 ROOT_URLCONF = "config.urls"
@@ -62,7 +67,7 @@ WSGI_APPLICATION = "config.wsgi.application"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [],
+        "DIRS": [BASE_DIR / "templates"],
         "APP_DIRS": True,
         "OPTIONS": {
             "context_processors": [
@@ -102,7 +107,8 @@ STATIC_ROOT = Path(env("STATIC_ROOT", BASE_DIR / "staticfiles"))
 MEDIA_URL = "/media/"
 MEDIA_ROOT = Path(env("MEDIA_ROOT", BASE_DIR / "media"))
 MAX_UPLOAD_MB = int(env("MAX_UPLOAD_MB", "25"))
-# Let anyone who can open the site create their own account (and empty workspace) from the sign-in page.
+# Let anyone create their own workspace: with the Marketian account, anyone who has one; without it,
+# a "Create an account" form on the sign-in page. When false, only people the admin added can sign in.
 ALLOW_SIGNUP = env_bool("ALLOW_SIGNUP", False)
 # Base of public file links, e.g. https://wa.yourdomain.com (empty = the address the site was opened on).
 PUBLIC_BASE_URL = env("PUBLIC_BASE_URL", "").rstrip("/")
@@ -124,6 +130,43 @@ X_FRAME_OPTIONS = "DENY"
 if SECURE:
     SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
     SECURE_HSTS_SECONDS = 60 * 60 * 24 * 30
+
+# ---------- Sign in with the Marketian account ----------
+# Owners sign in at accounts.marketian.net (GitHub or email) over OpenID Connect; this app never
+# sees their password. Team members and the admin keep the username + password sign-in.
+# Get the client ID and secret with:
+#   docker compose exec accounts python manage.py register_product wa https://wa.marketian.net
+ACCOUNTS_URL = env("ACCOUNTS_URL", "https://accounts.marketian.net").rstrip("/")
+MARKETIAN_CLIENT_ID = env("MARKETIAN_CLIENT_ID", "")
+MARKETIAN_SSO = bool(MARKETIAN_CLIENT_ID)
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+LOGIN_REDIRECT_URL = "/"
+SOCIALACCOUNT_ONLY = True  # allauth handles only the Marketian account; passwords go through /api/auth/login/
+SOCIALACCOUNT_ADAPTER = "apps.core.marketian.SocialAccountAdapter"
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_STORE_TOKENS = False
+# A user the admin added with the same (verified) email signs in to that user, instead of a new one.
+SOCIALACCOUNT_EMAIL_AUTHENTICATION = True
+SOCIALACCOUNT_EMAIL_AUTHENTICATION_AUTO_CONNECT = True
+ACCOUNT_EMAIL_VERIFICATION = "none"  # verified at accounts.marketian.net
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*"]
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_PROVIDERS = {
+    "openid_connect": {
+        "OAUTH_PKCE_ENABLED": True,
+        "APPS": [{
+            "provider_id": "marketian",
+            "name": "Marketian",
+            "client_id": MARKETIAN_CLIENT_ID,
+            "secret": env("MARKETIAN_CLIENT_SECRET", ""),
+            "settings": {"server_url": f"{ACCOUNTS_URL}/o"},
+        }],
+    }
+}
 
 # ---------- API ----------
 REST_FRAMEWORK = {

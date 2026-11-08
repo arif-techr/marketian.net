@@ -15,6 +15,7 @@ from rest_framework.throttling import SimpleRateThrottle
 from apps.broadcasts.models import Campaign, CampaignTarget
 from apps.whatsapp.models import WhatsAppAccount
 
+from . import marketian
 from .models import AppSettings, TeamMember
 from .serializers import (
     AppSettingsSerializer, LoginSerializer, PasswordChangeSerializer, RegisterSerializer, TeamMemberSerializer,
@@ -31,6 +32,8 @@ def user_payload(user):
         "is_owner": membership is None,
         "role": membership.role if membership else "owner",
         "workspace": (owner.get_full_name() or owner.username) if owner else None,
+        # "marketian": signs in with the Marketian account, whose password is changed there.
+        "sign_in": "marketian" if marketian.uses_marketian_account(user) else "password",
     }
 
 
@@ -39,8 +42,16 @@ def user_payload(user):
 def session(request):
     """Sets the CSRF cookie and tells the SPA who is signed in (or null)."""
     get_token(request)
-    return Response({"user": user_payload(request.user) if request.user.is_authenticated else None,
-                     "signup_enabled": conf.ALLOW_SIGNUP})
+    return Response({
+        "user": user_payload(request.user) if request.user.is_authenticated else None,
+        # The "Create an account" form; with the Marketian account people sign up there instead.
+        "signup_enabled": conf.ALLOW_SIGNUP and not conf.MARKETIAN_SSO,
+        "marketian": {
+            "enabled": conf.MARKETIAN_SSO,
+            "login_url": marketian.LOGIN_PATH,
+            "account_url": conf.ACCOUNTS_URL + "/",
+        },
+    })
 
 
 class LoginThrottle(SimpleRateThrottle):
@@ -70,6 +81,8 @@ def login_view(request):
 @throttle_classes([LoginThrottle])
 def register(request):
     """Create a new user with their own, empty workspace and sign them in. Off unless ALLOW_SIGNUP=true."""
+    if conf.MARKETIAN_SSO:
+        return Response({"error": "Sign up with your Marketian account instead."}, status=status.HTTP_403_FORBIDDEN)
     if not conf.ALLOW_SIGNUP:
         return Response({"error": "Sign-up is turned off. Ask the administrator for an account."}, status=status.HTTP_403_FORBIDDEN)
     s = RegisterSerializer(data=request.data)
@@ -82,13 +95,19 @@ def register(request):
 @api_view(["POST"])
 @permission_classes([AllowAny])
 def logout_view(request):
+    """Signs out here. For Marketian-account users, also returns where to sign out of that account."""
+    user = request.user
+    redirect = marketian.sign_out_url(request) if user.is_authenticated and marketian.uses_marketian_account(user) else None
     logout(request)
-    return Response({"ok": True})
+    return Response({"ok": True, "redirect": redirect})
 
 
 @api_view(["POST"])
 @permission_classes([IsWorkspaceOwner])
 def change_password(request):
+    if marketian.uses_marketian_account(request.user) and not request.user.has_usable_password():
+        return Response({"error": "Your password belongs to your Marketian account. Change it there."},
+                        status=status.HTTP_400_BAD_REQUEST)
     s = PasswordChangeSerializer(data=request.data, context={"request": request})
     s.is_valid(raise_exception=True)
     request.user.set_password(s.validated_data["new_password"])

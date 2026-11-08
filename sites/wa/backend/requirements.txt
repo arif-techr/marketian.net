@@ -7,3 +7,4 @@ celery[redis]>=5.4,<6
 psycopg[binary]>=3.2
 gunicorn>=23
 openpyxl>=3.1,<4
+django-allauth[socialaccount]>=65.21,<66
