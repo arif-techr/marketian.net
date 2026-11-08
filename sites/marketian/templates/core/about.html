@@ -38,7 +38,7 @@
       {% endfor %}
       <div class="hero-actions">
         {% if profile.resume %}
-          <a class="btn btn-primary" href="{{ profile.resume.url }}" download>{% icon "download" 18 %} Download CV</a>
+          <a class="btn btn-primary" href="{{ profile.resume.url }}" download hx-boost="false">{% icon "download" 18 %} Download CV</a>
         {% endif %}
         <a class="btn btn-outline" href="{% url 'core:contact' %}">Work with me {% icon "arrow" 16 %}</a>
       </div>

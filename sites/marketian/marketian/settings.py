@@ -58,6 +58,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "core.middleware.CanonicalDomainMiddleware",
+    "core.middleware.PreloadCacheMiddleware",
 ]
 
 ROOT_URLCONF = "marketian.urls"

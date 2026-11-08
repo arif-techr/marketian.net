@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% block title %}Dashboard · {{ product_name }}{% endblock %}
 {% block content %}
+{# Signed-in pages: keep them out of htmx's back-button copy in localStorage. #}
+<div hx-history="false" hidden></div>
 <div class="page-head">
   {% if picture %}<img class="avatar" src="{{ picture }}" alt="">{% else %}<span class="avatar">{{ display_name|first|upper }}</span>{% endif %}
   <div>

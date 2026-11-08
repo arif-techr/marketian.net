@@ -71,3 +71,21 @@ class SiteTests(TestCase):
         response = self.client.get("/about/", HTTP_HOST="marketain.net")
         self.assertEqual(response.status_code, 301)
         self.assertTrue(response["Location"].endswith("marketian.net/about/"))
+
+    def test_pages_load_without_full_reload(self):
+        response = self.client.get(reverse("core:home"))
+        self.assertContains(response, 'hx-boost="true"')
+        self.assertContains(response, "js/vendor/htmx-2.0.4.min.js")
+
+    def test_hover_prefetch_is_kept_briefly(self):
+        preloaded = self.client.get(reverse("core:about"), HTTP_HX_PRELOADED="true")
+        self.assertIn("max-age=10", preloaded["Cache-Control"])
+        self.assertIn("private", preloaded["Cache-Control"])
+        self.assertFalse(self.client.get(reverse("core:about")).has_header("Cache-Control"))
+
+    def test_hover_prefetch_never_keeps_a_one_time_notice(self):
+        data = {"name": "Jane Doe", "email": "jane@example.com", "subject": "Hi", "message": "A new website please."}
+        self.client.post(reverse("core:contact"), data)  # leaves "message sent" waiting for the next page
+        response = self.client.get(reverse("core:contact"), HTTP_HX_PRELOADED="true")
+        self.assertContains(response, "Your message has been sent")
+        self.assertFalse(response.has_header("Cache-Control"))

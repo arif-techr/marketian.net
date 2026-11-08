@@ -59,6 +59,7 @@ MIDDLEWARE = [
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "allauth.account.middleware.AccountMiddleware",
+    "dashboard.middleware.PreloadCacheMiddleware",
 ]
 
 ROOT_URLCONF = "product.urls"

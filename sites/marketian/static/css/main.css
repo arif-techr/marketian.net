@@ -441,8 +441,22 @@ a.contact-item:hover { border-color: var(--brand); transform: translateY(-2px); 
 .js .reveal { opacity: 0; transform: translateY(24px); transition: opacity .7s var(--ease), transform .7s var(--ease); }
 .js .reveal.is-visible { opacity: 1; transform: none; }
 
+/* ---- Page changes (htmx) ------------------------------------------------- */
+/* Quick cross-fade between pages; the header stays put. */
+.site-header { view-transition-name: site-header; }
+::view-transition-old(root), ::view-transition-new(root) { animation-duration: .18s; }
+
+/* Progress bar, shown only when a page takes longer than a moment to arrive. */
+html::before {
+  content: ""; position: fixed; top: 0; left: 0; z-index: 200;
+  width: 100%; height: 3px; background: var(--gradient);
+  transform: scaleX(0); transform-origin: left; opacity: 0; pointer-events: none;
+}
+html.is-loading::before { opacity: 1; transform: scaleX(.85); transition: opacity .1s .15s, transform 6s cubic-bezier(.1, .6, .2, 1) .15s; }
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
+  ::view-transition-group(*), ::view-transition-old(*), ::view-transition-new(*) { animation: none !important; }
   .js .reveal { opacity: 1; transform: none; }
   .bar span { width: var(--level); }
 }
