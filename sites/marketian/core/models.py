@@ -89,6 +89,39 @@ class Service(models.Model):
         return [line.strip() for line in self.features.splitlines() if line.strip()]
 
 
+class Tool(models.Model):
+    """A Marketian marketing tool (an app on its own subdomain), listed on the Marketing tools page."""
+
+    LIVE, INVITE, BETA, SOON = "live", "invite", "beta", "soon"
+    STATUSES = [(LIVE, "Live"), (INVITE, "Invite only"), (BETA, "Beta"), (SOON, "Coming soon")]
+    ICONS = Service.ICONS + [("whatsapp", "WhatsApp")]
+
+    name = models.CharField(max_length=80)
+    icon = models.CharField(max_length=20, choices=ICONS, default="chart")
+    tagline = models.CharField(max_length=160, help_text="One line: what it does.")
+    description = models.TextField(blank=True)
+    features = models.TextField(blank=True, help_text="One feature per line.")
+    url = models.URLField(blank=True, help_text="Where it lives, e.g. https://wa.marketian.net")
+    status = models.CharField(max_length=10, choices=STATUSES, default=LIVE,
+                              help_text="Coming soon: no Open button, visitors can ask to be told when it's ready.")
+    order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True, help_text="Show it on the site.")
+
+    class Meta:
+        ordering = ["order", "name"]
+
+    def __str__(self):
+        return self.name
+
+    @property
+    def feature_list(self):
+        return [line.strip() for line in self.features.splitlines() if line.strip()]
+
+    @property
+    def can_open(self):
+        return self.status != self.SOON and bool(self.url)
+
+
 class Project(models.Model):
     title = models.CharField(max_length=160)
     slug = models.SlugField(max_length=180, unique=True, blank=True)

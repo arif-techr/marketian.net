@@ -5,7 +5,7 @@ from django.utils.html import format_html
 
 from mailer.views import bulk_send, compose
 
-from .models import ContactMessage, Experience, Project, Service, SiteProfile, Skill, Testimonial
+from .models import ContactMessage, Experience, Project, Service, SiteProfile, Skill, Testimonial, Tool
 
 
 @admin.register(SiteProfile)
@@ -33,6 +33,12 @@ class SiteProfileAdmin(admin.ModelAdmin):
 class ServiceAdmin(admin.ModelAdmin):
     list_display = ["title", "icon", "order", "is_active"]
     list_editable = ["order", "is_active"]
+
+
+@admin.register(Tool)
+class ToolAdmin(admin.ModelAdmin):
+    list_display = ["name", "status", "url", "order", "is_active"]
+    list_editable = ["status", "order", "is_active"]
 
 
 @admin.register(Project)

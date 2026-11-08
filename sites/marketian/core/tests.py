@@ -6,7 +6,7 @@ from django.core.management import call_command
 from django.test import TestCase, override_settings
 from django.urls import reverse
 
-from .models import ContactMessage, Project
+from .models import ContactMessage, Project, Tool
 
 
 @override_settings(CONTACT_RECIPIENTS=["owner@marketian.net"])
@@ -19,7 +19,7 @@ class SiteTests(TestCase):
         cache.clear()
 
     def test_pages_render(self):
-        for name in ["home", "about", "services", "portfolio", "contact"]:
+        for name in ["home", "about", "services", "tools", "portfolio", "contact"]:
             with self.subTest(page=name):
                 self.assertEqual(self.client.get(reverse(f"core:{name}")).status_code, 200)
 
@@ -89,3 +89,21 @@ class SiteTests(TestCase):
         response = self.client.get(reverse("core:contact"), HTTP_HX_PRELOADED="true")
         self.assertContains(response, "Your message has been sent")
         self.assertFalse(response.has_header("Cache-Control"))
+
+    def test_marketing_tools_button_in_menu(self):
+        response = self.client.get(reverse("core:home"))
+        self.assertContains(response, f'class="nav-tools" href="{reverse("core:tools")}"')
+        self.assertContains(response, "Tools I build for marketers")
+
+    def test_tools_page_lists_active_tools(self):
+        Tool.objects.create(name="Hidden tool", tagline="x", url="https://hidden.marketian.net", is_active=False)
+        response = self.client.get(reverse("core:tools"))
+        self.assertContains(response, 'href="https://wa.marketian.net"')
+        self.assertContains(response, "Invite only")
+        self.assertNotContains(response, "Hidden tool")
+
+    def test_coming_soon_tool_has_no_open_button(self):
+        response = self.client.get(reverse("core:tools"))
+        self.assertNotContains(response, 'href="https://metadata.marketian.net"')
+        self.assertContains(response, "Get notified")
+        self.assertIn(reverse("core:tools"), self.client.get("/sitemap.xml").content.decode())

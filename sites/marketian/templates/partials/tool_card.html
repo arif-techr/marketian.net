@@ -1,0 +1,23 @@
+{% load ui %}<article class="card tool-card reveal">
+  <div class="tool-head">
+    <span class="icon-badge icon-badge-lg">{% icon tool.icon 26 %}</span>
+    <span class="tool-status tool-status-{{ tool.status }}">{{ tool.get_status_display }}</span>
+  </div>
+  <h{{ level|default:"2" }} class="tool-name">{{ tool.name }}</h{{ level|default:"2" }}>
+  <p class="muted">{{ tool.tagline }}</p>
+  {% if full %}
+    {% if tool.description %}<p>{{ tool.description }}</p>{% endif %}
+    {% if tool.feature_list %}
+      <ul class="check-list">
+        {% for feature in tool.feature_list %}<li>{% icon "check" 16 %} {{ feature }}</li>{% endfor %}
+      </ul>
+    {% endif %}
+  {% endif %}
+  <div class="tool-actions">
+    {% if tool.can_open %}
+      <a class="btn btn-primary btn-sm" href="{{ tool.url }}">Open {{ tool.name }} {% icon "external" 15 %}</a>
+    {% else %}
+      <a class="btn btn-outline btn-sm" href="{% url 'core:contact' %}?subject={{ tool.name|urlencode }}%20%E2%80%94%20tell%20me%20when%20it%27s%20ready">Get notified</a>
+    {% endif %}
+  </div>
+</article>

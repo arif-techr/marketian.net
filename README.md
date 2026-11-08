@@ -225,7 +225,7 @@ The whole server, exactly as on the VPS, on your own computer: every site at a `
    ```
 3. Stop with `docker compose down` (data stays in Docker volumes); start again with `CADDYFILE=Caddyfile.local docker compose up -d`.
 
-Local `.env` files never go to git. Running the Django tests with them present: add `DEBUG=True POSTGRES_DB=` in front of the test command.
+Local `.env` files never go to git. Running the Django tests with them present: add `DEBUG=True POSTGRES_DB= CANONICAL_HOST=` in front of the test command.
 
 ## Working on it locally
 

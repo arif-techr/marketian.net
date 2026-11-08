@@ -1,0 +1,28 @@
+{% extends "base.html" %}{% load ui %}
+
+{% block title %}Marketing tools{% endblock %}
+{% block description %}Online marketing tools by Marketian. One free Marketian account works with every tool.{% endblock %}
+
+{% block content %}
+<section class="page-hero">
+  <div class="container">
+    <p class="eyebrow">Marketing tools</p>
+    <h1>Tools that do the <span class="gradient-text">busy work for you</span></h1>
+    <p class="lead">Software I build and use for marketing work. One Marketian account (GitHub or email) signs you in to every tool.</p>
+  </div>
+</section>
+
+<section class="section pt-0">
+  <div class="container">
+    <div class="grid grid-2">
+      {% for tool in tools %}
+        {% include "partials/tool_card.html" with full=True %}
+      {% empty %}
+        <p class="muted">No tools yet — add some from the admin panel.</p>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+{% include "partials/cta.html" %}
+{% endblock %}

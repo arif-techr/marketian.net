@@ -11,6 +11,7 @@
       <li><a href="{% url 'core:about' %}" {% if url_name == "about" %}aria-current="page"{% endif %}>About</a></li>
       <li><a href="{% url 'core:services' %}" {% if url_name == "services" %}aria-current="page"{% endif %}>Services</a></li>
       <li><a href="{% url 'core:portfolio' %}" {% if url_name == "portfolio" or url_name == "project_detail" %}aria-current="page"{% endif %}>Portfolio</a></li>
+      <li><a class="nav-tools" href="{% url 'core:tools' %}" {% if url_name == "tools" %}aria-current="page"{% endif %}>{% icon "chart" 16 %} Marketing tools</a></li>
       <li class="nav-cta-mobile"><a class="btn btn-primary" href="{% url 'core:contact' %}">Let's talk</a></li>
     </ul>
 

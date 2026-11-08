@@ -5,7 +5,7 @@ from django.shortcuts import get_object_or_404, redirect, render
 from mailer.services import notify_new_contact
 
 from .forms import ContactForm
-from .models import Experience, Project, Service, Skill, Testimonial
+from .models import Experience, Project, Service, Skill, Testimonial, Tool
 
 CONTACT_LIMIT_PER_HOUR = 5
 
@@ -17,6 +17,7 @@ def home(request):
         "services": Service.objects.filter(is_active=True)[:6],
         "projects": featured,
         "testimonials": Testimonial.objects.filter(is_active=True)[:6],
+        "tools": Tool.objects.filter(is_active=True)[:3],
     })
 
 
@@ -32,6 +33,10 @@ def about(request):
 
 def services(request):
     return render(request, "core/services.html", {"services": Service.objects.filter(is_active=True)})
+
+
+def tools(request):
+    return render(request, "core/tools.html", {"tools": Tool.objects.filter(is_active=True)})
 
 
 def portfolio(request):

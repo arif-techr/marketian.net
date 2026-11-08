@@ -8,7 +8,7 @@ import datetime
 
 from django.core.management.base import BaseCommand
 
-from core.models import Experience, Project, Service, SiteProfile, Skill, Testimonial
+from core.models import Experience, Project, Service, SiteProfile, Skill, Testimonial, Tool
 
 SERVICES = [
     ("SEO & Content Strategy", "search", "Rank higher on Google and turn organic visitors into customers.",
@@ -94,6 +94,28 @@ TESTIMONIALS = [
 ]
 
 
+TOOLS = [
+    (
+        "WA Broadcaster", "whatsapp", Tool.INVITE, "https://wa.marketian.net",
+        "Send one WhatsApp message to many customers, safely paced and tracked.",
+        "Link your WhatsApp numbers by QR code, pick your contacts and send personalised messages "
+        "that go out one by one with natural pauses, while you watch every delivery live.",
+        "Link several WhatsApp numbers and share the sending between them\n"
+        "Import contacts from Excel or CSV and organise them into lists\n"
+        "Personal messages with {name} and your own columns\n"
+        "Schedule broadcasts and follow them live\n"
+        "Reports by day, campaign and number\n"
+        "Team members with their own sign-in",
+    ),
+    (
+        "Metadata", "search", Tool.SOON, "https://metadata.marketian.net",
+        "Placeholder: describe Metadata in the admin panel.",
+        "",
+        "",
+    ),
+]
+
+
 class Command(BaseCommand):
     help = "Populate the site with editable starter content."
 
@@ -102,7 +124,7 @@ class Command(BaseCommand):
 
     def handle(self, *args, reset=False, **options):
         if reset:
-            for model in (Service, Project, Skill, Experience, Testimonial):
+            for model in (Service, Tool, Project, Skill, Experience, Testimonial):
                 model.objects.all().delete()
 
         profile = SiteProfile.load()
@@ -133,6 +155,11 @@ class Command(BaseCommand):
         if not Service.objects.exists():
             for i, (title, icon, summary, desc, features) in enumerate(SERVICES):
                 Service.objects.create(title=title, icon=icon, summary=summary, description=desc, features=features, order=i)
+
+        if not Tool.objects.exists():
+            for i, (name, icon, status, url, tagline, desc, features) in enumerate(TOOLS):
+                Tool.objects.create(name=name, icon=icon, status=status, url=url, tagline=tagline,
+                                    description=desc, features=features, order=i)
 
         if not Project.objects.exists():
             for i, (title, cat, client, accent, featured, summary, challenge, solution, results, tags, done) in enumerate(PROJECTS):
