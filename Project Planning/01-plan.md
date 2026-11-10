@@ -8,9 +8,10 @@
 - **SaaS products on subdomains**, each one its own app with its own database:
   - **metadata.marketian.net**: the first product.
   - **wa.marketian.net**: WA Broadcaster. It links WhatsApp numbers by QR code and sends one message to many contacts, paced and scheduled, with tracking.
+  - **tracking.marketian.net**: server-side first-party tracking, Stape-style. Each client site sends its events through its own subdomain, and we forward them to Meta CAPI, GA4, TikTok and others. Design: [05-tracking-product.md](05-tracking-product.md).
   - More to come (for example **qr.marketian.net**). Each one is copied from `sites/metadata`.
 
-One server, one repo, one `docker compose up`. Caddy handles HTTPS for every domain, and only the proxy is reachable from the internet.
+One server, one repo, one `docker compose up`. Caddy handles HTTPS for every domain (including client tracking subdomains, via on-demand TLS), and only the proxy is reachable from the internet.
 
 ## Roadmap
 
@@ -32,8 +33,15 @@ One server, one repo, one `docker compose up`. Caddy handles HTTPS for every dom
 ### Next: harden and operate
 - Schedule `backup.sh` with cron (03:30 nightly) and download a copy off the server now and then.
 - Make the Django sites refuse to start in production with the placeholder `SECRET_KEY`, so a missing `.env` line can't leave a site in debug mode.
-- Add basic uptime monitoring for the four domains.
+- Add basic uptime monitoring for the domains (including tracking once live).
 - Write down how to roll back a deploy (which image or commit to go back to).
+
+### Then: Tracking product (see [05-tracking-product.md](05-tracking-product.md) §7)
+- **T0:** answer the open questions in 05 §8, `register_product tracking`, DNS record `edge.marketian.net`.
+- **T1 (MVP):** `sites/tracking` (Django dashboard + Node edge/worker + Redis), custom subdomains with on-demand TLS, `mt.js` loader, Meta CAPI + GA4, live event log. Go live on one real client site.
+- **T2:** TikTok, server events API, cookie keeper, bot filter, geo, consent rules, retention.
+- **T3:** same-origin path mode (for Safari), WordPress/Woo plugin, more destinations, stats and alerts.
+- **T4:** self-serve, plans and billing.
 
 ### Later: grow the product line
 - Next SaaS product (`qr.marketian.net` or similar), copied from `sites/metadata`.

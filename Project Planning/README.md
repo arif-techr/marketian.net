@@ -7,6 +7,10 @@ Planning and status notes for the Marketian sites: what we're building, where ea
 | [01-plan.md](01-plan.md) | What we're doing and why, plus the roadmap (Now / Next / Later) | priorities change, or a roadmap item is done |
 | [02-status.md](02-status.md) | Current state of every site and of the repo | after any work session, commit, or deploy |
 | [03-decisions.md](03-decisions.md) | Architecture and product decisions, with the reason for each | a choice is made that someone could later ask "why?" about |
+| [04-database-design.md](04-database-design.md) | Every database: what exists, the target design, rollout order | a schema change is planned or migrated |
+| [05-tracking-product.md](05-tracking-product.md) | Tracking product overview: Stape-style features, architecture, phases | the product's scope or phases change |
+| [06-tracking-build-spec.md](06-tracking-build-spec.md) | Tracking technical spec: tables, Redis keys, APIs, adapters, security, tests | a technical detail of the tracking build changes |
+| [07-tracking-build-queue.md](07-tracking-build-queue.md) | Tracking build task queue: ordered tasks with "done when" checks | a task is started or finished (update its ⬜/🟡/✅) |
 | [audits/](audits/) | Dated, full audit reports (one file per audit) | an audit is run; never edit an old one, add a new file |
 
 ## Rules for keeping it useful
