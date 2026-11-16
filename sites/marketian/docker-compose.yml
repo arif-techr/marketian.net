@@ -10,6 +10,10 @@ services:
     restart: unless-stopped
     env_file: .env
     environment:
+      # Always the PostgreSQL container below in Docker, even if .env leaves POSTGRES_DB out
+      # (without it the app would quietly fall back to SQLite inside the container).
+      POSTGRES_DB: ${POSTGRES_DB:-marketian}
+      POSTGRES_USER: ${POSTGRES_USER:-marketian}
       POSTGRES_HOST: marketian-db
       SERVE_MEDIA: "True"
     volumes:
