@@ -10,3 +10,4 @@ staticfiles/
 backups/
 keys/
 *.pem
+*.sqlite3-journal

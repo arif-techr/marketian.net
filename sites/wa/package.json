@@ -7,9 +7,9 @@
     "setup": "node scripts/setup.mjs",
     "dev": "node scripts/dev.mjs",
     "test": "node scripts/run.mjs test",
-    "docker:up": "docker compose up -d --build",
-    "docker:down": "docker compose down",
-    "docker:logs": "docker compose logs -f --tail=100"
+    "docker:up": "cd ../.. && docker compose up -d --build wa wa-backend wa-worker wa-beat wa-gateway",
+    "docker:down": "cd ../.. && docker compose stop wa wa-backend wa-worker wa-beat wa-gateway",
+    "docker:logs": "cd ../.. && docker compose logs -f --tail=100 wa wa-backend wa-worker wa-beat wa-gateway"
   },
   "engines": {
     "node": ">=20"

@@ -25,6 +25,8 @@ def env_list(name, default=""):
 
 SECRET_KEY = os.getenv("SECRET_KEY", "dev-insecure-change-me")
 DEBUG = env_bool("DEBUG", True)
+if not DEBUG and SECRET_KEY in ("", "dev-insecure-change-me", "change-me"):
+    raise RuntimeError("Set SECRET_KEY in .env (see .env.example).")
 
 ALLOWED_HOSTS = env_list("ALLOWED_HOSTS", "accounts.marketian.net")
 ALLOWED_HOSTS += [h for h in ("localhost", "127.0.0.1") if h not in ALLOWED_HOSTS]

@@ -1,4 +1,4 @@
-# Where we left off (9 Nov 2026)
+# Where we left off (9 Nov 2026, evening)
 
 ## Start everything again (Docker, on this PC)
 
@@ -32,11 +32,14 @@ Stop with `docker compose down`. The local `.env` files and passwords above are 
     hide, schedule, social icons, 6 themes + own colours, 5 button styles, live phone preview,
     page views and clicks per button, email sign-ups with CSV export, QR code, sensitive-content warning
 
+Also done this session: README covers Links, Django sites refuse to start in production with the placeholder
+`SECRET_KEY`, the WA `npm run docker:*` scripts work again, and all 251 tests pass (details in
+[Project Planning/02-status.md](Project%20Planning/02-status.md)).
+
 ## Not finished yet (next session)
 
 - Links: check it in the browser end to end in Docker (it builds, starts and answers; not clicked through yet)
 - Add Links to the portfolio's Marketing tools on this PC: in http://marketian.localhost/admin/ → Tools → Add
   (name Links, link http://links.localhost). New installs get it automatically from `seed_demo`.
-- README: add Links (tree, first-time setup steps, local addresses table)
 - Metadata: decide what it does (it's still an empty dashboard)
 - Push to GitHub (`git push`) and deploy to the VPS (README, "Hosting on Hostinger VPS")

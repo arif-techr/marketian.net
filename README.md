@@ -1,6 +1,6 @@
 # Marketian sites
 
-Everything that runs on the Marketian VPS: the portfolio at **marketian.net**, the shared **Marketian account** at accounts.marketian.net, and the SaaS products on their own subdomains: **metadata.marketian.net** and the WhatsApp broadcaster **wa.marketian.net**. One server, one repo, each site in its own folder.
+Everything that runs on the Marketian VPS: the portfolio at **marketian.net**, the shared **Marketian account** at accounts.marketian.net, and the SaaS products on their own subdomains: **metadata.marketian.net**, the link shortener and bio pages **links.marketian.net**, and the WhatsApp broadcaster **wa.marketian.net**. One server, one repo, each site in its own folder.
 
 ```
 Marketian.net/
@@ -12,6 +12,7 @@ Marketian.net/
 │   ├── marketian/         marketian.net (+ marketain.net) — Django portfolio, see its README
 │   ├── accounts/          accounts.marketian.net — one login (GitHub or email) for every product
 │   ├── metadata/          metadata.marketian.net — first SaaS product, signs in with the Marketian account
+│   ├── links/             links.marketian.net — short links with click stats + Linktree-style bio pages
 │   ├── wa/                wa.marketian.net — WhatsApp broadcaster (Django + React + WhatsApp gateway), see its README
 │   └── _template/         starter for a plain site (copy it)
 ├── docker-compose.yml     ← THE root file: lists the proxy and every site; run all Docker commands here
@@ -29,18 +30,18 @@ Marketian.net/
                              ┌──────────── VPS ─────────────────────────────────────────────────┐
  marketian.net ──────────┐   │                                                                  │
  marketain.net ──────────┤   │  proxy (Caddy, ports 80/443)                                     │
- accounts.marketian.net ─┼─► │     │  "web-proxy" network                                       │
- metadata.marketian.net ─┤   │     ├──► marketian:8000 (Django) ──► its own PostgreSQL          │
- wa.marketian.net ───────┘   │     ├──► accounts:8000  (Django) ──┐                             │
-                             │     ├──► metadata:8000  (Django) ──┴─► shared PostgreSQL (infra) │
-                             │     │                                 one database per product   │
+ accounts.marketian.net ─┤   │     │  "web-proxy" network                                       │
+ metadata.marketian.net ─┼─► │     ├──► marketian:8000 (Django) ──► its own PostgreSQL          │
+ links.marketian.net ────┤   │     ├──► accounts:8000  (Django) ──┐                             │
+ wa.marketian.net ───────┘   │     ├──► metadata:8000  (Django) ──┼─► shared PostgreSQL (infra) │
+                             │     ├──► links:8000     (Django) ──┘   one database per product   │
                              │     └──► wa:80 (Nginx + React) ──► wa-backend, wa-worker, wa-beat│
                              │            wa-gateway (WhatsApp) ──► its own PostgreSQL + Redis  │
                              └──────────────────────────────────────────────────────────────────┘
 ```
 
 - **One Docker project for the whole server.** The root `docker-compose.yml` includes `proxy/`, `infra/` and each `sites/<name>/docker-compose.yml`, so `docker compose up -d` starts everything and `docker compose ps` shows everything.
-- **Only the proxy is open to the internet.** Sites never publish ports. Each site's main service is named after the site (`marketian`, `accounts`, `metadata`, …); the Caddyfile maps each domain to that name over the shared `web-proxy` network.
+- **Only the proxy is open to the internet.** Sites never publish ports. Each site's main service is named after the site (`marketian`, `accounts`, `metadata`, `links`, …); the Caddyfile maps each domain to that name over the shared `web-proxy` network.
 - **Each site is self-contained**: its own folder, `.env` and Docker image. Updating one site (`bash scripts/deploy.sh metadata`) never restarts the others, and a site can use any language.
 - **Databases:** the portfolio and the WhatsApp broadcaster keep their own PostgreSQL. The SaaS products and the accounts site share one PostgreSQL server (`infra/`), but each gets its own database and login, so no product can read another's data. Only containers on the internal `shared-db` network can reach it.
 - **One login for every product.** People sign in once at accounts.marketian.net (GitHub or email + password). Products send people there over OpenID Connect and get them back signed in; a product never sees a password.
@@ -90,6 +91,7 @@ cp infra/.env.example infra/.env
 nano infra/.env                           # POSTGRES_PASSWORD
 bash scripts/create-db.sh accounts        # prints 3 POSTGRES_* lines: keep them for step c
 bash scripts/create-db.sh metadata        # prints 3 more: keep them for step d
+bash scripts/create-db.sh links           # and 3 more: keep them for step e
 ```
 (The WhatsApp broadcaster has its own database server; it needs no `create-db.sh`.)
 
@@ -109,24 +111,32 @@ cp sites/metadata/.env.example sites/metadata/.env
 nano sites/metadata/.env                  # SECRET_KEY and the POSTGRES_* lines from step b
 ```
 
-**e. WhatsApp broadcaster**
+**e. Links**
+```bash
+cp sites/links/.env.example sites/links/.env
+nano sites/links/.env                     # SECRET_KEY and the POSTGRES_* lines from step b
+```
+
+**f. WhatsApp broadcaster**
 ```bash
 cp sites/wa/.env.example sites/wa/.env
 nano sites/wa/.env                        # DJANGO_SECRET_KEY, POSTGRES_PASSWORD, GATEWAY_API_KEY, ADMIN_PASSWORD
 ```
 
-**f. Start everything, then connect the products to the account**
+**g. Start everything, then connect the products to the account**
 ```bash
 bash scripts/deploy.sh
 docker compose exec marketian python manage.py createsuperuser
 docker compose exec accounts python manage.py createsuperuser
 docker compose exec accounts python manage.py register_product metadata https://metadata.marketian.net
 nano sites/metadata/.env                  # paste the MARKETIAN_CLIENT_ID / MARKETIAN_CLIENT_SECRET it printed
+docker compose exec accounts python manage.py register_product links https://links.marketian.net
+nano sites/links/.env                     # paste the two lines it printed
 docker compose exec accounts python manage.py register_product wa https://wa.marketian.net
 nano sites/wa/.env                        # paste the two lines it printed
-bash scripts/deploy.sh metadata wa-backend
+bash scripts/deploy.sh metadata links wa-backend
 ```
-Open https://marketian.net, https://accounts.marketian.net, https://metadata.marketian.net and https://wa.marketian.net. On the broadcaster only people you add can sign in (see [its README](sites/wa/README.md)), and its admin is `admin` with the `ADMIN_PASSWORD` you set. The first visit to each may take a few seconds while its certificate is issued.
+Open https://marketian.net, https://accounts.marketian.net, https://metadata.marketian.net, https://links.marketian.net and https://wa.marketian.net. On the broadcaster only people you add can sign in (see [its README](sites/wa/README.md)), and its admin is `admin` with the `ADMIN_PASSWORD` you set. The first visit to each may take a few seconds while its certificate is issued.
 
 **Email with Hostinger mail:** in each `.env` use `EMAIL_HOST=smtp.hostinger.com`, `EMAIL_PORT=465`, `EMAIL_USE_SSL=True`, `EMAIL_USE_TLS=False`, and a mailbox you created in hPanel → **Emails** as `EMAIL_HOST_USER` / `DEFAULT_FROM_EMAIL`. The accounts site needs working email: new accounts must confirm their address.
 
@@ -151,8 +161,9 @@ What ends up in `backups/`:
 | `marketian_db_*.sql.gz` | the portfolio's database |
 | `wa_db_*.sql.gz` | the WhatsApp broadcaster's database |
 | `shared_roles_*.sql.gz` | the logins of the shared PostgreSQL server |
-| `shared_<product>_db_*.sql.gz` | one per database on the shared server (accounts, metadata, …) |
+| `shared_<product>_db_*.sql.gz` | one per database on the shared server (accounts, metadata, links, …) |
 | `marketian_media_*.tar.gz` | uploaded photos and CV |
+| `links_media_*.tar.gz` | bio page photos |
 | `wa-backend_media_*.tar.gz` | the broadcaster's attachments |
 | `wa-gateway_sessions_*.tar.gz` | the linked WhatsApp numbers' logins: full access to those numbers, keep it safe |
 | `accounts_keys_*.tar.gz` | the key that signs sign-in tokens. Losing it signs everyone out of every product |
@@ -211,17 +222,19 @@ The whole server, exactly as on the VPS, on your own computer: every site at a `
 | Portfolio | http://marketian.localhost |
 | Marketian account | http://accounts.localhost |
 | Metadata | http://metadata.localhost |
+| Links | http://links.localhost |
 | WhatsApp broadcaster | http://wa.localhost |
 
 1. Create every `.env` (the same files as on the server, with local values): `DEBUG=False`, `SECURE_SSL_REDIRECT=False`, and the addresses above instead of the real domains, e.g. `ALLOWED_HOSTS=accounts.localhost` and `CSRF_TRUSTED_ORIGINS=http://accounts.localhost`. Accounts and Metadata also need `SECURE_COOKIES=False`; accounts `PRODUCTS_DOMAIN=localhost`; products `ACCOUNTS_URL=http://accounts.localhost`; the broadcaster `DJANGO_SECURE=false`.
 2. Then, from the repo root in Git Bash:
    ```bash
    export CADDYFILE=Caddyfile.local                 # plain http, *.localhost names
-   bash scripts/create-db.sh accounts && bash scripts/create-db.sh metadata
+   bash scripts/create-db.sh accounts && bash scripts/create-db.sh metadata && bash scripts/create-db.sh links
    docker compose up -d --build
    docker compose exec accounts python manage.py register_product metadata http://metadata.localhost
+   docker compose exec accounts python manage.py register_product links http://links.localhost
    docker compose exec accounts python manage.py register_product wa http://wa.localhost
-   docker compose up -d metadata wa-backend wa-worker wa-beat   # after pasting the client IDs into their .env
+   docker compose up -d metadata links wa-backend wa-worker wa-beat   # after pasting the client IDs into their .env
    ```
 3. Stop with `docker compose down` (data stays in Docker volumes); start again with `CADDYFILE=Caddyfile.local docker compose up -d`.
 
@@ -242,6 +255,7 @@ Tests:
 cd sites/marketian && python manage.py test core mailer
 cd sites/accounts  && python manage.py test portal
 cd sites/metadata  && python manage.py test dashboard
+cd sites/links     && python manage.py test dashboard shortener bio
 cd sites/wa        && npm test                     # after npm run setup (see sites/wa/README.md)
 ```
 
