@@ -1,0 +1,7 @@
+{
+  "about": "AES-256-GCM test vector for destination secrets (web/common/crypto.py and engine). Both sides must turn keys + nonce + plaintext into token, and token back into plaintext.",
+  "keys": "t1:AAECAwQFBgcICQoLDA0ODxAREhMUFRYXGBkaGxwdHh8=",
+  "nonce_base64": "ZGVmZ2hpamtsbW5v",
+  "plaintext": "{\"access_token\":\"EAAB-test-token-ভ\"}",
+  "token": "v1:t1:ZGVmZ2hpamtsbW5vMzm/BRqMJe1hFjCDvwtIx2CHR0vJQYcX1KWBPJTIwCa5CeZtbm/nD2TCHwIXOkPgGKA8mIL+"
+}

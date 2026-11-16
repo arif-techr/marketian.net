@@ -1,8 +1,8 @@
 # Status
 
-As of: 2026-11-10 (audit of 2026-11-09 in [audits/2026-11-09-audit.md](audits/2026-11-09-audit.md), the tracking design, and a quick look at the repo on 2026-11-10)
+As of: 2026-11-16 (full check of repo and tests; audit of 2026-11-09 in [audits/2026-11-09-audit.md](audits/2026-11-09-audit.md), the tracking design, and a quick look at the repo on 2026-11-10)
 
-**Overall:** Five sites are built: portfolio, accounts, Metadata (shell), WA Broadcaster and **Links**. They run together locally in Docker (see the repo's `STATUS.md`). Nothing has been confirmed as deployed yet. A sixth product, **Tracking** (server-side first-party tracking), has a spec and a build task queue, and you'll start building it yourself.
+**Overall:** Five sites are built and pushed: portfolio, accounts, Metadata (shell), WA Broadcaster and **Links**. All 321 tests pass. Nothing is deployed yet. The sixth product, **Tracking**, is being built on branch `tracking` (dashboard back end W1–W10 done, uncommitted). The 9 Nov evening fixes are parked in a git stash, and the local `.env` files are missing (see Repo).
 
 ## Sites
 
@@ -13,22 +13,42 @@ As of: 2026-11-10 (audit of 2026-11-09 in [audits/2026-11-09-audit.md](audits/20
 | metadata.marketian.net | `sites/metadata` | ✅ Shell built, committed | 8 | Sign-in, landing page and dashboard work. Product features still to build |
 | wa.marketian.net | `sites/wa` | ✅ Built, committed (`5a6d4dd`) | 130 | Django + DRF + Celery + React + WhatsApp gateway, signs in with the Marketian account |
 | links.marketian.net | `sites/links` | ✅ Built, committed (`1c1746b`) | 47 | Short links + bio pages. Best template for new products |
-| tracking.marketian.net | `sites/tracking` (planned) | 📝 Spec + task queue ([05](05-tracking-product.md), [06](06-tracking-build-spec.md), [07](07-tracking-build-queue.md)) | none | Django dashboard (`web/`) + Node edge/worker (`engine/`) + Redis. Client subdomains via Caddy on-demand TLS |
+| tracking.marketian.net | `sites/tracking` | 🟡 Building on branch `tracking`: dashboard tasks W1–W10 done ([07](07-tracking-build-queue.md)) | 70 | Django dashboard (`web/`) + Node edge/worker (`engine/`) + Redis. Client subdomains via Caddy on-demand TLS |
 | Proxy / infra / scripts | `proxy`, `infra`, `scripts` | ✅ Committed | none | Caddy (+ `Caddyfile.local`), shared PostgreSQL, deploy/backup/create-db |
 
-## Repo (seen 2026-11-10)
-- Branch `main`, latest commit `9f864d9` "Apps Merged and started to do develop everything". Whether it's pushed wasn't checked.
-- Untracked: `Project Planning/04-database-design.md`, and now also docs 05–07 (copied in on 2026-11-10, not committed).
-- Repo `STATUS.md` (9 Nov) lists what's left for Links (click-through check, README, adding Links to the portfolio's tools) and pushing + deploying.
+## Repo (checked 2026-11-16)
+- `main` = `origin/main` = `0573c00` "Tracking added": pushed, nothing waiting.
+- Working on branch `tracking` (local only, not pushed). `sites/tracking/` and edits to 02/07 are **not committed**.
+- **`stash@{0}` holds the 9 Nov evening session, never committed:** fixes for issues 2–4 below (`*.sqlite3-journal` in `.gitignore`, WA `docker:*` scripts, `SECRET_KEY` guard in marketian/accounts/metadata/links), the README section for Links, and that session's 01/02/STATUS.md edits. Restore it with `git stash pop` on `main`; 01-plan/02-status will conflict and need merging by hand.
+- Untracked `marketian.net/` folder in the repo root: a second clone at `0573c00`. Delete it or move it out.
+- No `.env` file exists in this folder (only `sites/accounts/keys/` and old SQLite files). `docker compose up` needs `infra/.env` and each site's `.env` again, so the logins in `STATUS.md` won't work until they're recreated.
+
+## Tests (run 2026-11-16, all green)
+| Suite | Tests |
+|---|---|
+| marketian | 22 ✅ |
+| accounts | 11 ✅ |
+| metadata | 8 ✅ |
+| links | 47 ✅ |
+| wa (pytest, `DJANGO_DEBUG=true`, `sites/wa/backend/.venv`) | 163 ✅ |
+| tracking/web (SQLite; also PostgreSQL 17 on 2026-11-10) | 70 ✅ |
+| **Total** | **321** |
 
 ## Open issues
 | # | Issue | Severity | Status |
 |---|---|---|---|
-| 1 | `wa-broadcaster/` (old copy) with `.venv` and SQL dumps | High | Not seen in the repo root on 2026-11-10. Confirm it's gone |
-| 2 | `sites/wa/backend/db.sqlite3-journal` not ignored | Low | Check (`.gitignore` has no `*.sqlite3-journal` yet) |
-| 3 | `sites/wa/package.json` `docker:*` scripts | Low | Check |
-| 4 | Django sites default to `DEBUG=True` + placeholder `SECRET_KEY` if `.env` lines are missing (Links too) | Medium | Open |
-| 5 | Run all test suites before deploying | Medium | Open |
+| 1 | `wa-broadcaster/` (old copy) with `.venv` and SQL dumps | High | ✅ Gone from the repo root |
+| 2 | `*.sqlite3-journal` not ignored | Low | Fixed in `stash@{0}`, not committed |
+| 3 | `sites/wa/package.json` `docker:*` scripts | Low | Fixed in `stash@{0}`, not committed |
+| 4 | Django sites start with `DEBUG=False` and the placeholder `SECRET_KEY` | Medium | Fixed in `stash@{0}` (Tracking has its own guard), not committed |
+| 5 | Run all test suites before deploying | Medium | ✅ 321 pass (2026-11-16) |
+| 6 | Links not clicked through in the browser in Docker | Medium | Open. Needs the `.env` files and Docker Desktop |
+| 7 | Links missing from the portfolio's Marketing tools on the local install | Low | Open |
+| 8 | Local `.env` files missing | Medium | Open. Recreate from each `.env.example` |
+| 9 | Metadata: product not decided (empty dashboard) | — | Open |
+| 10 | Portfolio fell back to SQLite in Docker if `POSTGRES_DB` was left commented out in its `.env` | Medium | Fixed 2026-11-16 (`sites/marketian/docker-compose.yml` always sets it; `.env.example` uncommented). Not committed, made on branch `tracking`: move it to `main` |
+| 11 | No memory limits on any container | Low | Open (planned in Deployment below) |
+| 12 | With the optional WA `evolution` profile, its database and `wa-evolution-instances` volume aren't in `backup.sh` | Low | Open. The default `builtin` gateway is covered |
 
 ## Deployment
 - VPS: Hostinger **KVM 2** (2 vCPU shared, 8 GB RAM, 100 GB NVMe, 8 TB bandwidth), 1-year term. Ubuntu 24.04, repo at `/opt/sites`. **Not yet confirmed as set up.**
@@ -36,6 +56,10 @@ As of: 2026-11-10 (audit of 2026-11-09 in [audits/2026-11-09-audit.md](audits/20
 - DNS: `@`, `www`, `*` for marketian.net and `@`, `www` for marketain.net → VPS IP. **Not yet confirmed.** The tracking product will also need `edge.marketian.net` (covered by the wildcard).
 
 ## Change log (newest first)
+- **2026-11-16:** Infrastructure check before deploying. `docker compose config` validates all 14 services; only the proxy publishes ports; every Caddy block (and `Caddyfile.local`) matches a service; each site is on PostgreSQL (shared `postgres` 17 for accounts/metadata/links, own `marketian-db` 17 and `wa-db` 16); every Django site migrates on start; `backup.sh` covers all databases and volumes. Fixed issue 10.
+- **2026-11-16:** Full status check. All 321 tests pass. Found the 9 Nov evening session parked in `stash@{0}` (issues 2–4 fixes, README for Links), no local `.env` files, and the stray `marketian.net/` clone.
+- **2026-11-10 (evening):** Tracking W6–W10: destinations (Meta, GA4, TikTok, webhook; encrypted secrets), partitioned event tables, config publishing to Redis, the Caddy `ask` endpoint and domain verification. 70 tests pass on SQLite and on PostgreSQL 17 (Docker). Not committed. Next: W11–W17 (dashboard pages).
+- **2026-11-10 (later):** Started building Tracking on branch `tracking`: `sites/tracking/web` with sign-in, production guard, workspaces (roles, tenancy helpers, audit log), AES-GCM secret encryption + test vector, and Site/Domain/ApiKey models. 37 tests pass on SQLite. Not committed. Next: W6 destinations, W7 event tables, W8 Redis publisher.
 - **2026-11-10:** Copied docs 01–03 (updated) and 05–07 (new) from the Claude Project into this folder, and added them to the folder README. The PC folder and the Project copy now match. Not committed.
 - **2026-11-10:** Tracking build task queue written ([07-tracking-build-queue.md](07-tracking-build-queue.md)): 42 tasks in 5 phases with "done when" checks, plus 9 adjustments to the spec after reading the repo (build from `sites/links`, app names `tracker`/`workspaces`, Meta `v26.0`, GA4 rules, local Caddy catch-all). No code written. Status updated for the Links site and newer commits.
 - **2026-11-10:** Recorded VPS plan (Hostinger KVM 2) and the capacity estimate.

@@ -1,0 +1,18 @@
+{% extends "base.html" %}
+{% block content %}
+<section class="landing">
+  <h1>Server-side tracking that ad blockers and iPhones don't lose</h1>
+  <p class="muted lead">{{ product_tagline }} Events go from your shop to <b>data.yourshop.com</b>, then on to Meta, Google Analytics and TikTok from our server.</p>
+  <p><a class="btn btn-inline" href="{% url 'dashboard:login' %}">Get started</a></p>
+  <p class="small muted">Sign in with your Marketian account: GitHub or email.</p>
+</section>
+
+<div class="features">
+  <div class="card"><h2>Your own domain</h2><p class="muted">The tracking script and events load from a subdomain of your shop, so browsers treat them as first-party.</p></div>
+  <div class="card"><h2>Meta Conversions API</h2><p class="muted">Purchases reach Meta from the server with hashed customer data, and match up with your pixel so nothing counts twice.</p></div>
+  <div class="card"><h2>Google Analytics 4</h2><p class="muted">Events go to GA4 through the Measurement Protocol, with the visitor's client ID kept intact.</p></div>
+  <div class="card"><h2>Server events</h2><p class="muted">Send orders and refunds straight from your shop's backend with an API key.</p></div>
+  <div class="card"><h2>Consent aware</h2><p class="muted">Events wait for the visitor's consent signal, and each destination only gets what it's allowed to.</p></div>
+  <div class="card"><h2>Live log</h2><p class="muted">See every event as it arrives and what each platform answered.</p></div>
+</div>
+{% endblock %}

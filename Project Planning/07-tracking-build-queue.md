@@ -1,6 +1,6 @@
 # Tracking: build task queue
 
-As of: 2026-11-10. Status: **queued, not started.** Work through the tasks top to bottom. Each one lists what it needs first, what to make, and how to know it's done.
+As of: 2026-11-10. Status: **in progress** on branch `tracking` (W1–W10 written; 70 tests pass on SQLite and on PostgreSQL 17 in Docker). Work through the tasks top to bottom. Each one lists what it needs first, what to make, and how to know it's done.
 Spec: [06-tracking-build-spec.md](06-tracking-build-spec.md). Overview: [05-tracking-product.md](05-tracking-product.md).
 
 Legend: ⬜ to do · 🟡 in progress · ✅ done · ⛔ blocked
@@ -27,13 +27,29 @@ The repo has moved on since the audit. **`sites/links` is now the newest and bes
 
 ---
 
+**Progress notes (2026-11-10):**
+- T0.2: branch `tracking` made. Not committed yet. An untracked `marketian.net/` folder (a second clone of the repo) sits in the repo root: delete it or move it out.
+- W1: `sites/tracking/web` exists and its tests pass on SQLite; sign-in through the Marketian account in Docker still to check (needs T0.4 and I1). The landing page sends signed-in people to `/sites/`, a bare list until W11.
+- W2: the guard lives in `common/crypto.py` (`check_production_secrets`) and runs from settings. The Docker build's `collectstatic` sets `BUILD_ONLY=1` to skip it. A local `dev:` key is used only when `DEBUG` is on, and production refuses it.
+- W3: models in `workspaces/models.py`; `request.workspace` / `request.membership` from `workspaces/middleware.py`; `for_workspace`, `get_for_workspace_or_404`, `WorkspaceScopedMixin`, `role_required`, `audit` in `workspaces/access.py`. Each model names its path to the workspace in `WORKSPACE_FIELD`.
+- W4: test vector at `sites/tracking/web/docs/crypto-test-vector.json` (no AAD; base64 with padding).
+- W6: `destinations/registry.py` holds each type's fields (with patterns and help text), secret fields, default event map and consent. `Destination.set_secret()` / `get_secret()` / `masked_secret`; `event_map` stores overrides only, `effective_event_map()` merges them with the defaults. Webhook URLs must be https unless `DEBUG`.
+- W7: SQL in `events/partitions.py` (also gives the worker `partition_name()` / `create_partitions_sql()` for E11). `events_delivery.id` uses a sequence, not an identity column. Tested on postgres:17-alpine: partitions today…+3 + DEFAULT, indexes, and `migrate events zero`.
+- W8: `common/publish.py`; signals connect in `common/apps.py`. Every change bumps `config_version`, then publishes after commit; a Redis failure is logged and never breaks the save. `cfg:site:{id}` also carries `api_keys` (prefix → SHA-256, for the edge's `/s` route) and `verify_tokens` (same-origin `_v`). `cfg:dest:{id}` is the whole destination (settings + secret) encrypted as one value. Old hosts/destinations are found from the previous `cfg:site` value. Checked against a real Redis.
+- W9: `/internal/caddy-ask` and `/internal/healthz` (the Docker healthcheck now uses it). `/internal/` is exempt from the HTTPS redirect, because Caddy calls it over plain HTTP inside Docker.
+- W10: `tracker/verify.py` `verify_domain()`. A verified domain becomes `failing` after 3 failed checks in a row, but keeps serving.
+- Running the tests on PostgreSQL: build `web/` as an image and run `python manage.py test` in it next to a `postgres:17-alpine` container (psycopg has no wheel for the PC's Python 3.15).
+- W5: tables are `tracker_site`, `tracker_domain`, `tracker_apikey`. `ApiKey.issue()` returns the full key once. `config_version` exists but nothing bumps it yet (W8).
+
+---
+
 ## Phase T0: preparation (≈ 30 min)
 
 | ID | Task | Needs | Done when |
 |---|---|---|---|
 | ⬜ T0.1 | Answer the open questions: product name, first client site + platform, log retention (default 14 days) | — | Written in 02-status.md |
-| ⬜ T0.2 | Commit or ignore the current loose file (`Project Planning/04-database-design.md` is untracked). Start a branch `tracking` | — | `git status` clean, on branch `tracking` |
-| ⬜ T0.3 | Copy Project docs 05, 06, 07 into the PC's `Project Planning/` folder | — | Files in the repo |
+| 🟡 T0.2 | Commit or ignore the current loose file (`Project Planning/04-database-design.md` is untracked). Start a branch `tracking` | — | `git status` clean, on branch `tracking` |
+| ✅ T0.3 | Copy Project docs 05, 06, 07 into the PC's `Project Planning/` folder | — | Files in the repo |
 | ⬜ T0.4 | Local: `docker compose exec accounts python manage.py register_product tracking http://tracking.localhost`. Keep the client ID/secret | accounts running | Credentials saved in `sites/tracking/web/.env` |
 | ⬜ T0.5 | Local: `scripts/create-db.sh tracking` | postgres running | `POSTGRES_*` lines in `.env` |
 
@@ -41,16 +57,16 @@ The repo has moved on since the audit. **`sites/links` is now the newest and bes
 
 | ID | Task | Needs | Done when |
 |---|---|---|---|
-| ⬜ W1 | **Scaffold** from `sites/links`: `manage.py`, `product/`, `dashboard/` (landing, login, logout, context processor, middleware), `Dockerfile`, `docker/entrypoint.sh`, `static/`, `templates/base.html`. Rename to Tracking. Remove shortener/bio. Add `redis`, `cryptography`, `dnspython` to requirements | T0.2 | Site starts, sign-in with the Marketian account works, landing test passes |
-| ⬜ W2 | **Production guard:** refuse to start when `DEBUG=False` and `SECRET_KEY` or `TRACKING_ENC_KEYS` is missing or a placeholder | W1 | Test: settings raise `ImproperlyConfigured` |
-| ⬜ W3 | **`workspaces` app:** `Workspace`, `WorkspaceMember` (roles owner/admin/member/viewer), `AuditLog`. Middleware: `request.workspace` (creates a personal workspace at first sign-in). `WorkspaceScopedMixin` / helper `get_for_workspace_or_404`. `@role_required` | W1 | Tests: first sign-in creates a workspace + owner row; another user's object gives 404 |
-| ⬜ W4 | **`common/crypto.py`:** AES-256-GCM, format `v1:<key_id>:<base64(nonce‖ciphertext‖tag)>`, key list `TRACKING_ENC_KEYS` (first one encrypts, all can decrypt). Publish a **test vector** (fixed key, nonce, plaintext → ciphertext) in `docs/crypto-test-vector.json` for the Node side | W1 | Round-trip test + vector test pass |
-| ⬜ W5 | **`tracker` app models:** `Site` (public_key, path_prefix, loader_name, consent_mode, bot_filter, cookie_keeper, status, config_version, timezone, default_currency), `Domain` (hostname, mode, status, verify_token, dns_seen, fail_count…), `ApiKey` (prefix, SHA-256 hash, revoked_at). Random generators avoid block-list words | W3 | Migrations made; model tests (hostname must sit under primary_domain; prefix unique and not a blocked word) |
-| ⬜ W6 | **`destinations` app:** `Destination` model (type, label, config, secret_enc, secret_hint, event_map, consent_required, send_pii, enabled, health, last_error, last_success_at). `registry.py`: per type, its config fields, secret fields, default event map and default consent (Meta, GA4, TikTok, webhook) | W4, W5 | Tests: secret stored encrypted, never shown; defaults applied |
-| ⬜ W7 | **`events` app:** migration that creates partitioned `events_eventlog` + `events_delivery` (Postgres: `PARTITION BY RANGE (received_at)` + DEFAULT partition + today…+3; SQLite: plain tables). `managed=False` read models. `DailyStat` with `CompositePrimaryKey` (Django 5.2) | W5 | `migrate` works on both SQLite and Postgres; partitions listed in `\d+` |
-| ⬜ W8 | **Config publisher** (`common/publish.py`): on save/delete of Site/Domain/Destination (inside `transaction.on_commit`), write `cfg:host:*`, `cfg:site:{id}`, `cfg:dest:{id}` (still encrypted) and publish `cfg:changed`. Command `manage.py publish_all` | W6 | Tests with a fake Redis: keys written, removed domain disappears, paused site published |
-| ⬜ W9 | **`internal` app:** `GET /internal/caddy-ask?domain=` (200 only for verified/failing domains, 404 otherwise) and `/internal/healthz` | W5 | Tests: verified → 200, pending/unknown → 404 |
-| ⬜ W10 | **Domain verify:** service resolves the CNAME/A with dnspython and compares it to `EDGE_CNAME_TARGET` / `EDGE_PUBLIC_IP`. Same-origin mode fetches `https://<host>/<prefix>/_v` and compares the token. `DOMAIN_VERIFY_MODE=trust` for local | W5 | Tests with a mocked resolver: right target → verified, wrong → error message shown |
+| 🟡 W1 | **Scaffold** from `sites/links`: `manage.py`, `product/`, `dashboard/` (landing, login, logout, context processor, middleware), `Dockerfile`, `docker/entrypoint.sh`, `static/`, `templates/base.html`. Rename to Tracking. Remove shortener/bio. Add `redis`, `cryptography`, `dnspython` to requirements | T0.2 | Site starts, sign-in with the Marketian account works, landing test passes |
+| ✅ W2 | **Production guard:** refuse to start when `DEBUG=False` and `SECRET_KEY` or `TRACKING_ENC_KEYS` is missing or a placeholder | W1 | Test: settings raise `ImproperlyConfigured` |
+| ✅ W3 | **`workspaces` app:** `Workspace`, `WorkspaceMember` (roles owner/admin/member/viewer), `AuditLog`. Middleware: `request.workspace` (creates a personal workspace at first sign-in). `WorkspaceScopedMixin` / helper `get_for_workspace_or_404`. `@role_required` | W1 | Tests: first sign-in creates a workspace + owner row; another user's object gives 404 |
+| ✅ W4 | **`common/crypto.py`:** AES-256-GCM, format `v1:<key_id>:<base64(nonce‖ciphertext‖tag)>`, key list `TRACKING_ENC_KEYS` (first one encrypts, all can decrypt). Publish a **test vector** (fixed key, nonce, plaintext → ciphertext) in `docs/crypto-test-vector.json` for the Node side | W1 | Round-trip test + vector test pass |
+| ✅ W5 | **`tracker` app models:** `Site` (public_key, path_prefix, loader_name, consent_mode, bot_filter, cookie_keeper, status, config_version, timezone, default_currency), `Domain` (hostname, mode, status, verify_token, dns_seen, fail_count…), `ApiKey` (prefix, SHA-256 hash, revoked_at). Random generators avoid block-list words | W3 | Migrations made; model tests (hostname must sit under primary_domain; prefix unique and not a blocked word) |
+| ✅ W6 | **`destinations` app:** `Destination` model (type, label, config, secret_enc, secret_hint, event_map, consent_required, send_pii, enabled, health, last_error, last_success_at). `registry.py`: per type, its config fields, secret fields, default event map and default consent (Meta, GA4, TikTok, webhook) | W4, W5 | Tests: secret stored encrypted, never shown; defaults applied |
+| ✅ W7 | **`events` app:** migration that creates partitioned `events_eventlog` + `events_delivery` (Postgres: `PARTITION BY RANGE (received_at)` + DEFAULT partition + today…+3; SQLite: plain tables). `managed=False` read models. `DailyStat` with `CompositePrimaryKey` (Django 5.2) | W5 | `migrate` works on both SQLite and Postgres; partitions listed in `\d+` |
+| ✅ W8 | **Config publisher** (`common/publish.py`): on save/delete of Site/Domain/Destination (inside `transaction.on_commit`), write `cfg:host:*`, `cfg:site:{id}`, `cfg:dest:{id}` (still encrypted) and publish `cfg:changed`. Command `manage.py publish_all` | W6 | Tests with a fake Redis: keys written, removed domain disappears, paused site published |
+| ✅ W9 | **`internal` app:** `GET /internal/caddy-ask?domain=` (200 only for verified/failing domains, 404 otherwise) and `/internal/healthz` | W5 | Tests: verified → 200, pending/unknown → 404 |
+| ✅ W10 | **Domain verify:** service resolves the CNAME/A with dnspython and compares it to `EDGE_CNAME_TARGET` / `EDGE_PUBLIC_IP`. Same-origin mode fetches `https://<host>/<prefix>/_v` and compares the token. `DOMAIN_VERIFY_MODE=trust` for local | W5 | Tests with a mocked resolver: right target → verified, wrong → error message shown |
 | ⬜ W11 | **Pages: sites** list (health dots), new, overview, settings (consent mode, bot filter, cookie keeper, pause, delete with confirm) | W5, W8 | Clicked through locally; tenancy tests |
 | ⬜ W12 | **Page: setup.** Add domain, DNS instructions card (record type, name, target, Cloudflare grey-cloud note, "avoid the word tracking"), Verify button, install snippets (plain HTML, GTM custom HTML, WordPress) with copy buttons | W10, W11 | A test site shows a correct snippet with its own prefix and loader name |
 | ⬜ W13 | **Page: destinations.** Add by type (forms from the registry), edit, event map table, enable/disable, delete, **Send test event** (puts a synthetic event with `test=true` on `ev:in`) | W6, W8 | Meta/GA4 can be added; secret shows only `••••1234` |

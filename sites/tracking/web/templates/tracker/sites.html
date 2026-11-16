@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% block title %}Sites · {{ product_name }}{% endblock %}
+{% block content %}
+<div class="page-title">
+  <h1>Sites</h1>
+</div>
+{% if sites %}
+  <div class="card">
+    <ul class="list">
+      {% for site in sites %}
+        <li>
+          <span><strong>{{ site.name }}</strong> <span class="muted small">{{ site.primary_domain }}</span></span>
+          <span class="badge{% if site.status == 'active' %} badge-ok{% endif %}">{{ site.get_status_display }}</span>
+        </li>
+      {% endfor %}
+    </ul>
+  </div>
+{% else %}
+  <div class="card center">
+    <h2>No sites yet</h2>
+    <p class="muted">A site is one shop or website you send events from. Adding sites comes next.</p>
+  </div>
+{% endif %}
+{% endblock %}

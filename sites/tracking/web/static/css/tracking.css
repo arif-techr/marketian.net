@@ -1,0 +1,10 @@
+/* Tracking: dashboard styles. Loaded after app.css (the shared Marketian app styles). */
+.center { text-align: center; }
+.lead { font-size: 1.1rem; }
+.landing { text-align: center; max-width: 680px; margin: 24px auto 40px; }
+.landing h1 { font-size: clamp(1.9rem, 5vw, 2.8rem); }
+.features { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 16px; }
+.features .card { box-shadow: none; }
+.features .card + .card { margin-top: 0; }
+.page-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; margin-bottom: 18px; }
+.page-title h1, .page-title h2 { margin: 0; }
