@@ -42,6 +42,12 @@ wa.marketian.net {
 	reverse_proxy wa:80
 }
 
+# Marketian SMS (sites/sms): uncomment when it goes live (see Project Planning/08-sms-plan.md).
+# sms.marketian.net {
+# 	encode zstd gzip
+# 	reverse_proxy sms-web:3000
+# }
+
 # --- Next sites ---------------------------------------------------------------
 # Copy sites/_template to sites/<name>, then uncomment and adjust a block:
 #

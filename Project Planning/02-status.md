@@ -14,6 +14,7 @@ As of: 2026-11-16 (full check of repo and tests; audit of 2026-11-09 in [audits/
 | wa.marketian.net | `sites/wa` | ✅ Built, committed (`5a6d4dd`) | 130 | Django + DRF + Celery + React + WhatsApp gateway, signs in with the Marketian account |
 | links.marketian.net | `sites/links` | ✅ Built, committed (`1c1746b`) | 47 | Short links + bio pages. Best template for new products |
 | tracking.marketian.net | `sites/tracking` | 🟡 Building on branch `tracking`: dashboard tasks W1–W10 done ([07](07-tracking-build-queue.md)) | 70 | Django dashboard (`web/`) + Node edge/worker (`engine/`) + Redis. Client subdomains via Caddy on-demand TLS |
+| sms.marketian.net | `sites/sms` | 📝 Source in the repo (Next.js panel + reference Laravel API), not live. Being rebuilt on Django + PostgreSQL with Marketian sign-in ([08](08-sms-plan.md)) | none yet | Marketian SMS, from our hivesms-lab repo |
 | Proxy / infra / scripts | `proxy`, `infra`, `scripts` | ✅ Committed | none | Caddy (+ `Caddyfile.local`), shared PostgreSQL, deploy/backup/create-db |
 
 ## Repo (checked 2026-11-16)
@@ -58,6 +59,7 @@ As of: 2026-11-16 (full check of repo and tests; audit of 2026-11-09 in [audits/
 - DNS (checked 2026-11-16): **both domains' DNS is at Namecheap**, not Hostinger. marketian.net uses Namecheap hosting nameservers and currently serves the old site from Namecheap hosting (LiteSpeed, 162.0.232.25). marketain.net uses Namecheap's default DNS (parking page). No subdomain records exist yet. To go live: in Namecheap set `@`, `www`, `*` for marketian.net and `@`, `www` for marketain.net → VPS IP (or point the nameservers to Hostinger and add the records there). The tracking product will also need `edge.marketian.net` (covered by the wildcard).
 
 ## Change log (newest first)
+- **2026-11-17:** Marketian SMS: plan written ([08-sms-plan.md](08-sms-plan.md)); hivesms-lab source added as `sites/sms` (web, laravel reference, docs). Not in the root compose. Live portfolio name set to A.I. Niloy.
 - **2026-11-17:** Live site fixes: trusted HTTPS on every domain (proxy was on a `tls internal` preview config), Marketing tools and services added to the live portfolio.
 - **2026-11-16 (deploy):** Deployed `main` to the Hostinger VPS srv2097136 (KVM 2, Ubuntu 26.04, IPv4 201.18.200.226, IPv6 2a02:4780:63:8d94::1) via the hPanel web console: Docker + `server-setup.sh` (ufw 22/80/443, 2 GB swap), repo at `/opt/sites`, every `.env` created with random secrets (`scripts/first-deploy.sh`), databases created, products registered with accounts. All 14 containers healthy; all 5 sites answer on the internal network. Waiting on: DNS at Namecheap → VPS, then HTTPS issues itself. Still placeholders: SMTP passwords (marketian, accounts) and GitHub OAuth (accounts). No superusers created yet.
 - **2026-11-16:** Build and start check of `main` in Docker (isolated test project, throwaway secrets): all 7 images build; all 14 containers start (every healthcheck healthy); marketian, accounts, metadata, links and wa answer through the proxy; tables created on PostgreSQL for every site (portfolio: 21 tables, no SQLite). Found the domains' DNS is at Namecheap.

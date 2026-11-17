@@ -11,3 +11,5 @@ backups/
 keys/
 *.pem
 *.sqlite3-journal
+# Source archives dropped in the repo folder
+/*.zip
