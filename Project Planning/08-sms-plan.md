@@ -1,6 +1,6 @@
 # Marketian SMS: plan
 
-As of: 2026-11-17. Status: **approved 2026-11-17, S0 in progress.** Source in `sites/sms` (in the repo, not live).
+As of: 2026-11-17. Status: **approved 2026-11-17. S0 done, S1.1–S1.2 done.** Source in `sites/sms` (in the repo, not live). Next: S1.3 sign-in and sessions.
 
 ## What and why
 **Marketian SMS** at `sms.marketian.net`: the bulk SMS platform from the `hivesms-lab` repo ("SMSFlow BD", our own code), rebuilt to run like every other Marketian site.
@@ -11,7 +11,8 @@ Source: `hivesms-lab-main.zip`, now in `sites/sms` (see S0.1). It is a Next.js 1
 | Topic | Decision |
 |---|---|
 | Name | **Marketian SMS** everywhere (UI, emails, invoices). Marketian colours, font and logo |
-| Backend | **Django + Django REST Framework** replaces Laravel. The Next.js panel stays |
+| Backend | **Django + Django REST Framework** replaces Laravel. The Next.js panel stays. Python 3.12 (as WA) |
+| Money | `DECIMAL(14,4)` as in the reference (not whole poisha), `Decimal` in Python, never floats |
 | Database | **PostgreSQL** on the shared server (`create-db.sh sms`). No MariaDB |
 | Sign-in | **Marketian account from day one** (OpenID Connect, like Links). Personal organisation at first sign-in, invitations by email |
 | Gateway | Automas (Bangladesh). Needs the API key and an approved sender ID before go-live |
@@ -40,14 +41,14 @@ Legend: ⬜ to do · 🟡 in progress · ✅ done
 | ID | Task | Done when |
 |---|---|---|
 | ✅ S0.1 | Source into the repo: panel → `sites/sms/web`, Laravel API → `sites/sms/laravel` (reference until Django passes its tests), docs → `sites/sms/docs`. Left out: agent folders, its CI, its MariaDB compose. Not in the root compose; Caddy block commented out | Done 2026-11-17 |
-| ⬜ S0.2 | Contract list: every endpoint with method, auth, permission, request and response shape (from the API reference + routes + tests) | `sites/sms/api/docs/contract.md` |
+| ✅ S0.2 | Contract list: every endpoint with method, auth, permission, flags, rate limit and Laravel action, generated from Laravel's own route table. Response shapes: the API reference | `sites/sms/api/docs/contract.md` + `contract.json` (248 endpoints: 133 session, 84 staff, 20 public, 7 API key, 4 provider callbacks) |
 | ⬜ S0.3 | `register_product sms https://sms.marketian.net`, `create-db.sh sms` (local first) | Credentials in `.env` |
 
 ### S1: Django foundation (≈ 4 days)
 | ID | Task | Done when |
 |---|---|---|
-| ⬜ S1.1 | Scaffold `sites/sms/api` from `sites/links` conventions: settings with production guard, DRF, Celery, health endpoint, Dockerfile, entrypoint | Starts, `/api/v1/health` answers |
-| ⬜ S1.2 | Models for the 46 tables on PostgreSQL (IDs, money as integer poisha, enums, indexes, constraints) | Migrations apply on Postgres 17 |
+| ✅ S1.1 | Scaffold `sites/sms/api` from `sites/links` conventions: settings with production guard (5 secrets), DRF, Celery, response envelope + 27 error codes (checked against Laravel's), request IDs, health endpoint, Dockerfile (Python 3.12), entrypoint | Done 2026-11-17 |
+| ✅ S1.2 | Models for the 45 tables, generated from the Laravel schema (`tools/generate_models.py`), in 8 apps: accounts, orgs, contacts, messaging, billing, developers, support, system | Done 2026-11-17: migrations apply and roll back on Postgres 17; 10 tests pass on SQLite and PostgreSQL |
 | ⬜ S1.3 | Sessions + panel cookie contract, Marketian sign-in (OIDC), personal organisation, invitations | Sign-in from the panel works |
 | ⬜ S1.4 | Organisations, members, roles, permissions (RBAC), audit log, settings (encrypted), rate limits, idempotency keys | Ported tests pass |
 

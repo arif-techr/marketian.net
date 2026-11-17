@@ -1,45 +1,47 @@
-# Where we left off (9 Nov 2026, evening)
+# Where we left off (17 Nov 2026)
 
-## Start everything again (Docker, on this PC)
+Full status, open issues and history: [Project Planning/02-status.md](Project%20Planning/02-status.md).
+Plans: Tracking [05–07](Project%20Planning/07-tracking-build-queue.md), Marketian SMS [08](Project%20Planning/08-sms-plan.md).
 
-1. Open **Docker Desktop** and wait until it says it's running.
-2. In Git Bash, from this folder:
-   ```bash
-   CADDYFILE=Caddyfile.local docker compose up -d
-   ```
-3. Open the sites (data and logins are kept in Docker volumes):
+## Live
 
-| Site | Address | Sign in |
-|---|---|---|
-| Portfolio | http://marketian.localhost | `/admin/`: admin / marketian-local-123 |
-| Marketian account | http://accounts.localhost | demo@marketian.net / marketian-local-123 |
-| Metadata | http://metadata.localhost | Continue with Marketian account |
-| WA Broadcaster | http://wa.localhost | Continue with Marketian account (admin / marketian-local-123 by username) |
-| Links | http://links.localhost | Continue with Marketian account |
+Five sites run on the Hostinger VPS (`201.18.200.226`, repo at `/opt/sites`), all with Let's Encrypt HTTPS:
+marketian.net (+ marketain.net), accounts., metadata., links. and wa.marketian.net. DNS is at Namecheap.
 
-Stop with `docker compose down`. The local `.env` files and passwords above are for this PC only.
+**Updating the live sites:** push to `main`, then on the server `cd /opt/sites && bash scripts/deploy.sh`
+(or `deploy.sh <service>`). Never start the proxy with `CADDYFILE=` set there, and never run
+`scripts/first-deploy.sh` on it (both are explained in 02-status, "Deployment").
+SSH from the PC that has the key: `ssh -i ~/.ssh/marketian_vps root@201.18.200.226`. On another PC,
+make a new key and add it in hPanel → VPS → SSH keys (keys are per PC; never copy the private key around).
 
-## Done
+## Continue on another PC
 
-- Portfolio with Marketing tools page, menu button and home section
-- Marketian account (one sign-in for every product)
-- WA Broadcaster at wa.marketian.net (moved in from its own repo)
-- **Links** at links.marketian.net (new, all 47 tests pass):
-  - short links: random or custom names, click stats (per day, unique, referrers, devices, browsers, systems),
-    QR codes (PNG/SVG), UTM builder, passwords, expiry dates, turn off, edit, delete, search, CSV export,
-    `+` preview, bots and link previews not counted, daily limit per person
-  - Linktree-style bio pages at /@name: photo, bio, buttons, section titles, YouTube videos, reorder,
-    hide, schedule, social icons, 6 themes + own colours, 5 button styles, live phone preview,
-    page views and clicks per button, email sign-ups with CSV export, QR code, sensitive-content warning
+```bash
+git clone https://github.com/arif-techr/marketian.net.git
+cd marketian.net
+```
 
-Also done this session: README covers Links, Django sites refuse to start in production with the placeholder
-`SECRET_KEY`, the WA `npm run docker:*` scripts work again, and all 251 tests pass (details in
-[Project Planning/02-status.md](Project%20Planning/02-status.md)).
+| To work on | Set up once |
+|---|---|
+| marketian, accounts, metadata, links, tracking/web | `python -m venv .venv` in the repo root, then `pip install -r sites/<site>/requirements.txt` (on Python 3.15 leave out psycopg; tests use SQLite) |
+| sms/api | Python **3.12**: see [sites/sms/api/README.md](sites/sms/api/README.md) |
+| wa | Python 3.12 in `sites/wa/backend/.venv`: see [sites/wa/README.md](sites/wa/README.md) |
+| Whole server locally | Docker Desktop; copy each `.env.example` to `.env` (`infra/` and every site), then `CADDYFILE=Caddyfile.local docker compose up -d --build` and open `http://<site>.localhost` |
 
-## Not finished yet (next session)
+`.env` files are never in git: each PC (and the server) keeps its own.
 
-- Links: check it in the browser end to end in Docker (it builds, starts and answers; not clicked through yet)
-- Add Links to the portfolio's Marketing tools on this PC: in http://marketian.localhost/admin/ → Tools → Add
-  (name Links, link http://links.localhost). New installs get it automatically from `seed_demo`.
-- Metadata: decide what it does (it's still an empty dashboard)
-- Push to GitHub (`git push`) and deploy to the VPS (README, "Hosting on Hostinger VPS")
+## Being built
+
+- **Marketian SMS** (`sites/sms`, not live): Next.js panel + a new Django API on PostgreSQL with Marketian
+  sign-in, replacing the Laravel reference. Done: S0 (source, 248-endpoint contract) and S1.1–S1.2
+  (Django foundation, 45 tables). **Next: S1.3** sessions + Marketian sign-in, then S1.4 organisations and roles.
+- **Tracking** (`sites/tracking`, not live): dashboard back end W1–W10 done. Next: W11–W17 dashboard pages.
+
+## Open (needs you)
+
+- Mailbox password for `no-reply@marketian.net` (Namecheap) in `sites/marketian/.env` and `sites/accounts/.env`
+  on the server, and `EMAIL_HOST=mail.marketian.net` in accounts: email doesn't send until then.
+- Link a WhatsApp number at wa.marketian.net (admin password: `grep ADMIN_PASSWORD /opt/sites/sites/wa/.env`).
+- Portfolio content on the live site: profile, photo, projects, skills (https://marketian.net/admin/).
+- Nightly backups aren't scheduled yet (`crontab`, see README "Backups").
+- Metadata: decide what the product does.

@@ -14,7 +14,8 @@ operator admin console. Sends through the Automas gateway.
 sites/sms/
 ├── web/        Next.js panel (from hivesms-lab / "SMSFlow BD"). Stays; gets the Marketian brand
 │               and Marketian sign-in, and talks to the API below over /api/v1
-├── api/        Django + DRF backend: being built. Answers the same /api/v1 contract as laravel/
+├── api/        Django + DRF backend: being built (45 tables, envelope, health so far; see api/README.md).
+│               Answers the same /api/v1 contract as laravel/, listed in api/docs/contract.md
 ├── laravel/    The original Laravel API: the reference for api/ (its tests are the acceptance
 │               tests). Removed once api/ passes them
 └── docs/       The original product, architecture, design system and API reference docs

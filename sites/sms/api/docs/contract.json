@@ -1,0 +1,3701 @@
+[
+ {
+  "method": "GET",
+  "path": "/v1/admin/abuse-reports",
+  "auth": "staff",
+  "permissions": [
+   "admin:abuse:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@abuseReports",
+  "name": "v1.admin.abuse.index",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/abuse-reports/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:abuse:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@updateAbuse",
+  "name": "v1.admin.abuse.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/api-logs",
+  "auth": "staff",
+  "permissions": [
+   "admin:messages:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@apiLogs",
+  "name": "v1.admin.api-logs",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/audit-logs",
+  "auth": "staff",
+  "permissions": [
+   "admin:audit:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@auditLogs",
+  "name": "v1.admin.audit",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/badges",
+  "auth": "staff",
+  "permissions": [
+   "admin:access"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@badges",
+  "name": "v1.admin.badges",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/blocklist",
+  "auth": "staff",
+  "permissions": [
+   "admin:abuse:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@blocklist",
+  "name": "v1.admin.blocklist.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/blocklist",
+  "auth": "staff",
+  "permissions": [
+   "admin:abuse:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@addBlocklist",
+  "name": "v1.admin.blocklist.store",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/admin/blocklist/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:abuse:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@removeBlocklist",
+  "name": "v1.admin.blocklist.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/campaigns",
+  "auth": "staff",
+  "permissions": [
+   "admin:campaigns:review"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@campaigns",
+  "name": "v1.admin.campaigns.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/campaigns/{id}/review",
+  "auth": "staff",
+  "permissions": [
+   "admin:campaigns:review"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@reviewCampaign",
+  "name": "v1.admin.campaigns.review",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/customers",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerController@index",
+  "name": "v1.admin.customers.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/customers/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerController@show",
+  "name": "v1.admin.customers.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/customers/{id}/controls",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerController@updateControls",
+  "name": "v1.admin.customers.controls",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/customers/{id}/pricing",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerPricingController@show",
+  "name": "v1.admin.customers.pricing",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/customers/{id}/pricing",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:customer"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerPricingController@update",
+  "name": "v1.admin.customers.pricing.update",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/customers/{id}/pricing/reset",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:customer"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerPricingController@reset",
+  "name": "v1.admin.customers.pricing.reset",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/customers/{id}/status",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerController@status",
+  "name": "v1.admin.customers.status",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/customers/{id}/usage",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminUsageController@show",
+  "name": "v1.admin.customers.usage",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/customers/{id}/wallet-adjustments",
+  "auth": "staff",
+  "permissions": [
+   "admin:wallet:adjust"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@adjustWallet",
+  "name": "v1.admin.customers.wallet",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/dashboard",
+  "auth": "staff",
+  "permissions": [
+   "admin:access"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@dashboard",
+  "name": "v1.admin.dashboard",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/exports/{kind}",
+  "auth": "staff",
+  "permissions": [
+   "admin:reports:export"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminExportController@export",
+  "name": "v1.admin.exports",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/finance/margins",
+  "auth": "staff",
+  "permissions": [
+   "admin:finance:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@margins",
+  "name": "v1.admin.finance.margins",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/finance/provider-balance",
+  "auth": "staff",
+  "permissions": [
+   "admin:finance:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@providerBalance",
+  "name": "v1.admin.finance.provider-balance",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/finance/provider-costs",
+  "auth": "staff",
+  "permissions": [
+   "admin:finance:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@providerCosts",
+  "name": "v1.admin.finance.costs",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/finance/provider-costs",
+  "auth": "staff",
+  "permissions": [
+   "admin:costs:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@saveProviderCosts",
+  "name": "v1.admin.finance.costs.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/finance/summary",
+  "auth": "staff",
+  "permissions": [
+   "admin:finance:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@summary",
+  "name": "v1.admin.finance.summary",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/finance/transactions",
+  "auth": "staff",
+  "permissions": [
+   "admin:finance:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@transactions",
+  "name": "v1.admin.finance.transactions",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/leads",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@leads",
+  "name": "v1.admin.leads",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/leads/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@updateLead",
+  "name": "v1.admin.leads.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/messages",
+  "auth": "staff",
+  "permissions": [
+   "admin:messages:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@messages",
+  "name": "v1.admin.messages",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/messages/unconfirmed",
+  "auth": "staff",
+  "permissions": [
+   "admin:messages:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@unconfirmed",
+  "name": "v1.admin.messages.unconfirmed",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/messages/{id}/resolve",
+  "auth": "staff",
+  "permissions": [
+   "admin:messages:resolve"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@resolve",
+  "name": "v1.admin.messages.resolve",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/overview",
+  "auth": "staff",
+  "permissions": [
+   "admin:access"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@overview",
+  "name": "v1.admin.overview",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/payment-methods",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@methods",
+  "name": "v1.admin.payment-methods.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/payment-methods",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@storeMethod",
+  "name": "v1.admin.payment-methods.store",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/payment-methods/reorder",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@reorder",
+  "name": "v1.admin.payment-methods.reorder",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/admin/payment-methods/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@destroyMethod",
+  "name": "v1.admin.payment-methods.destroy",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/payment-methods/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@updateMethod",
+  "name": "v1.admin.payment-methods.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/payment-methods/{id}/qr",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@qr",
+  "name": "v1.admin.payment-methods.qr",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/payment-methods/{id}/qr",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@uploadQr",
+  "name": "v1.admin.payment-methods.qr.upload",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/payments",
+  "auth": "staff",
+  "permissions": [
+   "admin:billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@payments",
+  "name": "v1.admin.payments.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/payments/{id}/refund",
+  "auth": "staff",
+  "permissions": [
+   "admin:payments:refund"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@refund",
+  "name": "v1.admin.payments.refund",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/payments/{id}/review",
+  "auth": "staff",
+  "permissions": [
+   "admin:billing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@reviewPayment",
+  "name": "v1.admin.payments.review",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/pricing/packages",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@packages",
+  "name": "v1.admin.packages.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/pricing/packages",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@storePackage",
+  "name": "v1.admin.packages.store",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/pricing/packages/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@updatePackage",
+  "name": "v1.admin.packages.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/pricing/plans",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@plans",
+  "name": "v1.admin.plans.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/pricing/plans",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@storePlan",
+  "name": "v1.admin.plans.store",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/pricing/plans/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@updatePlan",
+  "name": "v1.admin.plans.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/sender-catalog",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_catalog:manage"
+  ],
+  "flags": [
+   "feature sender_catalog"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@catalog",
+  "name": "v1.admin.sender-catalog.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/sender-catalog",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_catalog:manage"
+  ],
+  "flags": [
+   "feature sender_catalog"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@addCatalog",
+  "name": "v1.admin.sender-catalog.store",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/sender-catalog/sync",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_catalog:manage"
+  ],
+  "flags": [
+   "feature sender_catalog"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@syncCatalog",
+  "name": "v1.admin.sender-catalog.sync",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/sender-catalog/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_catalog:manage"
+  ],
+  "flags": [
+   "feature sender_catalog"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@updateCatalog",
+  "name": "v1.admin.sender-catalog.update",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/sender-catalog/{id}/assignments",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_catalog:manage"
+  ],
+  "flags": [
+   "feature sender_catalog"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@assignCatalog",
+  "name": "v1.admin.sender-catalog.assign",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/sender-ids",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_ids:review"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@senderIds",
+  "name": "v1.admin.sender-ids.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/sender-ids/{id}/documents/{index}",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_ids:review"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@senderIdDocument",
+  "name": "v1.admin.sender-ids.document",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/sender-ids/{id}/review",
+  "auth": "staff",
+  "permissions": [
+   "admin:sender_ids:review"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminReviewController@reviewSenderId",
+  "name": "v1.admin.sender-ids.review",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/settings",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@settings",
+  "name": "v1.admin.settings.show",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/settings/billing-policy",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@billingPolicy",
+  "name": "v1.admin.settings.billing.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/settings/billing-policy",
+  "auth": "staff",
+  "permissions": [
+   "admin:pricing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@updateSettings",
+  "name": "v1.admin.settings.billing",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/settings/campaign-processing",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@processingSettings",
+  "name": "v1.admin.settings.processing.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/settings/campaign-processing",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminOperationsController@updateProcessingSettings",
+  "name": "v1.admin.settings.processing.update",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/settings/{section}",
+  "auth": "staff",
+  "permissions": [
+   "admin:settings:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSettingsController@updateSettings",
+  "name": "v1.admin.settings.update",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/staff",
+  "auth": "staff",
+  "permissions": [
+   "admin:users:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminStaffController@invite",
+  "name": "v1.admin.staff.invite",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/staff/history",
+  "auth": "staff",
+  "permissions": [
+   "admin:users:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminStaffController@history",
+  "name": "v1.admin.staff.history",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/staff/permissions",
+  "auth": "staff",
+  "permissions": [
+   "admin:users:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminStaffController@permissions",
+  "name": "v1.admin.staff.permissions",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/stats",
+  "auth": "staff",
+  "permissions": [
+   "admin:access"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@stats",
+  "name": "v1.admin.stats",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/support/tickets",
+  "auth": "staff",
+  "permissions": [
+   "admin:support"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSupportController@index",
+  "name": "v1.admin.support.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/support/tickets/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:support"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSupportController@show",
+  "name": "v1.admin.support.show",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/support/tickets/{id}/messages",
+  "auth": "staff",
+  "permissions": [
+   "admin:support"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSupportController@reply",
+  "name": "v1.admin.support.reply",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/support/tickets/{id}/status",
+  "auth": "staff",
+  "permissions": [
+   "admin:support"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminSupportController@status",
+  "name": "v1.admin.support.status",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/system/health",
+  "auth": "staff",
+  "permissions": [
+   "admin:health:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminFinanceController@health",
+  "name": "v1.admin.system.health",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/topup-requests",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:review"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@index",
+  "name": "v1.admin.topups.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/topup-requests/{id}",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:review"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@show",
+  "name": "v1.admin.topups.show",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/topup-requests/{id}/approve",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:approve"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@approve",
+  "name": "v1.admin.topups.approve",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/topup-requests/{id}/notes",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:review"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@note",
+  "name": "v1.admin.topups.notes",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/topup-requests/{id}/proof",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:review"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@proof",
+  "name": "v1.admin.topups.proof",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/topup-requests/{id}/reject",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:approve"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@reject",
+  "name": "v1.admin.topups.reject",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/topup-requests/{id}/under-review",
+  "auth": "staff",
+  "permissions": [
+   "admin:topups:review"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminManualPaymentController@underReview",
+  "name": "v1.admin.topups.under-review",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/usage",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminUsageController@index",
+  "name": "v1.admin.usage",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/users",
+  "auth": "staff",
+  "permissions": [
+   "admin:users:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminPlatformController@users",
+  "name": "v1.admin.users.index",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/admin/users/{id}/access",
+  "auth": "staff",
+  "permissions": [
+   "admin:users:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminStaffController@updateAccess",
+  "name": "v1.admin.users.access",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/admin/users/{id}/password-reset",
+  "auth": "staff",
+  "permissions": [
+   "admin:customers:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminStaffController@sendPasswordReset",
+  "name": "v1.admin.users.password-reset",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/admin/wallets",
+  "auth": "staff",
+  "permissions": [
+   "admin:billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "admin_write_per_user"
+  ],
+  "laravel": "AdminCustomerController@wallets",
+  "name": "v1.admin.wallets",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/api-keys",
+  "auth": "session",
+  "permissions": [
+   "api_keys:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@index",
+  "name": "v1.app.api-keys.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/api-keys",
+  "auth": "session",
+  "permissions": [
+   "api_keys:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@store",
+  "name": "v1.app.api-keys.store",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/api-keys/{id}",
+  "auth": "session",
+  "permissions": [
+   "api_keys:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@destroy",
+  "name": "v1.app.api-keys.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/api-logs",
+  "auth": "session",
+  "permissions": [
+   "api_keys:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@logs",
+  "name": "v1.app.api-logs",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/campaigns",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@index",
+  "name": "v1.app.campaigns.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@store",
+  "name": "v1.app.campaigns.store",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/estimate",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "CampaignController@estimate",
+  "name": "v1.app.campaigns.estimate",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/submit",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "CampaignController@submit",
+  "name": "v1.app.campaigns.submit",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/campaigns/{id}",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@destroy",
+  "name": "v1.app.campaigns.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/campaigns/{id}",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@show",
+  "name": "v1.app.campaigns.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/campaigns/{id}",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@update",
+  "name": "v1.app.campaigns.update",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/cancel",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@cancel",
+  "name": "v1.app.campaigns.cancel",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/duplicate",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@duplicate",
+  "name": "v1.app.campaigns.duplicate",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/campaigns/{id}/export",
+  "auth": "session",
+  "permissions": [
+   "reports:export"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@export",
+  "name": "v1.app.campaigns.export",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/campaigns/{id}/messages",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@messages",
+  "name": "v1.app.campaigns.messages",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/pause",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@pause",
+  "name": "v1.app.campaigns.pause",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/campaigns/{id}/progress",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@progress",
+  "name": "v1.app.campaigns.progress",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/resume",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@resume",
+  "name": "v1.app.campaigns.resume",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/retry",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "CampaignController@retry",
+  "name": "v1.app.campaigns.retry",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/schedule",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "CampaignController@schedule",
+  "name": "v1.app.campaigns.schedule",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/campaigns/{id}/send",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "CampaignController@send",
+  "name": "v1.app.campaigns.send",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/campaigns/{id}/stats",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@stats",
+  "name": "v1.app.campaigns.stats",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contact-groups",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@index",
+  "name": "v1.app.groups.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/contact-groups",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@store",
+  "name": "v1.app.groups.store",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/contact-groups/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@destroy",
+  "name": "v1.app.groups.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contact-groups/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@show",
+  "name": "v1.app.groups.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/contact-groups/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@update",
+  "name": "v1.app.groups.update",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/contact-groups/{id}/contacts",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@detach",
+  "name": "v1.app.groups.detach",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contact-groups/{id}/contacts",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@contacts",
+  "name": "v1.app.groups.contacts",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/contact-groups/{id}/contacts",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactGroupController@attach",
+  "name": "v1.app.groups.attach",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contacts",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@index",
+  "name": "v1.app.contacts.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/contacts",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@store",
+  "name": "v1.app.contacts.store",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/contacts/bulk",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@bulk",
+  "name": "v1.app.contacts.bulk",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contacts/export",
+  "auth": "session",
+  "permissions": [
+   "contacts:export"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactExportController (invokable)",
+  "name": "v1.app.contacts.export",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/contacts/import",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactImportController@store",
+  "name": "v1.app.contacts.import",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contacts/imports/{importId}",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactImportController@show",
+  "name": "v1.app.contacts.imports.show",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contacts/tags",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@tags",
+  "name": "v1.app.contacts.tags",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/contacts/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@destroy",
+  "name": "v1.app.contacts.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/contacts/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@show",
+  "name": "v1.app.contacts.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/contacts/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ContactController@update",
+  "name": "v1.app.contacts.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/dashboard",
+  "auth": "session",
+  "permissions": [
+   "dashboard:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "DashboardController (invokable)",
+  "name": "v1.app.dashboard",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/dynamic-sms/estimate",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "feature dynamic_sms",
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "DynamicSmsController@estimate",
+  "name": "v1.app.dynamic.estimate",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/dynamic-sms/preview",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "feature dynamic_sms"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "DynamicSmsController@preview",
+  "name": "v1.app.dynamic.preview",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/dynamic-sms/submit",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "feature dynamic_sms",
+   "verified.email",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "DynamicSmsController@submit",
+  "name": "v1.app.dynamic.submit",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/dynamic-sms/template",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [
+   "feature dynamic_sms"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "DynamicSmsController@template",
+  "name": "v1.app.dynamic.template",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/dynamic-sms/uploads",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write,sms:send"
+  ],
+  "flags": [
+   "feature dynamic_sms"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "DynamicSmsController@upload",
+  "name": "v1.app.dynamic.uploads.store",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/dynamic-sms/uploads/{id}",
+  "auth": "session",
+  "permissions": [
+   "campaigns:read"
+  ],
+  "flags": [
+   "feature dynamic_sms"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "DynamicSmsController@show",
+  "name": "v1.app.dynamic.uploads.show",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/messages",
+  "auth": "session",
+  "permissions": [
+   "reports:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@messages",
+  "name": "v1.app.messages.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/messages/{id}",
+  "auth": "session",
+  "permissions": [
+   "reports:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@message",
+  "name": "v1.app.messages.show",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/notifications",
+  "auth": "session",
+  "permissions": [],
+  "flags": [
+   "tenant"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@notifications",
+  "name": "v1.app.notifications",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/notifications/read",
+  "auth": "session",
+  "permissions": [],
+  "flags": [
+   "tenant"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@markNotificationsRead",
+  "name": "v1.app.notifications.read",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/organization",
+  "auth": "session",
+  "permissions": [],
+  "flags": [
+   "tenant"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@organization",
+  "name": "v1.app.organization.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/organization",
+  "auth": "session",
+  "permissions": [
+   "settings:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@updateOrganization",
+  "name": "v1.app.organization.update",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/organization/leave",
+  "auth": "session",
+  "permissions": [],
+  "flags": [
+   "tenant"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@leaveOrganization",
+  "name": "v1.app.organization.leave",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/payment-methods",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ManualTopUpController@methods",
+  "name": "v1.app.payment-methods.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/payment-methods/{id}/qr",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ManualTopUpController@qr",
+  "name": "v1.app.payment-methods.qr",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/payments",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@index",
+  "name": "v1.app.payments.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/payments",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@store",
+  "name": "v1.app.payments.store",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/payments/methods",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@methods",
+  "name": "v1.app.payments.methods",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/payments/preview",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@preview",
+  "name": "v1.app.payments.preview",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/payments/{id}",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@show",
+  "name": "v1.app.payments.show",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/payments/{id}/cancel",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@cancel",
+  "name": "v1.app.payments.cancel",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/payments/{id}/mock-complete",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@mockComplete",
+  "name": "v1.app.payments.mock",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/payments/{id}/reference",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "PaymentController@submitReference",
+  "name": "v1.app.payments.reference",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/reports/campaigns",
+  "auth": "session",
+  "permissions": [
+   "reports:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@campaigns",
+  "name": "v1.app.reports.campaigns",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/reports/delivery",
+  "auth": "session",
+  "permissions": [
+   "reports:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@delivery",
+  "name": "v1.app.reports.delivery",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/reports/export",
+  "auth": "session",
+  "permissions": [
+   "reports:export"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@export",
+  "name": "v1.app.reports.export",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/reports/filters",
+  "auth": "session",
+  "permissions": [
+   "reports:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@filterOptions",
+  "name": "v1.app.reports.filters",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/reports/messages",
+  "auth": "session",
+  "permissions": [
+   "reports:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@messages",
+  "name": "v1.app.reports.messages",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/reports/usage",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ReportController@usage",
+  "name": "v1.app.reports.usage",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/sender-ids",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@index",
+  "name": "v1.app.sender-ids.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/sender-ids",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@store",
+  "name": "v1.app.sender-ids.store",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/sender-ids/approved",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@approved",
+  "name": "v1.app.sender-ids.approved",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/sender-ids/{id}",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@destroy",
+  "name": "v1.app.sender-ids.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/sender-ids/{id}",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@show",
+  "name": "v1.app.sender-ids.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/sender-ids/{id}",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@update",
+  "name": "v1.app.sender-ids.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/sender-ids/{id}/documents/{index}",
+  "auth": "session",
+  "permissions": [
+   "sender_ids:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SenderIdController@document",
+  "name": "v1.app.sender-ids.document",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/sms/composer",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@composer",
+  "name": "v1.app.sms.composer",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/sms/segments",
+  "auth": "session",
+  "permissions": [
+   "campaigns:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "CampaignController@segments",
+  "name": "v1.app.sms.segments",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/support/tickets",
+  "auth": "session",
+  "permissions": [
+   "support:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SupportController@index",
+  "name": "v1.app.support.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/support/tickets",
+  "auth": "session",
+  "permissions": [
+   "support:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SupportController@store",
+  "name": "v1.app.support.store",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/support/tickets/{id}",
+  "auth": "session",
+  "permissions": [
+   "support:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SupportController@show",
+  "name": "v1.app.support.show",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/support/tickets/{id}/close",
+  "auth": "session",
+  "permissions": [
+   "support:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SupportController@close",
+  "name": "v1.app.support.close",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/support/tickets/{id}/messages",
+  "auth": "session",
+  "permissions": [
+   "support:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SupportController@reply",
+  "name": "v1.app.support.reply",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/suppression",
+  "auth": "session",
+  "permissions": [
+   "contacts:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SuppressionController@index",
+  "name": "v1.app.suppression.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/suppression",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SuppressionController@store",
+  "name": "v1.app.suppression.store",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/suppression/{id}",
+  "auth": "session",
+  "permissions": [
+   "contacts:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "SuppressionController@destroy",
+  "name": "v1.app.suppression.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/team",
+  "auth": "session",
+  "permissions": [
+   "team:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TeamController@index",
+  "name": "v1.app.team.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/team/invitations",
+  "auth": "session",
+  "permissions": [
+   "team:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TeamController@invite",
+  "name": "v1.app.team.invite",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/team/invitations/{id}",
+  "auth": "session",
+  "permissions": [
+   "team:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TeamController@revokeInvitation",
+  "name": "v1.app.team.invite.revoke",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/team/members/{memberId}/role",
+  "auth": "session",
+  "permissions": [
+   "team:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TeamController@changeRole",
+  "name": "v1.app.team.role",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/team/members/{memberId}/status",
+  "auth": "session",
+  "permissions": [
+   "team:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TeamController@setStatus",
+  "name": "v1.app.team.status",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/team/roles/{role}/permissions",
+  "auth": "session",
+  "permissions": [
+   "team:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TeamController@updateRolePermissions",
+  "name": "v1.app.team.permissions",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/templates",
+  "auth": "session",
+  "permissions": [
+   "templates:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TemplateController@index",
+  "name": "v1.app.templates.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/templates",
+  "auth": "session",
+  "permissions": [
+   "templates:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TemplateController@store",
+  "name": "v1.app.templates.store",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/templates/{id}",
+  "auth": "session",
+  "permissions": [
+   "templates:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TemplateController@destroy",
+  "name": "v1.app.templates.destroy",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/templates/{id}",
+  "auth": "session",
+  "permissions": [
+   "templates:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TemplateController@show",
+  "name": "v1.app.templates.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/templates/{id}",
+  "auth": "session",
+  "permissions": [
+   "templates:write"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "TemplateController@update",
+  "name": "v1.app.templates.update",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/topup-requests",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ManualTopUpController@index",
+  "name": "v1.app.topups.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/topup-requests",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [
+   "feature manual_topups",
+   "idempotent"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "ManualTopUpController@store",
+  "name": "v1.app.topups.store",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/topup-requests/{id}",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ManualTopUpController@show",
+  "name": "v1.app.topups.show",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/topup-requests/{id}/cancel",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "dashboard_per_user",
+   "dashboard_send_per_user"
+  ],
+  "laravel": "ManualTopUpController@cancel",
+  "name": "v1.app.topups.cancel",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/topup-requests/{id}/proof",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [
+   "feature manual_topups"
+  ],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ManualTopUpController@proof",
+  "name": "v1.app.topups.proof",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/transactions/export",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@exportTransactions",
+  "name": "v1.app.transactions.export",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/wallet",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@show",
+  "name": "v1.app.wallet.show",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/wallet/invoices",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@invoices",
+  "name": "v1.app.wallet.invoices",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/wallet/invoices/{id}",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@invoice",
+  "name": "v1.app.wallet.invoice",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/wallet/threshold",
+  "auth": "session",
+  "permissions": [
+   "billing:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@threshold",
+  "name": "v1.app.wallet.threshold",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/wallet/transactions",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@transactions",
+  "name": "v1.app.wallet.transactions",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/wallet/transactions/export",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@exportTransactions",
+  "name": "v1.app.wallet.transactions.export",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/wallet/transactions/{id}",
+  "auth": "session",
+  "permissions": [
+   "billing:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "WalletController@transaction",
+  "name": "v1.app.wallet.transaction",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/app/webhooks",
+  "auth": "session",
+  "permissions": [
+   "api_keys:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@webhooks",
+  "name": "v1.app.webhooks.index",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/webhooks",
+  "auth": "session",
+  "permissions": [
+   "api_keys:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@storeWebhook",
+  "name": "v1.app.webhooks.store",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/app/webhooks/{id}",
+  "auth": "session",
+  "permissions": [
+   "api_keys:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@destroyWebhook",
+  "name": "v1.app.webhooks.destroy",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/app/webhooks/{id}",
+  "auth": "session",
+  "permissions": [
+   "api_keys:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@updateWebhook",
+  "name": "v1.app.webhooks.update",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/app/webhooks/{id}/test",
+  "auth": "session",
+  "permissions": [
+   "api_keys:manage"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ApiKeyController@testWebhook",
+  "name": "v1.app.webhooks.test",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/email/resend",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "otp_per_user"
+  ],
+  "laravel": "AuthController@resendVerification",
+  "name": "v1.auth.resend-verification",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/email/verify",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "password_reset_per_ip"
+  ],
+  "laravel": "AuthController@verifyEmail",
+  "name": "v1.auth.verify-email",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/forgot-password",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@forgotPassword",
+  "name": "v1.auth.forgot-password.alias",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/google",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "GoogleAuthController@signIn",
+  "name": "v1.auth.google",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/invitations/accept",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@acceptInvitation",
+  "name": "v1.auth.invitation.accept",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/invitations/signup",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "register_per_ip"
+  ],
+  "laravel": "AuthController@invitationSignup",
+  "name": "v1.auth.invitation.signup",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/auth/invitations/{token}",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "public_form_per_ip"
+  ],
+  "laravel": "AuthController@invitation",
+  "name": "v1.auth.invitation",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/login",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@login",
+  "name": "v1.auth.login",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/logout",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@logout",
+  "name": "v1.auth.logout",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/auth/me",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@me",
+  "name": "v1.auth.me",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/organizations",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@createOrganization",
+  "name": "v1.auth.organizations.create",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/password/forgot",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@forgotPassword",
+  "name": "v1.auth.forgot-password",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/password/reset",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "password_reset_per_ip"
+  ],
+  "laravel": "AuthController@resetPassword",
+  "name": "v1.auth.reset-password",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/phone/otp",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@sendOtp",
+  "name": "v1.auth.phone.otp",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/phone/verify",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "otp_per_user"
+  ],
+  "laravel": "AuthController@verifyOtp",
+  "name": "v1.auth.phone.verify",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/auth/providers",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "GoogleAuthController@providers",
+  "name": "v1.auth.providers",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/register",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@register",
+  "name": "v1.auth.register",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/resend-verification",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "otp_per_user"
+  ],
+  "laravel": "AuthController@resendVerification",
+  "name": "v1.auth.resend-verification.alias",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/reset-password",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "password_reset_per_ip"
+  ],
+  "laravel": "AuthController@resetPassword",
+  "name": "v1.auth.reset-password.alias",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/switch-organization",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "AuthController@switchOrganization",
+  "name": "v1.auth.switch-organization",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/auth/verify-email",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "password_reset_per_ip"
+  ],
+  "laravel": "AuthController@verifyEmail",
+  "name": "v1.auth.verify-email.alias",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/balance",
+  "auth": "api_key",
+  "permissions": [
+   "balance:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "api_per_key"
+  ],
+  "laravel": "PublicApiController@balance",
+  "name": "v1.balance",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/health",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "HealthController (invokable)",
+  "name": "v1.health",
+  "done": true
+ },
+ {
+  "method": "GET",
+  "path": "/v1/internal/ready",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "HealthController@ready",
+  "name": "v1.internal.ready",
+  "done": false
+ },
+ {
+  "method": "GET|POST",
+  "path": "/v1/internal/worker/tick",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "WorkerController (invokable)",
+  "name": "v1.internal.worker",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/messages",
+  "auth": "api_key",
+  "permissions": [
+   "messages:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "api_per_key"
+  ],
+  "laravel": "PublicApiController@messages",
+  "name": "v1.messages.index",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/messages/{id}",
+  "auth": "api_key",
+  "permissions": [
+   "messages:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "api_per_key"
+  ],
+  "laravel": "PublicApiController@message",
+  "name": "v1.messages.show",
+  "done": false
+ },
+ {
+  "method": "GET|POST",
+  "path": "/v1/payments/{provider}/return",
+  "auth": "signature",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "webhook_per_ip"
+  ],
+  "laravel": "PaymentWebhookController@return",
+  "name": "v1.payments.return",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/profile",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@show",
+  "name": "v1.profile.show",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/profile",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@update",
+  "name": "v1.profile.update",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/profile/locale",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@locale",
+  "name": "v1.profile.locale",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/profile/notification-preferences",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@notificationPreferences",
+  "name": "v1.profile.prefs",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/profile/notification-preferences",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@saveNotificationPreferences",
+  "name": "v1.profile.prefs.update",
+  "done": false
+ },
+ {
+  "method": "PUT",
+  "path": "/v1/profile/password",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@password",
+  "name": "v1.profile.password",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/profile/sessions",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@sessions",
+  "name": "v1.profile.sessions",
+  "done": false
+ },
+ {
+  "method": "DELETE",
+  "path": "/v1/profile/sessions/{id}",
+  "auth": "session",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "dashboard_per_user"
+  ],
+  "laravel": "ProfileController@revokeSession",
+  "name": "v1.profile.sessions.revoke",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/public/abuse-reports",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "PublicController@abuse",
+  "name": "v1.public.abuse",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/public/contact",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "PublicController@contact",
+  "name": "v1.public.contact",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/public/policies",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "PublicController@policies",
+  "name": "v1.public.policies",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/public/pricing",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "PublicController@pricing",
+  "name": "v1.public.pricing",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/public/site-content",
+  "auth": "public",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [],
+  "laravel": "PublicController@siteContent",
+  "name": "v1.public.site",
+  "done": false
+ },
+ {
+  "method": "GET",
+  "path": "/v1/sender-ids",
+  "auth": "api_key",
+  "permissions": [
+   "sender_ids:read"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "api_per_key"
+  ],
+  "laravel": "PublicApiController@senderIds",
+  "name": "v1.sender-ids",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/sms/bulk",
+  "auth": "api_key",
+  "permissions": [
+   "sms:send"
+  ],
+  "flags": [
+   "idempotent"
+  ],
+  "ratelimit": [
+   "api_send_per_key"
+  ],
+  "laravel": "SmsController@bulk",
+  "name": "v1.sms.bulk",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/sms/estimate",
+  "auth": "api_key",
+  "permissions": [
+   "sms:send"
+  ],
+  "flags": [],
+  "ratelimit": [
+   "api_per_key"
+  ],
+  "laravel": "SmsController@estimate",
+  "name": "v1.sms.estimate",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/sms/send",
+  "auth": "api_key",
+  "permissions": [
+   "sms:send"
+  ],
+  "flags": [
+   "idempotent"
+  ],
+  "ratelimit": [
+   "api_send_per_key"
+  ],
+  "laravel": "SmsController@send",
+  "name": "v1.sms.send",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/webhooks/payments/{provider}",
+  "auth": "signature",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "webhook_per_ip"
+  ],
+  "laravel": "PaymentWebhookController@ipn",
+  "name": "v1.webhooks.payments",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/webhooks/sms/{provider}",
+  "auth": "signature",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "webhook_per_ip"
+  ],
+  "laravel": "SmsWebhookController@delivery",
+  "name": "v1.webhooks.sms",
+  "done": false
+ },
+ {
+  "method": "POST",
+  "path": "/v1/webhooks/sms/{provider}/inbound",
+  "auth": "signature",
+  "permissions": [],
+  "flags": [],
+  "ratelimit": [
+   "webhook_per_ip"
+  ],
+  "laravel": "SmsWebhookController@inbound",
+  "name": "v1.webhooks.sms.inbound",
+  "done": false
+ }
+]

@@ -1,15 +1,42 @@
+# --- Secrets and server data (never commit) -------------------------------------
+.env
+*.pem
+keys/
+backups/
+
+# --- Python / Django ---------------------------------------------------------------
 .venv/
 venv/
 __pycache__/
 *.pyc
-.env
 db.sqlite3
+*.sqlite3-journal
 media/
 staticfiles/
+.pytest_cache/
+.coverage
+htmlcov/
+
+# --- Node.js / Next.js (sites/wa, sites/sms/web) ------------------------------------
+node_modules/
+.next/
+test-results/
+playwright-report/
+*.tsbuildinfo
+
+# --- PHP (sites/sms/laravel reference) ------------------------------------------------
+# Composer packages only: static/js/vendor/ folders (htmx) are ours and stay tracked.
+/sites/sms/laravel/vendor/
+
+# --- Editors and OS -------------------------------------------------------------------
 .DS_Store
-backups/
-keys/
-*.pem
-*.sqlite3-journal
-# Source archives dropped in the repo folder
+Thumbs.db
+.idea/
+*.swp
+*.log
+
+# --- Local leftovers in the repo folder ----------------------------------------------
+# Source archives dropped here (e.g. hivesms-lab-main.zip)
 /*.zip
+# A second clone of this repo that was made inside it by mistake
+/marketian.net/

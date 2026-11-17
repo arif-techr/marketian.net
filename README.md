@@ -14,11 +14,14 @@ Marketian.net/
 │   ├── metadata/          metadata.marketian.net — first SaaS product, signs in with the Marketian account
 │   ├── links/             links.marketian.net — short links with click stats + Linktree-style bio pages
 │   ├── wa/                wa.marketian.net — WhatsApp broadcaster (Django + React + WhatsApp gateway), see its README
+│   ├── tracking/          tracking.marketian.net — server-side tracking (being built, not deployed)
+│   ├── sms/               sms.marketian.net — Marketian SMS: Next.js panel + Django API (being built, not deployed)
 │   └── _template/         starter for a plain site (copy it)
 ├── docker-compose.yml     ← THE root file: lists the proxy and every site; run all Docker commands here
 ├── scripts/
 │   ├── server-setup.sh    one-time VPS preparation
 │   ├── deploy.sh          start / update everything
+│   ├── first-deploy.sh    first install on an empty server only (refuses where databases exist)
 │   ├── create-db.sh       a database + login for one product on the shared PostgreSQL
 │   └── backup.sh          daily backup of databases, uploads and sign-in keys
 └── README.md              this file
