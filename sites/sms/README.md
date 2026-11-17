@@ -26,7 +26,7 @@ sites/sms/
 | | Now (laravel/) | Target |
 |---|---|---|
 | Backend | Laravel 12, PHP 8.3 | Django + DRF, Celery |
-| Database | MariaDB | PostgreSQL on the shared server (`scripts/create-db.sh sms`) |
+| Database | MariaDB | PostgreSQL in its own container (`sms-db`) |
 | Sign-in | Own email/password, Google | Marketian account (OpenID Connect) |
 | Name | SMSFlow BD | Marketian SMS |
 | Served by | its own Caddy | the shared proxy: `sms.marketian.net → sms-web:3000` |

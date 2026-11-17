@@ -5,6 +5,7 @@ from django.contrib.sitemaps.views import sitemap
 from django.urls import include, path, re_path
 from django.views.static import serve
 
+from core.admin_signin import admin_login
 from core.sitemaps import ProjectSitemap, StaticSitemap
 
 handler404 = "core.views.page_not_found"
@@ -12,11 +13,14 @@ handler404 = "core.views.page_not_found"
 admin.site.site_header = "Marketian Admin"
 admin.site.site_title = "Marketian Admin"
 admin.site.index_title = "Manage your portfolio"
+# Admins sign in with their Marketian account: no admin password (core/admin_signin.py).
+admin.site.login = admin_login
 
 sitemaps = {"static": StaticSitemap, "projects": ProjectSitemap}
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("accounts/", include("allauth.urls")),
     path("sitemap.xml", sitemap, {"sitemaps": sitemaps}, name="sitemap"),
     path("", include("core.urls")),
 ]

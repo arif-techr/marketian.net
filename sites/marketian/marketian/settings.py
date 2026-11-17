@@ -46,6 +46,10 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "django.contrib.sitemaps",
+    "allauth",
+    "allauth.account",
+    "allauth.socialaccount",
+    "allauth.socialaccount.providers.openid_connect",
     "core",
     "mailer",
 ]
@@ -59,6 +63,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "allauth.account.middleware.AccountMiddleware",
     "core.middleware.CanonicalDomainMiddleware",
     "core.middleware.PreloadCacheMiddleware",
 ]
@@ -166,6 +171,39 @@ CONTACT_RECIPIENTS = env_list("CONTACT_RECIPIENTS", "hello@marketian.net")
 
 # Redirect marketain.net (and www.*) to this host. Empty disables redirecting.
 CANONICAL_HOST = os.getenv("CANONICAL_HOST", "" if DEBUG else "marketian.net")
+
+
+# --- Admin sign-in with the Marketian account --------------------------------------
+# /admin/ has no password of its own: admins use their Marketian account (accounts.marketian.net).
+# Only the emails in ADMIN_EMAILS get in (core/admin_signin.py). Register this site once on the
+# accounts server:  docker compose exec accounts python manage.py register_product marketian https://marketian.net
+ACCOUNTS_URL = os.getenv("ACCOUNTS_URL", "https://accounts.marketian.net").rstrip("/")
+ADMIN_EMAILS = {email.lower() for email in env_list("ADMIN_EMAILS")}
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+LOGIN_URL = "admin:login"
+SOCIALACCOUNT_ONLY = True
+SOCIALACCOUNT_ADAPTER = "core.admin_signin.SignupOnlyForAdmins"
+ACCOUNT_EMAIL_VERIFICATION = "none"
+ACCOUNT_LOGIN_METHODS = {"email"}
+ACCOUNT_SIGNUP_FIELDS = ["email*"]
+ACCOUNT_UNIQUE_EMAIL = True
+SOCIALACCOUNT_AUTO_SIGNUP = True
+SOCIALACCOUNT_STORE_TOKENS = False
+SOCIALACCOUNT_PROVIDERS = {
+    "openid_connect": {
+        "OAUTH_PKCE_ENABLED": True,
+        "APPS": [{
+            "provider_id": "marketian",
+            "name": "Marketian",
+            "client_id": os.getenv("MARKETIAN_CLIENT_ID", ""),
+            "secret": os.getenv("MARKETIAN_CLIENT_SECRET", ""),
+            "settings": {"server_url": f"{ACCOUNTS_URL}/o"},
+        }],
+    }
+}
 
 # --- Production security -----------------------------------------------------
 if not DEBUG:

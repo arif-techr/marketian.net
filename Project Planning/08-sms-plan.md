@@ -13,7 +13,7 @@ Source: `hivesms-lab-main.zip`, now in `sites/sms` (see S0.1). It is a Next.js 1
 | Name | **Marketian SMS** everywhere (UI, emails, invoices). Marketian colours, font and logo |
 | Backend | **Django + Django REST Framework** replaces Laravel. The Next.js panel stays. Python 3.12 (as WA) |
 | Money | `DECIMAL(14,4)` as in the reference (not whole poisha), `Decimal` in Python, never floats |
-| Database | **PostgreSQL** on the shared server (`create-db.sh sms`). No MariaDB |
+| Database | **PostgreSQL in its own container** (`sms-db`, like WA's `wa-db`), not the shared server: only the portfolio, WA and SMS keep their own database server (decided 2026-11-17). No MariaDB |
 | Sign-in | **Marketian account from day one** (OpenID Connect, like Links). Personal organisation at first sign-in, invitations by email |
 | Gateway | Automas (Bangladesh). Needs the API key and an approved sender ID before go-live |
 | Ownership | Our code: free to reuse |
@@ -21,14 +21,14 @@ Source: `hivesms-lab-main.zip`, now in `sites/sms` (see S0.1). It is a Next.js 1
 ## How it fits the server
 ```
 sites/sms/
-├── docker-compose.yml   sms-web, sms-api, sms-worker, sms-beat, sms-redis
+├── docker-compose.yml   sms-web, sms-api, sms-worker, sms-beat, sms-redis, sms-db (PostgreSQL 17)
 ├── api/                 Django + DRF (product/, apps per domain), Celery for the queue and schedules
 └── web/                 the Next.js panel from hivesms-lab, rebranded, Prisma removed
 ```
 - `sms-web` (Next.js, port 3000) is the only service the proxy reaches: `sms.marketian.net → sms-web:3000`. The panel already forwards `/api/v1` to its backend (today Laravel, then Django) with a shared secret, so customers' servers use `https://sms.marketian.net/api/v1/...`.
-- `sms-api` (gunicorn) on `shared-db` + a private network. `sms-worker` / `sms-beat` (Celery) send queued SMS, launch campaigns, poll delivery, retry webhooks and clean up, as WA does. `sms-redis` on an internal network.
+- `sms-api` (gunicorn) on a private network with `sms-db`; no access to the shared database. `sms-worker` / `sms-beat` (Celery) send queued SMS, launch campaigns, poll delivery, retry webhooks and clean up, as WA does. `sms-redis` on an internal network.
 - Marketian sign-in callback goes through the panel to `sms-api` (`/accounts/oidc/marketian/...`).
-- No published ports, memory limits on each service, `backup.sh` covers the `sms` database (already automatic for the shared server) and uploaded files.
+- No published ports, memory limits on each service, `backup.sh` covers `sms-db` (its `*-db` rule dumps it automatically) and uploaded files.
 - Estimated memory: ~600–900 MB more. The VPS has ~5.9 GB free (checked 2026-11-17).
 
 ## The key rule
@@ -42,7 +42,7 @@ Legend: ⬜ to do · 🟡 in progress · ✅ done
 |---|---|---|
 | ✅ S0.1 | Source into the repo: panel → `sites/sms/web`, Laravel API → `sites/sms/laravel` (reference until Django passes its tests), docs → `sites/sms/docs`. Left out: agent folders, its CI, its MariaDB compose. Not in the root compose; Caddy block commented out | Done 2026-11-17 |
 | ✅ S0.2 | Contract list: every endpoint with method, auth, permission, flags, rate limit and Laravel action, generated from Laravel's own route table. Response shapes: the API reference | `sites/sms/api/docs/contract.md` + `contract.json` (248 endpoints: 133 session, 84 staff, 20 public, 7 API key, 4 provider callbacks) |
-| ⬜ S0.3 | `register_product sms https://sms.marketian.net`, `create-db.sh sms` (local first) | Credentials in `.env` |
+| ⬜ S0.3 | `register_product sms https://sms.marketian.net` (local first). The database is the `sms-db` container, so no `create-db.sh` | Credentials in `.env` |
 
 ### S1: Django foundation (≈ 4 days)
 | ID | Task | Done when |

@@ -143,6 +143,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 # --- Sign in with the Marketian account --------------------------------------
 LOGIN_URL = "dashboard:login"
 LOGIN_REDIRECT_URL = "dashboard:app"
+# Marketian accounts that may use the admin pages (/admin/), comma separated. dashboard/admin_signin.py.
+ADMIN_EMAILS = {email.lower() for email in env_list("ADMIN_EMAILS")}
 SOCIALACCOUNT_ONLY = True  # no passwords here: the Marketian account is the only way in
 ACCOUNT_EMAIL_VERIFICATION = "none"
 ACCOUNT_LOGIN_METHODS = {"email"}

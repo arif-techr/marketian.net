@@ -4,7 +4,11 @@ from django.urls import include, path, re_path
 from django.views.static import serve
 
 from bio import views as bio
+from dashboard.admin_signin import admin_login
 from shortener import views as shortener
+
+# The admin pages sign in with the Marketian account, like everything else (no admin password).
+admin.site.login = admin_login
 
 urlpatterns = [
     path("admin/", admin.site.urls),

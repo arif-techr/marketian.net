@@ -104,7 +104,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "product.wsgi.application"
 
-# PostgreSQL when POSTGRES_DB is set (Docker, and the server's shared database), otherwise SQLite
+# PostgreSQL when POSTGRES_DB is set (Docker: the sms-db container), otherwise SQLite
 # for quick local tests. Run the full suite on PostgreSQL before merging: money and queue code
 # relies on its row locks.
 if os.getenv("POSTGRES_DB"):
@@ -114,7 +114,7 @@ if os.getenv("POSTGRES_DB"):
             "NAME": os.getenv("POSTGRES_DB"),
             "USER": os.getenv("POSTGRES_USER", "postgres"),
             "PASSWORD": os.getenv("POSTGRES_PASSWORD", ""),
-            "HOST": os.getenv("POSTGRES_HOST", "postgres"),
+            "HOST": os.getenv("POSTGRES_HOST", "sms-db"),  # its own container, not the shared server
             "PORT": os.getenv("POSTGRES_PORT", "5432"),
             "CONN_MAX_AGE": 60,
             "CONN_HEALTH_CHECKS": True,

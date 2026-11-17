@@ -1,0 +1,23 @@
+{% extends "admin/base_site.html" %}{% load socialaccount %}
+{# The admin sign-in: the Marketian account, never a separate admin password (core/admin_signin.py). #}
+{% block bodyclass %}{{ block.super }} login{% endblock %}
+{% block usertools %}{% endblock %}
+{% block nav-global %}{% endblock %}
+{% block nav-sidebar %}{% endblock %}
+{% block content_title %}{% endblock %}
+{% block breadcrumbs %}{% endblock %}
+{% block content %}
+<div id="content-main">
+  {% if denied %}
+    <p class="errornote">{{ user.email }} has no admin access here.</p>
+    <p>Admin access comes from the <code>ADMIN_EMAILS</code> list in this site's settings. Ask the owner to add your
+      Marketian account's email, then sign in again.</p>
+  {% else %}
+    <p>Admins sign in with their Marketian account.</p>
+    <form method="post" action="{% provider_login_url 'marketian' process='login' next=next %}">
+      {% csrf_token %}
+      <div class="submit-row"><input type="submit" value="Continue with Marketian account"></div>
+    </form>
+  {% endif %}
+</div>
+{% endblock %}

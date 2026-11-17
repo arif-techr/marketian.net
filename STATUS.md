@@ -30,6 +30,27 @@ cd marketian.net
 
 `.env` files are never in git: each PC (and the server) keeps its own.
 
+## Before the next deploy (admin pages now use the Marketian account)
+
+The admin pages (`/admin/`) of the portfolio, metadata and links no longer have a password form. Do this on
+the server **before** `deploy.sh`, or nobody can open them until you do:
+
+```bash
+cd /opt/sites
+docker compose exec accounts python manage.py register_product marketian https://marketian.net
+nano sites/marketian/.env   # paste MARKETIAN_CLIENT_ID / MARKETIAN_CLIENT_SECRET, add ACCOUNTS_URL=https://accounts.marketian.net
+nano sites/marketian/.env   # ADMIN_EMAILS=<your Marketian account email>
+nano sites/metadata/.env    # ADMIN_EMAILS=<same>
+nano sites/links/.env       # ADMIN_EMAILS=<same>
+bash scripts/deploy.sh
+```
+
+## Databases and sign-in (rule, 17 Nov)
+
+- Own PostgreSQL server: **portfolio, WA, SMS**. Everyone else: own database on the shared server.
+- One Marketian account for everything, admin pages included (`ADMIN_EMAILS` per site). WA also keeps
+  its username/password sign-in for team members and its admin.
+
 ## Being built
 
 - **Marketian SMS** (`sites/sms`, not live): Next.js panel + a new Django API on PostgreSQL with Marketian
