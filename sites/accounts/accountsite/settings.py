@@ -9,6 +9,7 @@ All values come from environment variables (or `.env`); see `.env.example`.
 import os
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -147,7 +148,12 @@ LOGIN_URL = "account_login"
 LOGIN_REDIRECT_URL = "portal:home"
 ACCOUNT_LOGIN_METHODS = {"email"}
 ACCOUNT_SIGNUP_FIELDS = ["email*", "password1*", "password2*"]
-ACCOUNT_EMAIL_VERIFICATION = "mandatory"
+# "optional": people can sign in before clicking the email link (it is still sent), so sign-up
+# works while email doesn't. Set EMAIL_VERIFICATION=mandatory once the mailbox sends. Admin pages
+# only accept verified emails either way (email_verified claim, see the products' admin_signin.py).
+ACCOUNT_EMAIL_VERIFICATION = os.getenv("EMAIL_VERIFICATION", "optional")
+if ACCOUNT_EMAIL_VERIFICATION not in ("mandatory", "optional", "none"):
+    raise ImproperlyConfigured("EMAIL_VERIFICATION must be mandatory, optional or none")
 ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_LOGOUT_ON_GET = True  # products link to /accounts/logout/?next=<product>
 ACCOUNT_ADAPTER = "portal.adapter.AccountAdapter"

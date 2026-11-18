@@ -115,3 +115,33 @@ class PortalTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertIn("authorization_endpoint", response.json())
         self.assertEqual(self.client.get("/o/.well-known/jwks.json").status_code, 200)
+
+
+class SignUpTests(TestCase):
+    """Visitors make their Marketian account here, even while email doesn't send."""
+
+    def sign_up(self):
+        return self.client.post(reverse("account_signup"), {
+            "email": "new@example.com", "password1": "a-Long-pass-123", "password2": "a-Long-pass-123",
+        })
+
+    def test_visitor_can_sign_up_and_is_signed_in(self):
+        response = self.sign_up()
+        self.assertEqual(response.status_code, 302)
+        self.assertTrue(User.objects.filter(email="new@example.com").exists())
+        self.assertEqual(self.client.get(reverse("portal:home")).status_code, 200)
+
+    def test_sign_up_works_when_the_mail_server_is_down(self):
+        from unittest import mock
+
+        with mock.patch("django.core.mail.EmailMessage.send", side_effect=OSError("SMTP down")), \
+                self.assertLogs("portal.adapter", "ERROR"):
+            response = self.sign_up()
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(self.client.get(reverse("portal:home")).status_code, 200)
+
+    def test_unclicked_email_is_reported_as_unverified(self):
+        self.sign_up()
+        request = RequestFactory().get("/")
+        request.user = User.objects.get(email="new@example.com")
+        self.assertFalse(MarketianValidator().get_additional_claims(request)["email_verified"])

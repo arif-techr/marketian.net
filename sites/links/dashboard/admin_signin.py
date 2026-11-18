@@ -1,8 +1,9 @@
 """
 The admin pages (/admin/) sign in with the Marketian account too, like the rest of the site:
 no separate admin password. Marketian accounts whose email is in ADMIN_EMAILS (settings, from
-.env) are made staff each time they sign in; take an email out of the list and that person
-loses admin access at their next sign-in.
+.env) are made staff each time they sign in, provided the Marketian account has verified that
+email (otherwise anyone could sign up there with an admin's address). Take an email out of the
+list and that person loses admin access at their next sign-in.
 
 Wired up in urls.py (admin.site.login) and apps.py (the sign-in signal).
 """
@@ -19,12 +20,20 @@ def is_admin_email(email):
     return bool(email) and email.strip().lower() in settings.ADMIN_EMAILS
 
 
+def email_verified(sociallogin):
+    """What the Marketian account says (the email_verified claim) about this sign-in's email."""
+    data = getattr(sociallogin.account, "extra_data", None) or {}
+    claims = data.get("userinfo") or data.get("id_token") or {}
+    return claims.get("email_verified") is True
+
+
 def sync_staff(sender, request, user, sociallogin=None, **kwargs):
     """On every sign-in with the Marketian account: staff and superuser exactly when the email is
-    listed in ADMIN_EMAILS. Other logins (a superuser made with createsuperuser) are left alone."""
+    listed in ADMIN_EMAILS and verified. Other logins (a superuser made with createsuperuser) are
+    left alone."""
     if sociallogin is None:
         return
-    allowed = is_admin_email(user.email)
+    allowed = is_admin_email(user.email) and email_verified(sociallogin)
     if user.is_staff != allowed or user.is_superuser != allowed:
         user.is_staff = user.is_superuser = allowed
         user.save(update_fields=["is_staff", "is_superuser"])

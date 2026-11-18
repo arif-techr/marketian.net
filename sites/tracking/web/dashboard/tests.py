@@ -51,12 +51,16 @@ class SignInTests(TestCase):
 class AdminSignInTests(TestCase):
     """The admin pages use the Marketian account: no admin password, staff only from ADMIN_EMAILS."""
 
-    def sign_in(self, email):
+    def sign_in(self, email, verified=True):
+        from types import SimpleNamespace
+
         from allauth.account.signals import user_logged_in
 
         user = User.objects.get_or_create(username=email, defaults={"email": email})[0]
         self.client.force_login(user)
-        user_logged_in.send(sender=User, request=None, user=user, sociallogin=object())  # a Marketian sign-in
+        # A Marketian sign-in: the claims are what accounts.marketian.net sent.
+        login = SimpleNamespace(account=SimpleNamespace(extra_data={"userinfo": {"email": email, "email_verified": verified}}))
+        user_logged_in.send(sender=User, request=None, user=user, sociallogin=login)
         user.refresh_from_db()
         return user
 
@@ -78,6 +82,12 @@ class AdminSignInTests(TestCase):
         self.assertFalse(user.is_staff)
         response = self.client.get(reverse("admin:login"), {"next": "/admin/"})
         self.assertContains(response, "has no admin access", status_code=403)
+
+    def test_listed_but_unverified_email_gets_no_access(self):
+        # Anyone can sign up on accounts with an admin's address; only a verified one counts.
+        user = self.sign_in("owner@marketian.net", verified=False)
+        self.assertFalse(user.is_staff or user.is_superuser)
+        self.assertContains(self.client.get(reverse("admin:login")), "has no admin access", status_code=403)
 
     def test_removing_an_email_takes_access_away_at_next_sign_in(self):
         self.sign_in("owner@marketian.net")

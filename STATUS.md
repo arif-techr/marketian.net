@@ -45,6 +45,16 @@ nano sites/links/.env       # ADMIN_EMAILS=<same>
 bash scripts/deploy.sh
 ```
 
+## Sign-up fix (18 Nov, not deployed)
+
+Visitors couldn't create a Marketian account: accounts required clicking an email link, and email
+doesn't send yet. Now `EMAIL_VERIFICATION=optional` (the default), and a failing mail server is logged
+instead of breaking sign-up. Admin pages only accept a **verified** email (`email_verified` claim), so
+nobody can become admin by signing up with your address. Deploy: `bash scripts/deploy.sh accounts`.
+Before using the admin pages: your own email must be verified on accounts. Until email sends, tick
+"Verified" for it at https://accounts.marketian.net/admin/ → Email addresses. When email works, set
+`EMAIL_VERIFICATION=mandatory` in `sites/accounts/.env`.
+
 ## Databases and sign-in (rule, 17 Nov)
 
 - Own PostgreSQL server: **portfolio, WA, SMS**. Everyone else: own database on the shared server.
