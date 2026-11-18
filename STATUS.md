@@ -45,6 +45,13 @@ nano sites/links/.env       # ADMIN_EMAILS=<same>
 bash scripts/deploy.sh
 ```
 
+## Claude skills (18 Nov)
+
+Project skills in `.claude/skills/` load in Claude Code on any PC with this repo: `marketian-new-product`,
+`marketian-signin`, `marketian-deploy`, `marketian-database`, `marketian-sms-port`,
+`marketian-security-review`, `marketian-docs-and-commits`. Workflow, pre-deploy check and debugging
+skills come from the claude.ai organisation.
+
 ## Sign-up fix (18 Nov, not deployed)
 
 Visitors couldn't create a Marketian account: accounts required clicking an email link, and email
